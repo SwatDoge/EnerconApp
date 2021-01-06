@@ -37,7 +37,29 @@ class SLController extends Controller
      */
     public function store(Request $request)
     {
-        return view('SL.create');
+        // $this->validate($request, [
+        //     'schakelbriefnr' => 'required' ,
+        //     'windpark' => 'required',
+        //     'date' => 'required'
+        // ]);    
+
+        // //create
+        // $posts = new Posts;
+        // $posts->title = $request->input('title');
+        // $posts->body = $request->input('body');
+        // $posts->type = $request->input('type');
+        // if($request->input('story') != 'empty'){
+        //     $posts->story = $request->input('story');
+        // }
+        // if($request->input('arc') != 'empty'){
+        //     $posts->arc = $request->input('arc');
+        // }
+        // $posts->user_id = auth()->user()->id;      
+        // $posts->user_role = auth()->user()->role;
+        // $posts->cover_image = $fileNameToStore;
+        // $posts->save();
+        return view('SL.test');
+        // return redirect('/')->with('success', 'Post Created');
     }
 
     /**
