@@ -20,4 +20,5 @@ Route::get('/', function () {
 
 Auth::routes();
 
+Route::resource('sl', App\Http\Controllers\SLController::class)->shallow();
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
