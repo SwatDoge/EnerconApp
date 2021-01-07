@@ -1,5 +1,5 @@
 <?php
-
+use App\Http\Controllers;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
@@ -25,3 +25,7 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::any('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('pIndex');
 Route::any('/profile/update', [ProfileController::class, 'update'])->name('pUpdate');
+Route::post('/giverole', 'HomeController@insert');
+Route::post('addrole', 'HomeController@create');
+Route::any('/roles/{id}/edit', 'HomeController@edit');
+Route::post('/roles/edit/{role}', 'HomeController@edit1');
