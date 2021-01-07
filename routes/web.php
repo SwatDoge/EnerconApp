@@ -4,7 +4,6 @@ use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
 use App\Http\Controllers\SLController;
-use App\Http\Controllers;
 
 /*
 |--------------------------------------------------------------------------
@@ -24,6 +23,7 @@ Route::get('/', function () {
 Auth::routes();
 Route::post('/sl/update/{id}', [SLController::class, 'update']);
 Route::resource('sl', App\Http\Controllers\SLController::class)->shallow();
+Route::get('/admin/schakelbrieven', 'SLController@index');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
 Route::any('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('pIndex');

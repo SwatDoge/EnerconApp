@@ -14,7 +14,9 @@ class SLController extends Controller
      */
     public function index()
     {
-        //
+        $switchbrief = SL::all();
+
+        return view('admin.switchbriefs.index')->with('switchbrief', $switchbrief);
     }
 
     /**
