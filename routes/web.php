@@ -29,3 +29,10 @@ Route::post('/giverole', 'HomeController@insert');
 Route::post('addrole', 'HomeController@create');
 Route::any('/roles/{id}/edit', 'HomeController@edit');
 Route::post('/roles/edit/{role}', 'HomeController@edit1');
+
+
+Route::any('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('aIndex');
+Route::any('/admin/{user}/edit', [App\Http\Controllers\Admincontroller::class, 'edit'])->name('aEdit');
+Route::any('/admin/{user}/delete', [App\Http\Controllers\Admincontroller::class, 'destroy'])->name('aDelete');
+Route::any('/admin/update', [App\Http\Controllers\AdminController::class, 'update'])->name('aUpdate');
+
