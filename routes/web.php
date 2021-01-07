@@ -25,3 +25,10 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::any('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('pIndex');
 Route::any('/profile/update', [ProfileController::class, 'update'])->name('pUpdate');
+
+
+Route::any('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('aIndex');
+Route::any('/admin/{user}/edit', [App\Http\Controllers\Admincontroller::class, 'edit'])->name('aEdit');
+Route::any('/admin/{user}/delete', [App\Http\Controllers\Admincontroller::class, 'destroy'])->name('aDelete');
+Route::any('/admin/update', [App\Http\Controllers\AdminController::class, 'update'])->name('aUpdate');
+
