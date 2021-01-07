@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Models\SL;
 
 class SLController extends Controller
 {
@@ -37,29 +38,42 @@ class SLController extends Controller
      */
     public function store(Request $request)
     {
-        // $this->validate($request, [
-        //     'schakelbriefnr' => 'required' ,
-        //     'windpark' => 'required',
-        //     'date' => 'required'
-        // ]);    
-
-        // //create
-        // $posts = new Posts;
-        // $posts->title = $request->input('title');
-        // $posts->body = $request->input('body');
-        // $posts->type = $request->input('type');
-        // if($request->input('story') != 'empty'){
-        //     $posts->story = $request->input('story');
-        // }
-        // if($request->input('arc') != 'empty'){
-        //     $posts->arc = $request->input('arc');
-        // }
-        // $posts->user_id = auth()->user()->id;      
-        // $posts->user_role = auth()->user()->role;
-        // $posts->cover_image = $fileNameToStore;
-        // $posts->save();
-        return view('SL.test');
-        // return redirect('/')->with('success', 'Post Created');
+        $this->validate($request, [
+            'windpark' => 'required',
+            'date' => 'required',
+            'ivname' => 'required' ,
+            'ivtel' => 'required',
+            'mvname' => 'required' ,
+            'mvtel' => 'required',
+            'plname' => 'required' ,
+            'pltel' => 'required',
+            'switchcompany' => 'required' ,
+            'switchtel' => 'required',
+            'contactname' => 'required' ,
+            'contacttel' => 'required',
+            'remarks' => 'required' ,
+            'reason' => 'required',
+        ]);    
+        //create
+        $SL = new SL;
+        $SL->briefnr = 1;
+        $SL->windpark = $request->input('windpark');
+        $SL->date = $request->input('date');
+        $SL->ivname = $request->input('ivname');
+        $SL->ivtel = $request->input('ivtel');
+        $SL->mvname = $request->input('mvname');
+        $SL->mvtel = $request->input('mvtel');
+        $SL->plname = $request->input('plname');      
+        $SL->pltel = $request->input('pltel'); 
+        $SL->bedrijf = $request->input('switchcompany');
+        $SL->bedrijftel = $request->input('switchtel');
+        $SL->contact = $request->input('contactname');
+        $SL->contacttel = $request->input('contacttel');
+        $SL->remarks = $request->input('remarks');      
+        $SL->reason = $request->input('reason'); 
+        $SL->save();
+        error_log($request);
+        return redirect('/home')->with('success', 'Post Created');
     }
 
     /**
@@ -81,7 +95,14 @@ class SLController extends Controller
      */
     public function edit($id)
     {
-        //
+        $SL = SL::find($id);
+        //check 4 role
+        // if(auth()->user()->role == 'admin') {} 
+        // else if(auth()->user()->id !== $post->user_id) {
+        //     return redirect('/')->with('error', 'Unauthorized page');
+        // } 
+        return view('SL.edit')->with('SL', $SL);
+        
     }
 
     /**
@@ -93,7 +114,43 @@ class SLController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $this->validate($request, [
+            'windpark' => 'required',
+            'date' => 'required',
+            'ivname' => 'required' ,
+            'ivtel' => 'required',
+            'mvname' => 'required' ,
+            'mvtel' => 'required',
+            'plname' => 'required' ,
+            'pltel' => 'required',
+            'switchcompany' => 'required' ,
+            'switchtel' => 'required',
+            'contactname' => 'required' ,
+            'contacttel' => 'required',
+            'remarks' => 'required' ,
+            'reason' => 'required',
+        ]);    
+        // DD($request);
+        //update
+        $SL = SL::find($id);
+        // $SL->briefnr = $request->input('schakelbriefnr');
+        $SL->windpark = $request->input('windpark');
+        $SL->date = $request->input('date');
+        $SL->ivname = $request->input('ivname');
+        $SL->ivtel = $request->input('ivtel');
+        $SL->mvname = $request->input('mvname');
+        $SL->mvtel = $request->input('mvtel');
+        $SL->plname = $request->input('plname');      
+        $SL->pltel = $request->input('pltel'); 
+        $SL->bedrijf = $request->input('switchcompany');
+        $SL->bedrijftel = $request->input('switchtel');
+        $SL->contact = $request->input('contactname');
+        $SL->contacttel = $request->input('contacttel');
+        $SL->remarks = $request->input('remarks');      
+        $SL->reason = $request->input('reason'); 
+        $SL->save();
+        
+        return redirect('/')->with('success', 'Post Updated');
     }
 
     /**
@@ -104,6 +161,15 @@ class SLController extends Controller
      */
     public function destroy($id)
     {
-        //
+        $SL = SL::find($id);
+
+        //check role?
+        // if(auth()->user()->role == 'admin') {} 
+        // else if(auth()->user()->id !== $post->user_id) {
+        //     return redirect('/')->with('error', 'Unauthorized page');
+        // } 
+
+        $SL->delete();
+        return redirect('/')->with('success', 'Post Deleted');
     }
 }
