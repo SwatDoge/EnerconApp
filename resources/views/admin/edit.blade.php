@@ -18,6 +18,21 @@
                                 <label for="email">E-mail:</label>
                                 <input type="text" name="email" value="{{ $user->email }}" id="email" class="form-control" placeholder="{{ $user->email }}">
                             </div>
+                            <br>
+                            <ul class="list-group">
+                                <?php
+                                    $u = App\Models\UserRole::all()->where('user_id', $user->id);
+                                    $ar = array();
+                                    foreach($u as $item) {
+                                        $ar[] = $item->role_id;
+
+                                    }
+                                ?>
+                                <li class="list-group-item active">Huidige Rol(len)</li>
+                                @foreach($ar as $item)
+                                    <li class="list-group-item">{{ App\Models\Roles::all()->where('id', $item)->first()->role }}</li>
+                                @endforeach
+                            </ul>
                             @foreach($roles as $role)
                                 <div style="display: inline-block; padding-top: 20px" class="form-check">
                                     <input class="" type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->role }}">
