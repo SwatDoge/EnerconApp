@@ -20,11 +20,14 @@
                             </div>
                             @foreach($roles as $role)
                                 <div style="display: inline-block; padding-top: 20px" class="form-check">
-                                    <input class="" type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->name }}" >
-                                    <label for="{{ $role->name }}">{{ $role->name }}</label>
+                                    <input class="" type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->role }}">
+                                    <label for="{{ $role->role }}">{{ $role->role }}</label>
                                 </div>
                             @endforeach
-                            <button style="display: block" type="submit" class="btn btn-primary">Updaten</button>
+                            <div class="d-flex flex-row justify-content-between">
+                                <button style="display: block" type="submit" class="btn btn-primary">Updaten</button>
+                                <button style="display: block" href="{{ URL::previous() }}"class="btn btn-warning">Annuleren</button>
+                            </div>
                         </form>
                     </div>
                 </div>
