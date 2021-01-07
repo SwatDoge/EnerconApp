@@ -8,7 +8,12 @@ require('./bootstrap');
 
 window.Vue = require('vue');
 
-Vue.component('list-steps', require('./components/StepsListComponent.vue').default);
+Vue.component('form-steps', require('./components/form/StepsListComponent.vue').default);
+Vue.component('form-general', require('./components/form/GeneralComponent.vue').default);
+Vue.component('form-internal', require('./components/form/InternalComponent.vue').default);
+Vue.component('form-remarks', require('./components/form/RemarksComponent.vue').default);
+
+Vue.component('switchletter', require('./components/Form.vue').default);
 
 const app = new Vue({
     el: '#app'
