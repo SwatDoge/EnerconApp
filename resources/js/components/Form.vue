@@ -1,6 +1,6 @@
 <template>
     <div>
-        <form method="POST" action="http://127.0.0.1:8000/sl" accept-charset="UTF-8" enctype="multipart/form-data" id="SLcreateform" v-if="Fetched">
+        <form method="POST" action="http://127.0.0.1:8000/sl" accept-charset="UTF-8" enctype="multipart/form-data" id="SLcreateform">
             <!-- Schakelbrief gegevens -->
             <div class="card mx-4">
                 <div class="card-body">
