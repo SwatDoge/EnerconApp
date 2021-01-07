@@ -22,9 +22,11 @@
                                 <td>{{$user->id}}</td>
                                 <td>{{$user->name}}</td>
                                 <td>{{$user->email}}</td>
+                                <td>
                                 @foreach ($roles->where('id', $user->id) as $role)
-                                    {{ $role }}
+                                    {{ $role->role }}
                                 @endforeach
+                                </td>
                                 <td class="d-flex flex-row justify-content-between">
                                     <a href="{{ route('aEdit', $user->id) }}">
                                         <button style="margin: 0" type="button" class="btn btn-primary">

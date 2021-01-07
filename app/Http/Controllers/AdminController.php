@@ -34,6 +34,57 @@ class AdminController extends Controller
 
     }
 
+    public function roles() 
+    {
+        $roles = Roles::all();
+        return view('admin.roles.roles')->with('roles', $roles);
+    }
+
+    public function createrole()
+    {
+        return view('admin.roles.createrole');
+    }
+
+    public function insertrole(Request $request)
+    {
+
+        $this->validate($request, [
+            'addRole' => 'required',
+        ]);
+
+        $Role = new Roles;
+        $Role->role = $request->input('addRole');
+        $Role->save();
+
+        return redirect('/admin/roles');
+
+    }
+
+    public function editrole($id)
+    {
+        $role = Roles::find($id);
+        return view('admin.roles.editrole')->with('role', $role);
+    }
+
+    public function changerole(Request $request, $role)
+    {
+        $newRolename = Roles::find($role);
+        $this->validate($request, [
+            'newrolename' => 'required',
+        ]);
+
+        $newRolename->role = $request->input('newrolename');
+        $newRolename->save();
+        return redirect('/admin/roles');
+    }
+
+    public function deleterole($id)
+    {
+        $role = Roles::find($id);
+        $role->delete();
+        return redirect('/admin/roles');
+    }
+
     /**
      * Show the form for creating a new resource.
      *

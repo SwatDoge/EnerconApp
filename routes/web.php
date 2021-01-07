@@ -25,10 +25,13 @@ Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name
 
 Route::any('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('pIndex');
 Route::any('/profile/update', [ProfileController::class, 'update'])->name('pUpdate');
-Route::post('/giverole', 'HomeController@insert');
-Route::post('addrole', 'HomeController@create');
-Route::any('/roles/{id}/edit', 'HomeController@edit');
-Route::post('/roles/edit/{role}', 'HomeController@edit1');
+
+Route::any('/admin/roles', 'AdminController@roles');
+Route::get('/admin/roles/{id}/edit', 'AdminController@editrole');
+Route::post('/admin/roles/wijzigen/{id}', 'AdminController@changerole');
+Route::post('/admin/roles/delete/{id}', 'AdminController@deleterole');
+Route::any('/admin/roles/addrole', 'AdminController@createrole');
+Route::post('/admin/roles/add', 'AdminController@insertrole');
 
 
 Route::any('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('aIndex');

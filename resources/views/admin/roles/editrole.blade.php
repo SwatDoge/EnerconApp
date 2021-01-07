@@ -5,13 +5,13 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
-                <div class="card-header">{{ __('Dashboard') }}</div>
+                <div class="card-header"><strong>Bewerk: {{$role->role}}</strong></div>
                     <div class="card-body">
-                        <form method="post" action="/roles/edit/{{$role->id}}">
+                        <form method="post" action="/admin/roles/wijzigen/{{$role->id}}">
                             @csrf 
-                            <input type="text" name="newrolename" class="form-control" placeholder="{{$role->role}}">
+                            <input type="text" name="newrolename"class="form-control" placeholder="{{$role->role}}">
                             <br>
-                            <input type="submit" class="btn btn-info">
+                            <input type="submit" value="Rolnaam wijzigen" class="btn btn-info">
 
                         </form>
                     </div>
