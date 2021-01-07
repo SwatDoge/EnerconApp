@@ -176,9 +176,7 @@
                     <br/>
                 </div>
             </div>
-
             <input class="btn btn-primary" type="submit" value="Creeër">
-
         </div>
     </div>
 </form>
