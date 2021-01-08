@@ -80,7 +80,6 @@
         },
         mounted(){
             this.create();
-            alert(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''));
         }
     }
 </script>
