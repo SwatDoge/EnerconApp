@@ -75,16 +75,12 @@
                 this.steps.push(step);
             },
             updateDate: function (i){
-                let d = new Date();
-                let s =  d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + this.addzero(d.getHours()) + ":" + this.addzero(d.getMinutes()) + ":" + this.addzero(d.getSeconds());
-                this.steps[i].datum = s;
-            },
-            addzero: function (time){
-                return (parseInt(time) < 10 ? "0" + time : time);
+                this.steps[i].datum = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
             }
         },
         mounted(){
             this.create();
+            alert(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''));
         }
     }
 </script>
