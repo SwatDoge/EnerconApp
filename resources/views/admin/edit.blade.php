@@ -41,7 +41,13 @@
                             @endforeach
                             <div class="d-flex flex-row justify-content-between">
                                 <button style="display: block" type="submit" class="btn btn-primary">Updaten</button>
-                                <button style="display: block" href="{{ URL::previous() }}"class="btn btn-warning">Annuleren</button>
+                                <form action="{{ route('aDelete', $user) }}" method="POST">
+                                    @csrf @method('delete')
+                                    <button style="display: block" type="submit" class="btn btn-danger">
+                                        Verwijderen
+                                    </button>
+                                </form>
+                                <button style="display: block" href="{{ route('aIndex') }}"class="btn btn-warning">Annuleren</button>
                             </div>
                         </form>
                     </div>
