@@ -2231,16 +2231,12 @@ __webpack_require__.r(__webpack_exports__);
       this.steps.push(step);
     },
     updateDate: function updateDate(i) {
-      var d = new Date();
-      var s = d.getDate() + "/" + (d.getMonth() + 1) + "/" + d.getFullYear() + " " + this.addzero(d.getHours()) + ":" + this.addzero(d.getMinutes()) + ":" + this.addzero(d.getSeconds());
-      this.steps[i].datum = s;
-    },
-    addzero: function addzero(time) {
-      return parseInt(time) < 10 ? "0" + time : time;
+      this.steps[i].datum = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
     }
   },
   mounted: function mounted() {
     this.create();
+    alert(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''));
   }
 });
 
@@ -37837,83 +37833,81 @@ var render = function() {
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
   return _c("div", [
-    _vm.Fetched
-      ? _c(
-          "form",
-          {
-            attrs: {
-              method: "POST",
-              action: "http://127.0.0.1:8000/sl",
-              "accept-charset": "UTF-8",
-              enctype: "multipart/form-data",
-              id: "SLcreateform"
-            }
-          },
-          [
-            _c("div", { staticClass: "card mx-4" }, [
-              _c(
-                "div",
-                { staticClass: "card-body" },
-                [
-                  _c("div", { staticClass: "row" }, [
-                    _vm._m(0),
-                    _vm._v(" "),
-                    _c("div", { staticClass: "col order-1 pr-0" }, [
-                      _c("h2", [
-                        _vm._v(
-                          "Nieuwe schakelbrief (" +
-                            _vm._s(_vm.Schakelbrief_ID) +
-                            ")"
-                        )
-                      ]),
-                      _vm._v(" "),
-                      _c("br"),
-                      _vm._v(" "),
-                      _c("h4", [_vm._v("Algemeen")]),
-                      _vm._v(" "),
-                      _c("hr")
-                    ])
+    _c(
+      "form",
+      {
+        attrs: {
+          method: "POST",
+          action: "http://127.0.0.1:8000/sl",
+          "accept-charset": "UTF-8",
+          enctype: "multipart/form-data",
+          id: "SLcreateform"
+        }
+      },
+      [
+        _c("div", { staticClass: "card mx-4" }, [
+          _c(
+            "div",
+            { staticClass: "card-body" },
+            [
+              _c("div", { staticClass: "row" }, [
+                _vm._m(0),
+                _vm._v(" "),
+                _c("div", { staticClass: "col order-1 pr-0" }, [
+                  _c("h2", [
+                    _vm._v(
+                      "Nieuwe schakelbrief (" +
+                        _vm._s(_vm.Schakelbrief_ID) +
+                        ")"
+                    )
                   ]),
                   _vm._v(" "),
-                  _c("form-general"),
-                  _vm._v(" "),
-                  _c("br"),
-                  _c("br"),
                   _c("br"),
                   _vm._v(" "),
-                  _c("h4", [_vm._v("Intern")]),
+                  _c("h4", [_vm._v("Algemeen")]),
                   _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c("form-internal"),
-                  _vm._v(" "),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("h4", [_vm._v("Stappen")]),
-                  _vm._v(" "),
-                  _c("form-steps"),
-                  _vm._v(" "),
-                  _c("br"),
-                  _c("br"),
-                  _c("br"),
-                  _vm._v(" "),
-                  _c("h4", [_vm._v("Opmerkingen")]),
-                  _vm._v(" "),
-                  _c("hr"),
-                  _vm._v(" "),
-                  _c("form-remarks"),
-                  _vm._v(" "),
-                  _c("input", {
-                    staticClass: "btn btn-primary",
-                    attrs: { type: "submit", value: "Creeër" }
-                  })
-                ],
-                1
-              )
-            ])
-          ]
-        )
-      : _vm._e()
+                  _c("hr")
+                ])
+              ]),
+              _vm._v(" "),
+              _c("form-general"),
+              _vm._v(" "),
+              _c("br"),
+              _c("br"),
+              _c("br"),
+              _vm._v(" "),
+              _c("h4", [_vm._v("Intern")]),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("form-internal"),
+              _vm._v(" "),
+              _c("br"),
+              _vm._v(" "),
+              _c("h4", [_vm._v("Stappen")]),
+              _vm._v(" "),
+              _c("form-steps"),
+              _vm._v(" "),
+              _c("br"),
+              _c("br"),
+              _c("br"),
+              _vm._v(" "),
+              _c("h4", [_vm._v("Opmerkingen")]),
+              _vm._v(" "),
+              _c("hr"),
+              _vm._v(" "),
+              _c("form-remarks"),
+              _vm._v(" "),
+              _c("input", {
+                staticClass: "btn btn-primary",
+                attrs: { type: "submit", value: "Creeër" }
+              })
+            ],
+            1
+          )
+        ])
+      ]
+    )
   ])
 }
 var staticRenderFns = [
