@@ -10,34 +10,34 @@
                     <div class="col">Omschrijving</div>
                     <div class="col">Voltooid</div>
                     <div class="col">Datum/Tijd</div>   
-                    <div class="col">Acties</div>
+                    <div class="col" v-if="hasRole(['IV'])">Acties</div>
                 </div>
                 <hr class="mb-3"/>
                 <div v-for="(step, index) in steps" :key="parseInt(step.stap)">
                     <div class="row text-center align-items-center mt-1">
                         <div class="col">
-                            <input type="text" class="form-control text-center" v-model="step.stap">
+                            <input type="text" class="form-control text-center" v-model="step.stap"     :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center" v-model="step.turbine">
+                            <input type="text" class="form-control text-center" v-model="step.turbine"  :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center" v-model="step.plaats">
+                            <input type="text" class="form-control text-center" v-model="step.plaats"   :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center " v-model="step.veld">
+                            <input type="text" class="form-control text-center " v-model="step.veld"    :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
                             <a class="x" data-toggle="collapse" :data-target="'#description_' + index" aria-expanded="true" :aria-controls="'description_' + index">Zie omschrijving 👁</a>
                         </div>
                         <div class="col">
-                            <input type="checkbox" readonly :id="'signature_' + index" v-model="step.voltooid" @click="updateDate(index)">
+                            <input type="checkbox" :id="'signature_' + index" v-model="step.voltooid" @click="updateDate(index, step.voltooid)" :disabled="!hasRole(['PL'])">
                         </div>
                         <div class="col">
                             <input type="text" class="form-control text-center" readonly v-model="step.datum" v-if="step.voltooid">
-                            <input type="text" class="form-control text-center" :placeholder="(step.created ? 'n.v.t.' : 'niet voltooid')" readonly v-else>
+                            <input type="text" class="form-control text-center" :placeholder="(step.created ? 'n.v.t.' : 'niet voltooid')" v-model="step.datum" readonly v-else>
                         </div>
-                        <div class="col">
+                        <div class="col" v-if="hasRole(['IV'])">
                             <i class="fas fa-trash" v-on:click="steps.splice(index, 1)"></i>
                         </div>
                     </div>
@@ -49,7 +49,7 @@
                 </div>
             </div>
         </div>
-        <a type="button" class="btn btn-secondary mt-2" v-on:click="create();">Nieuwe stap aanmaken</a>
+        <a type="button" class="btn btn-secondary mt-2" v-on:click="create()" v-if="hasRole(['IV'])">Nieuwe stap aanmaken</a>
     </div>
 </template>
 
@@ -60,6 +60,7 @@
                 steps: [],
             }
         },
+        props:["rollen"],
         methods:{
             create: function (){
                 let step = {
@@ -74,9 +75,17 @@
                 }
                 this.steps.push(step);
             },
-            updateDate: function (i){
-                this.steps[i].datum = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
-            }
+            updateDate: function (i, t){
+                if (!t) this.steps[i].datum = new Date().toISOString().replace(/T/, ' ').replace(/\..+/, '');
+            },
+            hasRole: function(roles){
+                let res = false;
+                for (let role of roles)
+                    if (!res && this.rollen.includes(role))
+                        res = true;
+
+                return res;
+            },
         },
         mounted(){
             this.create();

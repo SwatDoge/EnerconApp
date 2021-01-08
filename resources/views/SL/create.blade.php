@@ -1,6 +1,7 @@
 @extends('layouts.app')
 @section('content')
-@csrf
     <link rel="stylesheet" href="{{asset('css/app.css')}}">
-    <switchletter></switchletter>
+    <switchletter rollen={{App\Models\Roles::all()->whereIn('id', App\Models\UserRole::all()-> where('user_id', auth()->user()->id)->pluck('role_id'))->pluck('role')}}>
+        {{csrf_field()}}
+    </switchletter>
 @endsection
