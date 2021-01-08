@@ -14,7 +14,7 @@
             <div class="row">
                 <div class="col pr-0">
                     <h2>Nieuwe schakelbrief (gegenereerd nummer)</h2>
-            
+
                     <br/>
                     <h4>Algemeen</h4>
                     <hr/>
