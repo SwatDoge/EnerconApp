@@ -5,7 +5,7 @@
         <body>
             <div class="container p-5">
                 @if($users->count() > 0)
-                    <table id="table" class="table p-5">
+                    <table id="table" class="table p-5 text center">
                         <h1>Gebruikers</h1><input type="search" class="form-control" placeholder="Zoek gebruikers"> <br>
                         <thead>
                         <tr>
