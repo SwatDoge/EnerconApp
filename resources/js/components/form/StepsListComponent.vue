@@ -9,7 +9,7 @@
                     <div class="col">Veld</div>
                     <div class="col">Omschrijving</div>
                     <div class="col">Voltooid</div>
-                    <div class="col">Datum/Tijd</div>
+                    <div class="col">Datum/Tijd</div>   
                     <div class="col">Acties</div>
                 </div>
                 <hr class="mb-3"/>
@@ -80,7 +80,6 @@
         },
         mounted(){
             this.create();
-            alert(new Date().toISOString().replace(/T/, ' ').replace(/\..+/, ''));
         }
     }
 </script>
