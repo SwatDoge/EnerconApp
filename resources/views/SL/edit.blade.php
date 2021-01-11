@@ -177,7 +177,7 @@
                 </div>
             </div>
 
-            <input class="btn btn-primary" type="submit" value="Creeër">
+            <input class="btn btn-primary" type="submit" value="Update">
 
         </div>
     </div>
