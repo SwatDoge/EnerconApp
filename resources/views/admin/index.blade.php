@@ -5,16 +5,16 @@
         <body>
             <div class="container p-5">
                 @if($users->count() > 0)
-                    <table id="table" class="table p-5 text center">
-                        <h1>Gebruikers</h1><input type="search" class="form-control" placeholder="Zoek gebruikers"> <br>
+                    <table id="admin_table_id" class="table p-5 text center display" data-paging='false'>
+                        <h1>Gebruikers</h1><br>
                         <thead>
-                        <tr>
-                            <th scope="col">ID</th>
-                            <th scope="col">Naam</th>
-                            <th scope="col">Email</th>
-                            <th scope="col">Rollen</th>
-                            <th scope="col">Acties</th>
-                        </tr>
+                            <tr>
+                                <th scope="col">ID</th>
+                                <th scope="col">Naam</th>
+                                <th scope="col">Email</th>
+                                <th scope="col">Rollen</th>
+                                <th scope="col">Acties</th>
+                            </tr>
                         </thead>
                         <tbody>
                         @foreach($users as $user)
@@ -52,6 +52,7 @@
                 @else
                     <p class="p-5">Nog geen gebruikers</p>
                 @endif
+                <br>
                 {{ $users->links() }}
             </div>
             <style>
@@ -61,5 +62,19 @@
             </style>
         </body>
     </html>
+    @push('scripts')
+        <script>
+            $(document).ready( function () {
+                $('#admin_table_id').DataTable({
+                    columnDefs: [
+                        { orderable: false, targets: -1 }
+                    ],
+                    "bInfo" : false,
+
+                });
+
+            } );
+        </script>
+    @endpush
 
 @endsection
