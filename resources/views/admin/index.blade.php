@@ -34,8 +34,8 @@
                                 @endif
                                 <td class="d-flex flex-row justify-content-between">
                                     <a href="{{ route('aEdit', $user->id) }}">
-                                        <button style="margin: 0" type="button" class="btn btn-primary">
-                                            <i class="far fa-edit"></i>
+                                        <button style="margin: 0" type="button" class="btn bg-green">
+                                            <i class="far fa-edit white"></i>
                                         </button>
                                     </a>
                                     <form action="{{ route('aDelete', $user) }}" method="POST">
