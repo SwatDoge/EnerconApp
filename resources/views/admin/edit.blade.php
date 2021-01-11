@@ -18,13 +18,37 @@
                                 <label for="email">E-mail:</label>
                                 <input type="text" name="email" value="{{ $user->email }}" id="email" class="form-control" placeholder="{{ $user->email }}">
                             </div>
+                            <br>
+                            <ul class="list-group">
+                                <?php
+                                    $u = App\Models\UserRole::all()->where('user_id', $user->id);
+                                    $ar = array();
+                                    foreach($u as $item) {
+                                        $ar[] = $item->role_id;
+
+                                    }
+                                ?>
+                                <li class="list-group-item active">Huidige Rol(len)</li>
+                                @foreach($ar as $item)
+                                    <li class="list-group-item">{{ App\Models\Roles::all()->where('id', $item)->first()->role }}</li>
+                                @endforeach
+                            </ul>
                             @foreach($roles as $role)
                                 <div style="display: inline-block; padding-top: 20px" class="form-check">
-                                    <input class="" type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->name }}" >
-                                    <label for="{{ $role->name }}">{{ $role->name }}</label>
+                                    <input class="" type="checkbox" name="roles[]" value="{{ $role->id }}" id="{{ $role->role }}">
+                                    <label for="{{ $role->role }}">{{ $role->role }}</label>
                                 </div>
                             @endforeach
-                            <button style="display: block" type="submit" class="btn btn-primary">Updaten</button>
+                            <div class="d-flex flex-row justify-content-between">
+                                <button style="display: block" type="submit" class="btn btn-primary">Updaten</button>
+                                <form action="{{ route('aDelete', $user) }}" method="POST">
+                                    @csrf @method('delete')
+                                    <button style="display: block" type="submit" class="btn btn-danger">
+                                        Verwijderen
+                                    </button>
+                                </form>
+                                <button style="display: block" href="{{ route('aIndex') }}"class="btn btn-warning">Annuleren</button>
+                            </div>
                         </form>
                     </div>
                 </div>

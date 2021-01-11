@@ -5,7 +5,7 @@
     <div class="row justify-content-center">
         <div class="col-sm-8">
             <div class="card">
-                <h5 class="card-header">{{ $user->name }}</h5>
+                <h5 class="card-header">Mijn account bewerken</h5>
                 <div class="card-body">
                     <form action="{{ route('pUpdate') }}" method="POST">
                         <input type="hidden" name="id" value="{{ $user->id }}">

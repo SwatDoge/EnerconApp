@@ -25,9 +25,9 @@ class AdminController extends Controller
     public function index()
     {
         $roles = Roles::all();
-        $userRoles = UserRole::all()->where('user_id', );
+        $userRoles = UserRole::all();
         return view('admin.index')->with([
-            'users' => User::paginate(5),
+            'users' => User::simplePaginate(10),
             'roles' => $roles,
             'userRoles' => $userRoles
         ]);
@@ -144,6 +144,11 @@ class AdminController extends Controller
             'name' => 'required',
             'email' => 'required'
         ]));
+
+        $newRole = new UserRole;
+        $newRole->user_id = $request->id;
+        $newRole->role_id = $request->roles[0];
+        $newRole->save();
         return redirect()->route('aIndex');
     }
 

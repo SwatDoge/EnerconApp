@@ -41,6 +41,7 @@ class SLController extends Controller
     public function store(Request $request)
     {
         $this->validate($request, [
+            'briefnr' => 'required',
             'windpark' => 'required',
             'date' => 'required',
             'ivname' => 'required' ,
@@ -58,7 +59,7 @@ class SLController extends Controller
         ]);    
         //create
         $SL = new SL;
-        $SL->briefnr = 1;
+        $SL->briefnr = $request->input('briefnr');
         $SL->windpark = $request->input('windpark');
         $SL->date = $request->input('date');
         $SL->ivname = $request->input('ivname');
@@ -75,7 +76,7 @@ class SLController extends Controller
         $SL->reason = $request->input('reason'); 
         $SL->save();
         error_log($request);
-        return redirect('/home')->with('success', 'Post Created');
+        return redirect('/admin/schakelbrieven')->with('success', 'Post Created');
     }
 
     /**
