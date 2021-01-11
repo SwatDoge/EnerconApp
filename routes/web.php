@@ -22,7 +22,9 @@ Route::get('/', function () {
 
 Auth::routes();
 Route::post('/sl/update/{id}', [SLController::class, 'update']);
-Route::resource('sl', App\Http\Controllers\SLController::class)->shallow();
+Route::get('/sl/create', 'SLController@create');
+Route::post('/sl', 'SLController@store');
+Route::get('/sl/{id}/edit', 'SLController@edit');
 Route::get('/admin/schakelbrieven', 'SLController@index');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
