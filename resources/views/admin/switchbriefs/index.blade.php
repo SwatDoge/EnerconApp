@@ -60,8 +60,8 @@
                         </td> --}}
                         <td>
                             <a href="/sl/{{$brief->id}}/edit" class="">
-                                <button style="margin: 0" type="button" class="btn btn-primary">
-                                    <i class="far fa-edit"></i>
+                                <button style="margin: 0" type="button" class="btn bg-green color-white">
+                                    <i class="far fa-edit white"></i>
                                 </button>
                             </a>
                         </td>
@@ -72,7 +72,7 @@
             @else
             <p>Nog geen schakelbrieven toegevoegd</p>
             @endif
-            <a href="{{ route('slCreate') }}" class="btn btn-primary">Schakelbrief toevoegen</a>
+            <a href="{{ route('slCreate') }}" class="btn bg-green white">Schakelbrief toevoegen</a>
         </div>
     </body>
 </html>

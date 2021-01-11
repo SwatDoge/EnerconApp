@@ -6,3 +6,60 @@
 
 // Bootstrap
 @import '~bootstrap/scss/bootstrap';
+
+
+#app {
+    main {
+        transition: all 1s;
+    }
+    .bg-green {
+        background-color: #00564c;
+    }
+    .customNav {
+        height: 80px;
+    }
+    .white {
+        color: white;
+    }
+    .blok-menu-inner{
+        height: 200px;
+        position: relative;
+        border-radius: 6px;
+        &:hover{
+            .menu-icon {
+                text-decoration: none;
+                font-size: 80px;
+                transition: all .2s;
+            }
+        }
+        .menu-icon{
+            top: 50%;
+            transform: translate(-50%, -50%);
+            position: absolute;
+            text-transform: uppercase;
+            color: white;
+            font-size: 63px;
+            left: 50%;
+            transition: all .2s;
+
+            &:hover{
+                text-decoration: none;
+                font-size: 80px;
+                transition: all .2s;
+            }
+        }
+    }
+    .blok-menu .menu-item{
+        bottom: 0;
+        position: absolute;
+        color: #fff;
+        font-size: 20px;
+        left: 8px;
+        font-weight: bold;
+        letter-spacing: 1px;
+
+        &:hover {
+            text-decoration: none;
+        }
+    }
+}
