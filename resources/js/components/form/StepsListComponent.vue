@@ -22,7 +22,7 @@
                             <input type="text" class="form-control text-center" v-model="step.plaats"   :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center " v-model="step.veld"    :readonly="!hasRole(['IV'])">
+                            <input type="text" class="form-control text-center" v-model="step.veld"    :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
                             <input type="text" class="form-control text-center" v-model="step.turbine"  :readonly="!hasRole(['IV'])">

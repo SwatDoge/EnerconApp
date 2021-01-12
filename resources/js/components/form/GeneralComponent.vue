@@ -3,7 +3,7 @@
         <div class="col ml-3">
             <div class="row">
                 <input-dropdownv2
-                    placeholder="Windpark naam" name="windpark" classes="form-control mb-1" :readonly="!hasRole(['IV'])" 
+                    placeholder="Windpark naam" name="windpark" classes="form-control mb-1" :disable="!hasRole(['IV'])"
                     :dhaydata="windParken" dkey="windpark" dheight="180px" :dlength="40">
                 </input-dropdownv2>
             </div>
