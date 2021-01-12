@@ -5111,8 +5111,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     };
   },
-  props: ["rollen", "route", "users"],
+  props: ["rollen", "route", "users", "editid"],
   methods: {
+    post: function post() {
+      switch (this.route) {
+        case "slCreate":
+          return "http://127.0.0.1:8000/sl/";
+
+        case "slEdit":
+          return 'http://127.0.0.1:8000/sl/update/' + this.editid;
+      }
+
+      return "http://127.0.0.1:8000/sl/";
+    },
     hasRole: function hasRole(roles) {
       var res = false;
 
@@ -5143,12 +5154,23 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     var _this = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-      var apis, _loop, _i, _apis, _ret;
+      var vm, apis, _loop, _i, _apis, _ret;
 
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              vm = _this;
+              vm.$nextTick(function () {
+                vm.rollen = JSON.parse(vm.rollen);
+
+                if (vm.rollen.includes("Admin")) {
+                  vm.rollen = [];
+                  vm.rollen.push("PL", "IV", "WV", "Admin");
+                }
+
+                vm.users = JSON.parse(vm.users);
+              });
               apis = [{
                 url: "https://std.stegion.nl/api_enercon/getWindparks",
                 name: "windpark"
@@ -5208,33 +5230,33 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               });
               _i = 0, _apis = apis;
 
-            case 4:
+            case 6:
               if (!(_i < _apis.length)) {
-                _context2.next = 12;
+                _context2.next = 14;
                 break;
               }
 
-              return _context2.delegateYield(_loop(), "t0", 6);
+              return _context2.delegateYield(_loop(), "t0", 8);
 
-            case 6:
+            case 8:
               _ret = _context2.t0;
 
               if (!(_ret === "break")) {
-                _context2.next = 9;
+                _context2.next = 11;
                 break;
               }
 
-              return _context2.abrupt("break", 12);
+              return _context2.abrupt("break", 14);
 
-            case 9:
+            case 11:
               _i++;
-              _context2.next = 4;
+              _context2.next = 6;
               break;
 
-            case 12:
+            case 14:
               if (!_this.load.failed) _this.fetched = !_this.fetched;
 
-            case 13:
+            case 15:
             case "end":
               return _context2.stop();
           }
@@ -5778,7 +5800,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     "dupdatekey": {
       "default": "",
       type: String
-    }
+    },
+    "disable": {}
   },
   mounted: function mounted() {
     var vm = this;
@@ -5788,6 +5811,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   methods: {
     fl: function fl(x) {
+      if (this.disable) return;
       setTimeout(function () {
         this.shown = x;
       }.bind(this), 100);
@@ -5795,7 +5819,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     gainsort: function gainsort(ldata, text) {
       var _this = this;
 
-      if (typeof ldata === "string") ldata = JSON.parse(ldata);
       var list = ldata.filter(function (item) {
         if (item[_this.dkey].toLowerCase().includes(text.toLowerCase())) return item;
       }).slice(0, this.dlength);
@@ -5828,7 +5851,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     old_key_to_new: function old_key_to_new(data, key, og_key) {
       var x = this.dhaydata;
-      if (typeof x === "string") x = JSON.parse(x);
 
       var _iterator = _createForOfIteratorHelper(x),
           _step;
@@ -5848,6 +5870,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       return null;
     },
     resetNumber: function resetNumber() {
+      if (this.disable) return;
+
       if (this.dupdateref !== null) {
         this.$emit("inputdropdown", {
           data: "",
@@ -43419,7 +43443,7 @@ var render = function() {
           {
             attrs: {
               method: "POST",
-              action: "http://127.0.0.1:8000/sl",
+              action: _vm.post(),
               "accept-charset": "UTF-8",
               enctype: "multipart/form-data",
               id: "SLcreateform"
@@ -43547,28 +43571,28 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.hasRole(["IV"]) && _vm.route == "slCreate"
+                  _vm.route == "slCreate"
                     ? _c("input", {
                         staticClass: "btn btn-primary mt-4 text-light",
                         attrs: { type: "submit", value: "Creeër" }
                       })
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.hasRole(["IV"]) && _vm.route == "slCreate"
+                  _vm.route == "slCreate"
                     ? _c("input", {
                         staticClass: "btn btn-danger mt-4 text-light",
                         attrs: { type: "submit", value: "Annuleer" }
                       })
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.hasRole(["WV"]) && _vm.route == "slAccept"
+                  _vm.route == "slEdit"
                     ? _c("input", {
                         staticClass: "btn btn-success mt-4 text-light",
                         attrs: { type: "submit", value: "Accepteren" }
                       })
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.hasRole(["WV"]) && _vm.route == "slAccept"
+                  _vm.route == "slEdit"
                     ? _c("input", {
                         staticClass: "btn btn-danger mt-4 text-light",
                         attrs: { type: "submit", value: "Afwijzen" }
@@ -43671,7 +43695,7 @@ var render = function() {
               placeholder: "Windpark naam",
               name: "windpark",
               classes: "form-control mb-1",
-              readonly: !_vm.hasRole(["IV"]),
+              disable: !_vm.hasRole(["IV"]),
               dhaydata: _vm.windParken,
               dkey: "windpark",
               dheight: "180px",
@@ -43840,9 +43864,9 @@ var render = function() {
               placeholder: "Naam",
               type: "text",
               classes: "form-control",
-              id: "plname",
-              name: "plname",
-              readonly: !_vm.hasRole(["IV"]),
+              id: "ivname",
+              name: "ivname",
+              disable: !_vm.hasRole(["IV"]),
               dhaydata: _vm.users,
               dkey: "name",
               dheight: "180px",
@@ -43908,7 +43932,7 @@ var render = function() {
               classes: "form-control",
               id: "plname",
               name: "plname",
-              readonly: !_vm.hasRole(["IV"]),
+              disable: !_vm.hasRole(["IV"]),
               dhaydata: _vm.users,
               dkey: "name",
               dheight: "180px",
@@ -43972,7 +43996,7 @@ var render = function() {
               classes: "form-control",
               id: "plname",
               name: "plname",
-              readonly: !_vm.hasRole(["IV"]),
+              disable: !_vm.hasRole(["IV"]),
               dhaydata: _vm.users,
               dkey: "name",
               dheight: "180px",
@@ -44197,7 +44221,7 @@ var render = function() {
                           expression: "step.veld"
                         }
                       ],
-                      staticClass: "form-control text-center ",
+                      staticClass: "form-control text-center",
                       attrs: { type: "text", readonly: !_vm.hasRole(["IV"]) },
                       domProps: { value: step.veld },
                       on: {
@@ -44478,7 +44502,8 @@ var render = function() {
         placeholder: _vm.placeholder,
         type: "text",
         autocomplete: "off",
-        name: _vm.name
+        name: _vm.name,
+        readonly: _vm.disable
       },
       domProps: { value: _vm.inputtext },
       on: {
@@ -57297,8 +57322,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\School\Xampp\htdocs\examen\EnerconApp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\School\Xampp\htdocs\examen\EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

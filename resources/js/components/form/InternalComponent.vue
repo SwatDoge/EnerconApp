@@ -5,7 +5,7 @@
             <div class="mb-4">
                 <label for="ivname">Instalatie verantwoordlijke:</label>
                     <input-dropdownv2 
-                        placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :readonly="!hasRole(['IV'])"
+                        placeholder="Naam" type="text" classes="form-control" id="ivname" name="ivname" :disable="!hasRole(['IV'])"
                         :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_iv" dupdatekey="phonenumber"
                         @inputdropdown="catchEvent"
                     />
@@ -19,7 +19,7 @@
             <div class="mx-4 mb-4">
                 <label for="mvname">Werk verantwoordelijke:</label>
                 <input-dropdownv2 
-                    placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :readonly="!hasRole(['IV'])"
+                    placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :disable="!hasRole(['IV'])"
                     :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_mv" dupdatekey="phonenumber"
                     @inputdropdown="catchEvent"
                 />
@@ -33,7 +33,7 @@
             <div class="mx-4 mb-4">
                 <label for="plname">Ploeglijder: </label>
                 <input-dropdownv2 
-                    placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :readonly="!hasRole(['IV'])"
+                    placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :disable="!hasRole(['IV'])"
                     :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_pl" dupdatekey="phonenumber"
                     @inputdropdown="catchEvent"
                 />

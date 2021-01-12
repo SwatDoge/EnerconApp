@@ -1,6 +1,6 @@
 <template>
     <div v-if="fetched">
-        <form method="POST" action="http://127.0.0.1:8000/sl" accept-charset="UTF-8" enctype="multipart/form-data" id="SLcreateform">
+        <form method="POST" :action="post()" accept-charset="UTF-8" enctype="multipart/form-data" id="SLcreateform">           
             <!-- csrf -->
             <slot></slot>
             <!-- id -->
@@ -46,11 +46,11 @@
                     </div>
 
                     <!-- iv knoppen -->
-                    <input class="btn btn-primary mt-4 text-light" type="submit" value="Creeër" v-if="hasRole(['IV']) && route == 'slCreate'">
-                    <input class="btn btn-danger mt-4 text-light" type="submit" value="Annuleer" v-if="hasRole(['IV']) && route == 'slCreate'">
+                    <input class="btn btn-primary mt-4 text-light" type="submit" value="Creeër" v-if="route == 'slCreate'">
+                    <input class="btn btn-danger mt-4 text-light" type="submit" value="Annuleer" v-if="route == 'slCreate'">
                     <!-- wv knoppen -->
-                    <input class="btn btn-success mt-4 text-light" type="submit" value="Accepteren" v-if="hasRole(['WV']) && route == 'slAccept'">
-                    <input class="btn btn-danger mt-4 text-light" type="submit" value="Afwijzen" v-if="hasRole(['WV']) && route == 'slAccept'">
+                    <input class="btn btn-success mt-4 text-light" type="submit" value="Accepteren" v-if="route == 'slEdit'">
+                    <input class="btn btn-danger mt-4 text-light" type="submit" value="Afwijzen" v-if="route == 'slEdit'">
                     
                 </div>
             </div>
@@ -89,8 +89,15 @@
                 },
             }
         },
-        props:["rollen", "route", "users"],
+        props:["rollen", "route", "users", "editid"],
         methods:{
+            post(){
+                switch(this.route){
+                    case "slCreate": return "http://127.0.0.1:8000/sl/";
+                    case "slEdit": return 'http://127.0.0.1:8000/sl/update/' + this.editid;
+                }
+                return "http://127.0.0.1:8000/sl/";
+            },
             hasRole: function(roles){
                 let res = false;
                 for (let role of roles)
@@ -107,6 +114,16 @@
             },
         },
         async mounted(){
+            let vm = this;
+            vm.$nextTick(function () {
+                vm.rollen = JSON.parse(vm.rollen);
+                if (vm.rollen.includes("Admin")){
+                    vm.rollen = [];
+                    vm.rollen.push("PL", "IV", "WV", "Admin");
+                }
+                vm.users = JSON.parse(vm.users);
+            });
+
             let apis = [
                 {url:"https://std.stegion.nl/api_enercon/getWindparks",             name: "windpark"},
                 {url:"https://std.stegion.nl/api_enercon/getTurbines",              name: "turbines"},
