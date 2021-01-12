@@ -10,11 +10,11 @@
                 <div class="card-body">
                     <!-- header -->
                     <div class="row">
-                        <div class="col-md-offset-4 mr-3 order-2">
-                            <img src="/img/logo_transparent.png" height=92>
-                            <hr/>
+                        <div class="col order-2 px-0">
+                            <img class="mr-offset-0" src="/img/logo_transparent.png" height=92>
+                            <hr>
                         </div>
-                        <div class="col order-1 pr-0">
+                        <div class="col order-1 px-0">
                             <h2>Nieuwe schakelbrief (#{{schakelbrief_ID}})</h2>
                             <br/>
                             <h4 v-if="hasRole(['IV', 'WV', 'PL'])">Algemeen</h4>
@@ -29,13 +29,13 @@
                         <br/><br/><br/>
                         <h4>Intern</h4>
                         <hr/>
-                        <form-internal :rollen="rollen"></form-internal>
+                        <form-internal :rollen="rollen" :users="users"></form-internal>
                     </div>
 
                     <div v-if="hasRole(['IV', 'WV', 'PL'])">
                         <br/>
                         <h4>Stappen</h4>
-                        <form-steps :rollen="rollen"></form-steps>
+                        <form-steps :rollen="rollen" :omschrijvingen="enerconapi.omschrijvingen"></form-steps>
                     </div>
 
                     <div v-if="hasRole(['IV', 'WV'])">
@@ -46,20 +46,28 @@
                     </div>
 
                     <!-- iv knoppen -->
-                    <input class="btn btn-primary mt-4" type="submit" value="Creeër" v-if="hasRole(['IV'])">
-                    <input class="btn btn-danger mt-4" type="submit" value="Annuleer" v-if="hasRole(['IV'])">
+                    <input class="btn btn-primary mt-4 text-light" type="submit" value="Creeër" v-if="hasRole(['IV']) && route == 'slCreate'">
+                    <input class="btn btn-danger mt-4 text-light" type="submit" value="Annuleer" v-if="hasRole(['IV']) && route == 'slCreate'">
                     <!-- wv knoppen -->
-                    <input class="btn btn-success mt-4" type="submit" value="Accepteren" v-if="hasRole(['WV'])">
-                    <input class="btn btn-danger mt-4" type="submit" value="Afwijzen" v-if="hasRole(['WV'])">
+                    <input class="btn btn-success mt-4 text-light" type="submit" value="Accepteren" v-if="hasRole(['WV']) && route == 'slAccept'">
+                    <input class="btn btn-danger mt-4 text-light" type="submit" value="Afwijzen" v-if="hasRole(['WV']) && route == 'slAccept'">
                     
                 </div>
             </div>
         </form>
     </div>
-    <div v-else class="row">
-        <div class="col text-center align-self-center">
-            <h4>Windmolen data laden..</h4>
-            <div class="spinner-border" role="status"></div>
+    <div v-else-if="!this.load.failed && !fetched">
+        <h4 class="text-center">({{this.load.gained}}/{{this.load.total}}) {{this.load.currentbuffer}} laden..</h4>
+        <div class="row progress align-self-center mx-4">
+            <div class="progress-bar-animated bg-info progress-bar-striped" role="progressbar" :style="'width: ' + (load.gained / load.total) * 100 + '%'"></div>
+        </div>
+    </div>
+    <div v-else>
+        <div class="text-center alert alert-danger mx-4">
+            <h4><b>Kon "{{this.load.currentbuffer}}" niet laden, neem contact op met een beheerder.</b></h4>
+            <br/>
+            <h4>Error bericht:</h4>
+            <h4>{{this.load.error}}</h4>
         </div>
     </div>
 </template>
@@ -72,9 +80,16 @@
                 datum: this.getDateForm(new Date()),
                 fetched: false,
                 enerconapi: {},
+                load: {
+                    total: 0,
+                    gained: 0,
+                    currentbuffer: "",
+                    failed: false,
+                    error: "",
+                },
             }
         },
-        props:["rollen"],
+        props:["rollen", "route", "users"],
         methods:{
             hasRole: function(roles){
                 let res = false;
@@ -88,7 +103,7 @@
                 return Math.floor(Math.random() * 9999999) + 1000000;
             },
             getDateForm: function(date){
-                return (date.getDate() < 10 ? "0" + date.getDate() : date.getDate) + "-" + (date.getMonth() + 1 < 10 ? "0" + date.getDate() : date.getDate) + "-" + date.getFullYear()
+                return new Date().toISOString().slice(0,10);
             },
         },
         async mounted(){
@@ -99,13 +114,22 @@
                 {url:"https://std.stegion.nl/api_enercon/getStap_velden",           name: "velden"},
                 {url:"https://std.stegion.nl/api_enercon/getStap_omschrijvingen",   name: "omschrijvingen"},
             ];
+            this.load.total = apis.length;
 
             for (let collection of apis) {
+                this.load.currentbuffer = collection.name;
                 await fetch(collection.url)
-                .then(res => {return res.json()})
-                .then(data => this.enerconapi[collection.name] = data.data);
+                .then(res => {
+                    if (!res.ok){this.load.failed = true;} 
+                    return res.json()
+                })
+                .then(data => (data.data.length > 0 ? this.enerconapi[collection.name] = data.data : this.load.failed = true))
+                .catch(error => {this.load.failed = true; this.load.error = error});
+                if (this.load.failed) break;
+                this.load.gained++;
+                
             }
-           this.fetched = !this.fetched;
+           if (!this.load.failed) this.fetched = !this.fetched;
         }
     }
 </script>
