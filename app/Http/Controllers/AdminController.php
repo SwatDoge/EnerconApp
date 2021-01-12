@@ -34,7 +34,7 @@ class AdminController extends Controller
 
     }
 
-    public function roles() 
+    public function roles()
     {
         $roles = Roles::all();
         return view('admin.roles.roles')->with('roles', $roles);
@@ -92,7 +92,8 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Roles::all();
+        return view('admin.users.create')->with('roles', $roles);
     }
 
     /**
@@ -103,7 +104,31 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new User;
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required',
+            'pnumber' => 'required',
+
+        ]);
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make('Welkom123');
+        $user->phonenumber = $request->input('pnumber');
+        $user->save();
+
+        $newRole = new UserRole;
+        $newRole->user_id = $user->id;
+        $newRole->role_id = $request->roles[0];
+        $newRole->save();
+
+        return redirect('/admin')->with([
+            'succes', 'Gebruiker toegevoegd',
+            'users' => User::simplePaginate(10),
+            ]);
+
+
     }
 
     /**
