@@ -22,6 +22,7 @@
                 <th scope="col">Contact Telnr</th>
                 <th scope="col">Opmerkingen</th>
                 <th scope="col">Reden</th> --}}
+                <th scope="col">PDF</th>
 
             </tr>
             </thead>
@@ -55,6 +56,9 @@
                         {{$brief->reason}}
                         @endif
                     </td> --}}
+                    <td>
+                        <a class="btn btn-danger" href="{{ route('slPDF', $brief->id) }}">Export PDF</a>
+                    </td>
 
                 </tr>
             @endforeach

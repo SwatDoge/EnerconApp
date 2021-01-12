@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SL;
+use PDF;
 
 class SLController extends Controller
 {
@@ -174,5 +175,17 @@ class SLController extends Controller
 
         $SL->delete();
         return redirect('/')->with('success', 'Post Deleted');
+    }
+
+    public function PDF($id)
+    {
+        $SL = SL::find($id);
+        $data = [
+            'title' => $SL->Briefnr,
+            'date' => date('m/d/Y')
+        ];
+        $pdf = PDF::loadView('SL.pdf', $data);
+
+        return $pdf->download('Schakelbrief.pdf');
     }
 }
