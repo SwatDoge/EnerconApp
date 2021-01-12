@@ -1,9 +1,13 @@
 @extends('layouts.app')
 
 @section('content')
-    <html>
-        <body>
-            <div class="container p-5">
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            {{-- <div class="container p-5"> --}}
+                <a class="btn btn-danger float-right btn-lg" href="{{route('aCreate')}}">
+                    Gebruiker toevoegen
+                </a>
                 @if($users->count() > 0)
                     <table id="table" class="table p-5 text center">
                         <h1>Gebruikers</h1><input type="search" class="form-control" placeholder="Zoek gebruikers"> <br>
@@ -19,7 +23,7 @@
                         <tbody>
                         @foreach($users as $user)
                             <?php
-                                $u = App\Models\UserRole::all()->where('user_id', $user->id )->pluck('role_id')->first();
+                                $u = App\Models\RoleUser::all()->where('user_id', $user->id )->pluck('role_id')->first();
                             ?>
                             <tr>
                                 <td>{{$user->id}}</td>
@@ -53,13 +57,12 @@
                     <p class="p-5">Nog geen gebruikers</p>
                 @endif
                 {{ $users->links() }}
-            </div>
             <style>
                 .w-5 {
                     display: none;
                 }
             </style>
-        </body>
-    </html>
-
+        </div>
+    </div>
+</div>
 @endsection

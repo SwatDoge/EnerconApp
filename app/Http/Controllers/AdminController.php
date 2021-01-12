@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Roles;
-use App\Models\UserRole;
+use App\Models\RoleUser;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -25,7 +25,7 @@ class AdminController extends Controller
     public function index()
     {
         $roles = Roles::all();
-        $userRoles = UserRole::all();
+        $userRoles = RoleUser::all();
         return view('admin.index')->with([
             'users' => User::simplePaginate(10),
             'roles' => $roles,
@@ -92,7 +92,8 @@ class AdminController extends Controller
      */
     public function create()
     {
-        //
+        $roles = Roles::all();
+        return view('admin.users.create')->with('roles', $roles);
     }
 
     /**
@@ -103,7 +104,31 @@ class AdminController extends Controller
      */
     public function store(Request $request)
     {
-        //
+        $user = new User;
+        $this->validate($request, [
+            'name' => 'required',
+            'email' => 'required',
+            'pnumber' => 'required',
+
+        ]);
+
+        $user->name = $request->input('name');
+        $user->email = $request->input('email');
+        $user->password = Hash::make('Welkom123');
+        $user->phonenumber = $request->input('pnumber');
+        $user->save();
+
+        $newRole = new RoleUser;
+        $newRole->user_id = $user->id;
+        $newRole->role_id = $request->roles[0];
+        $newRole->save();
+
+        return redirect('/admin')->with([
+            'succes', 'Gebruiker toegevoegd',
+            'users' => User::simplePaginate(10),
+            ]);
+
+
     }
 
     /**
@@ -145,7 +170,7 @@ class AdminController extends Controller
             'email' => 'required'
         ]));
 
-        $newRole = new UserRole;
+        $newRole = new RoleUser;
         $newRole->user_id = $request->id;
         $newRole->role_id = $request->roles[0];
         $newRole->save();
