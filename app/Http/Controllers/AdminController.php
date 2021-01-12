@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Admin;
 use App\Models\User;
 use App\Models\Roles;
-use App\Models\RoleUser;
+use App\Models\UserRole;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -25,7 +25,7 @@ class AdminController extends Controller
     public function index()
     {
         $roles = Roles::all();
-        $userRoles = RoleUser::all();
+        $userRoles = UserRole::all();
         return view('admin.index')->with([
             'users' => User::simplePaginate(10),
             'roles' => $roles,
@@ -34,7 +34,7 @@ class AdminController extends Controller
 
     }
 
-    public function roles() 
+    public function roles()
     {
         $roles = Roles::all();
         return view('admin.roles.roles')->with('roles', $roles);
@@ -118,7 +118,7 @@ class AdminController extends Controller
         $user->phonenumber = $request->input('pnumber');
         $user->save();
 
-        $newRole = new RoleUser;
+        $newRole = new UserRole;
         $newRole->user_id = $user->id;
         $newRole->role_id = $request->roles[0];
         $newRole->save();
@@ -170,7 +170,7 @@ class AdminController extends Controller
             'email' => 'required'
         ]));
 
-        $newRole = new RoleUser;
+        $newRole = new UserRole;
         $newRole->user_id = $request->id;
         $newRole->role_id = $request->roles[0];
         $newRole->save();

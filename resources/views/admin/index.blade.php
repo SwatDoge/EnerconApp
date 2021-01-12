@@ -20,7 +20,7 @@
                         <tbody>
                         @foreach($users as $user)
                             <?php
-                                $u = App\Models\RoleUser::all()->where('user_id', $user->id )->pluck('role_id')->first();
+                                $u = App\Models\UserRole::all()->where('user_id', $user->id )->pluck('role_id')->first();
                             ?>
                             <tr>
                                 <td>{{$user->id}}</td>

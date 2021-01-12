@@ -6,7 +6,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\User;
 use App\Models\Roles;
-use App\Models\RoleUser;
+use App\Models\UserRole;
 use Illuminate\Support\Facades\DB;
 class HomeController extends Controller
 {
@@ -34,7 +34,7 @@ class HomeController extends Controller
 
     public function create(Request $request)
     {
-        
+
     }
 
     public function edit($id)
