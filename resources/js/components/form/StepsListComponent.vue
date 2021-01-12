@@ -4,9 +4,9 @@
             <div class="card-body">
                 <div class="row text-center align-middle">
                     <div class="col">Stap</div>
-                    <div class="col">Turbine</div>
                     <div class="col">Plaats</div>
                     <div class="col">Veld</div>
+                    <div class="col">Turbine</div>
                     <div class="col">Omschrijving</div>
                     <div class="col">Voltooid</div>
                     <div class="col">Datum/Tijd</div>   
@@ -19,16 +19,21 @@
                             <input type="text" class="form-control text-center" v-model="step.stap"     :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center" v-model="step.turbine"  :readonly="!hasRole(['IV'])">
-                        </div>
-                        <div class="col">
                             <input type="text" class="form-control text-center" v-model="step.plaats"   :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
                             <input type="text" class="form-control text-center " v-model="step.veld"    :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
-                            <a class="x" data-toggle="collapse" :data-target="'#description_' + index" aria-expanded="true" :aria-controls="'description_' + index">Zie omschrijving 👁</a>
+                            <input type="text" class="form-control text-center" v-model="step.turbine"  :readonly="!hasRole(['IV'])">
+                        </div>
+                        <div class="col">
+                            <div class="dropdown show">
+                                <select name="description" style="form-control">
+                                    <option :value="option['id']" v-for="(option, kindex) in omschrijvingen" :key="kindex">{{option['omschrijving']}}</option>
+                                </select>
+                            </div>
+                            <!-- <a class="x" data-toggle="collapse" :data-target="'#description_' + index" aria-expanded="true" :aria-controls="'description_' + index">Zie omschrijving 👁</a> -->
                         </div>
                         <div class="col">
                             <input type="checkbox" :id="'signature_' + index" v-model="step.voltooid" @click="updateDate(index, step.voltooid)" :disabled="!hasRole(['PL'])">
@@ -39,11 +44,6 @@
                         </div>
                         <div class="col" v-if="hasRole(['IV'])">
                             <i class="fas fa-trash" v-on:click="steps.splice(index, 1)"></i>
-                        </div>
-                    </div>
-                    <div class="row collapse mt-2" :id="'description_' + index">
-                        <div class="col">
-                            <textarea class="form-control" placeholder="Omschrijving" v-model="step.omschrijving"></textarea>
                         </div>
                     </div>
                 </div>
@@ -60,7 +60,7 @@
                 steps: [],
             }
         },
-        props:["rollen"],
+        props:["rollen", "omschrijvingen"],
         methods:{
             create: function (){
                 let step = {

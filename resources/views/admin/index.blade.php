@@ -1,10 +1,10 @@
 @extends('layouts.app')
 
 @section('content')
-<div class="container">
-    <div class="row justify-content-center">
-        <div class="col-md-8">
-            {{-- <div class="container p-5"> --}}
+    <html>
+        <link rel="icon" href="{{ URL::asset('/css/favicon.jpg') }}" type="image/x-icon"/>
+        <body>
+            <div class="container p-5">
                 @if($users->count() > 0)
                     <table id="admin_table_id" class="table p-5 text center display" data-paging='false'>
                         <h1>Gebruikers</h1><br>
