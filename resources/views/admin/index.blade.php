@@ -2,6 +2,7 @@
 
 @section('content')
     <html>
+        <link rel="icon" href="{{ URL::asset('/css/favicon.jpg') }}" type="image/x-icon"/>
         <body>
             <div class="container p-5">
                 @if($users->count() > 0)
