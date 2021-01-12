@@ -35,14 +35,6 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <ul class="navbar-nav">
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{{ route('aIndex') }}">Admin</a>
-                        </li>
-                        <li class="nav-item active">
-                            <a class="nav-link" href="{{ route('slIndex') }}">Schakelbrief</a>
-                        </li>
-                    </ul>
                     <ul class="navbar-nav mr-auto">
 
                     </ul>

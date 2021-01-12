@@ -39,11 +39,16 @@ Route::any('/admin/roles/addrole', 'AdminController@createrole');
 Route::post('/admin/roles/add', 'AdminController@insertrole');
 
 
-Route::group(['middleware' => ['auth']], function () {
+Route::group(['middleware' => 'admin'], function () {
     Route::any('/admin', [App\Http\Controllers\AdminController::class, 'index'])->name('aIndex');
     Route::any('/admin/{user}/edit', [App\Http\Controllers\Admincontroller::class, 'edit'])->name('aEdit');
+    Route::any('admin/createuser', 'AdminController@create')->name('aCreate');
     Route::any('/admin/{user}/delete', [App\Http\Controllers\Admincontroller::class, 'destroy'])->name('aDelete');
     Route::any('/admin/update', [App\Http\Controllers\AdminController::class, 'update'])->name('aUpdate');
+    Route::get('/admin/users/create', 'AdminController@store')->name('aStore');
 });
 
 
+Route::group(['middleware' => 'admin'],  function () {
+    Route::any('admin/createuser', 'AdminController@create')->name('aCreate');
+});
