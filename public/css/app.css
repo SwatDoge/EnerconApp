@@ -11595,3 +11595,62 @@ fieldset:disabled .btn {
   }
 }
 
+#app main {
+  transition: all 1s;
+}
+
+#app .bg-green {
+  background-color: #00564c;
+}
+
+#app .customNav {
+  height: 80px;
+}
+
+#app .white {
+  color: white;
+}
+
+#app .blok-menu-inner {
+  height: 200px;
+  position: relative;
+  border-radius: 6px;
+}
+
+#app .blok-menu-inner:hover .menu-icon {
+  text-decoration: none;
+  font-size: 80px;
+  transition: all 0.2s;
+}
+
+#app .blok-menu-inner .menu-icon {
+  top: 50%;
+  transform: translate(-50%, -50%);
+  position: absolute;
+  text-transform: uppercase;
+  color: white;
+  font-size: 63px;
+  left: 50%;
+  transition: all 0.2s;
+}
+
+#app .blok-menu-inner .menu-icon:hover {
+  text-decoration: none;
+  font-size: 80px;
+  transition: all 0.2s;
+}
+
+#app .blok-menu .menu-item {
+  bottom: 0;
+  position: absolute;
+  color: #fff;
+  font-size: 20px;
+  left: 8px;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+#app .blok-menu .menu-item:hover {
+  text-decoration: none;
+}
+
