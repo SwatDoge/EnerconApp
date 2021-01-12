@@ -28,7 +28,7 @@
 
                                     }
                                 ?>
-                                <li class="list-group-item active">Huidige Rol(len)</li>
+                                <li class="list-group-item bg-green text-white">Huidige Rol(len)</li>
                                 @foreach($ar as $item)
                                     <li class="list-group-item">{{ App\Models\Roles::all()->where('id', $item)->first()->role }}</li>
                                 @endforeach
@@ -40,7 +40,7 @@
                                 </div>
                             @endforeach
                             <div class="d-flex flex-row justify-content-between">
-                                <button style="display: block" type="submit" class="btn btn-primary">Updaten</button>
+                                <button style="display: block" type="submit" class="btn bg-green text-white">Updaten</button>
                                 <form action="{{ route('aDelete', $user) }}" method="POST">
                                     @csrf @method('delete')
                                     <button style="display: block" type="submit" class="btn btn-danger">

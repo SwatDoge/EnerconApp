@@ -13,8 +13,8 @@
                             <br>
                             <input type="submit" class="btn btn-primary form-control" name="add" value="Toevoegen">
                         </form>
-                        
                     </div>
+                </div>
             </div>
         </div>
     </div>

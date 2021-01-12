@@ -12,7 +12,7 @@
     },
     "devDependencies": {
         "axios": "^0.21.1",
-        "bootstrap": "^4.0.0",
+        "bootstrap": "^5.0.0-beta1",
         "cross-env": "^7.0",
         "jquery": "^3.2",
         "laravel-mix": "^5.0.1",
@@ -27,6 +27,11 @@
     "dependencies": {
         "@inertiajs/inertia": "^0.8.2",
         "@inertiajs/inertia-vue": "^0.5.4",
+        "@popperjs/core": "^2.6.0",
+        "datatables.net": "^1.10.23",
+        "datatables.net-buttons": "^1.6.5",
+        "datatables.net-buttons-dt": "^1.6.5",
+        "datatables.net-dt": "^1.10.23",
         "vue-laravel-csrf": "^1.0.0"
     }
 }
