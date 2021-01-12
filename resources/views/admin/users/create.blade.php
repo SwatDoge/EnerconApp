@@ -20,8 +20,8 @@
                                 <label for="{{ $role->role }}">{{ $role->role }}</label>
                             </div>
                         @endforeach
-                        <input type="submit" class="form-control btn btn-primary" value="Gebruiker aanmaken"><br>
-                       
+                        <input type="submit" class="form-control btn bg-green white" value="Gebruiker aanmaken"><br>
+
                         * Standaard wachtwoord = Welkom123
                     </form>
                 </div>
@@ -30,4 +30,4 @@
     </div>
 </div>
 
-@endsection 
+@endsection
