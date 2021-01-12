@@ -5,9 +5,6 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             {{-- <div class="container p-5"> --}}
-                <a class="btn btn-danger float-right btn-lg" href="{{route('aCreate')}}">
-                    Gebruiker toevoegen
-                </a>
                 @if($users->count() > 0)
                     <table id="admin_table_id" class="table p-5 text center display" data-paging='false'>
                         <h1>Gebruikers</h1><br>
@@ -58,6 +55,9 @@
                 @endif
                 <br>
                 {{ $users->links() }}
+                <a class="btn bg-green white float-right" href="{{route('aCreate')}}">
+                    Gebruiker toevoegen
+                </a>
             <style>
                 .w-5 {
                     display: none;
@@ -66,6 +66,10 @@
         </body>
     </html>
     @push('scripts')
+    <script
+  src="https://code.jquery.com/jquery-3.5.1.min.js"
+  integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+  crossorigin="anonymous"></script>
         <script>
             $(document).ready( function () {
                 $('#admin_table_id').DataTable({
