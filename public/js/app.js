@@ -43840,8 +43840,8 @@ var render = function() {
               placeholder: "Naam",
               type: "text",
               classes: "form-control",
-              id: "plname",
-              name: "plname",
+              id: "ivname",
+              name: "ivname",
               readonly: !_vm.hasRole(["IV"]),
               dhaydata: _vm.users,
               dkey: "name",
@@ -43906,8 +43906,8 @@ var render = function() {
               placeholder: "Naam",
               type: "text",
               classes: "form-control",
-              id: "plname",
-              name: "plname",
+              id: "mvname",
+              name: "mvname",
               readonly: !_vm.hasRole(["IV"]),
               dhaydata: _vm.users,
               dkey: "name",
@@ -44150,7 +44150,12 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control text-center",
-                      attrs: { type: "text", readonly: !_vm.hasRole(["IV"]) },
+                      attrs: {
+                        type: "text",
+                        name: "stap[]",
+                        id: "stap",
+                        readonly: !_vm.hasRole(["IV"])
+                      },
                       domProps: { value: step.stap },
                       on: {
                         input: function($event) {
@@ -44174,7 +44179,12 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control text-center",
-                      attrs: { type: "text", readonly: !_vm.hasRole(["IV"]) },
+                      attrs: {
+                        type: "text",
+                        name: "plaats[]",
+                        id: "plaats",
+                        readonly: !_vm.hasRole(["IV"])
+                      },
                       domProps: { value: step.plaats },
                       on: {
                         input: function($event) {
@@ -44198,7 +44208,12 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control text-center ",
-                      attrs: { type: "text", readonly: !_vm.hasRole(["IV"]) },
+                      attrs: {
+                        type: "text",
+                        name: "veld[]",
+                        id: "veld",
+                        readonly: !_vm.hasRole(["IV"])
+                      },
                       domProps: { value: step.veld },
                       on: {
                         input: function($event) {
@@ -44222,7 +44237,12 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control text-center",
-                      attrs: { type: "text", readonly: !_vm.hasRole(["IV"]) },
+                      attrs: {
+                        type: "text",
+                        name: "turbine[]",
+                        id: "turbine",
+                        readonly: !_vm.hasRole(["IV"])
+                      },
                       domProps: { value: step.turbine },
                       on: {
                         input: function($event) {
@@ -57297,8 +57317,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\School\Xampp\htdocs\examen\EnerconApp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\School\Xampp\htdocs\examen\EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\1\examenproject\EnerconApp\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\1\examenproject\EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

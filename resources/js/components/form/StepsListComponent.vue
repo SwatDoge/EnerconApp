@@ -16,16 +16,16 @@
                 <div v-for="(step, index) in steps" :key="parseInt(step.stap)">
                     <div class="row text-center align-items-center mt-1">
                         <div class="col">
-                            <input type="text" class="form-control text-center" v-model="step.stap"     :readonly="!hasRole(['IV'])">
+                            <input type="text" class="form-control text-center" name="stap[]" id="stap" v-model="step.stap"     :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center" v-model="step.plaats"   :readonly="!hasRole(['IV'])">
+                            <input type="text" class="form-control text-center" name="plaats[]" id="plaats" v-model="step.plaats"   :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center " v-model="step.veld"    :readonly="!hasRole(['IV'])">
+                            <input type="text" class="form-control text-center " name="veld[]" id="veld" v-model="step.veld"    :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center" v-model="step.turbine"  :readonly="!hasRole(['IV'])">
+                            <input type="text" class="form-control text-center" name="turbine[]" id="turbine" v-model="step.turbine"  :readonly="!hasRole(['IV'])">
                         </div>
                         <div class="col">
                             <div class="dropdown show">

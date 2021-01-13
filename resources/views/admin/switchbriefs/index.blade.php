@@ -59,11 +59,31 @@
                             @endif
                         </td> --}}
                         <td>
-                            <a href="/sl/{{$brief->id}}/edit" class="">
-                                <button style="margin: 0" type="button" class="btn bg-green color-white">
-                                    <i class="far fa-edit white"></i>
-                                </button>
-                            </a>
+                            <?php if (Auth::user()->name == $brief->ivname && $brief->ivakkoord == 0) { ?>
+                                <a href="/sl/{{$brief->id}}/edit" class="">
+                                    <button style="margin: 0" type="button" class="btn bg-green color-white">
+                                        <i class="far fa-edit white"></i>
+                                    </button>
+                                </a>
+                            <?php } elseif (Auth::user()->name == $brief->mvname && $brief->ivakkoord == 1 && $brief->mvakkoord == 0) { ?>
+                                <a href="/sl/{{$brief->id}}/edit" class="">
+                                    <button style="margin: 0" type="button" class="btn bg-green color-white">
+                                        <i class="far fa-edit white"></i>
+                                    </button>
+                                </a>
+                            <?php } elseif (Auth::user()->name == $brief->plname && $brief->ivakkoord == 1 && $brief->mvakkoord == 1 && $brief->plakkoord == 0) { ?>
+                                <a href="/sl/{{$brief->id}}/edit" class="">
+                                    <button style="margin: 0" type="button" class="btn bg-green color-white">
+                                        <i class="far fa-edit white"></i>
+                                    </button>
+                                </a>
+                            <?php } else { ?>
+                                <a href="#" class="" disabled>
+                                    <button style="margin: 0" type="button" class="btn bg-green color-white" disabled>
+                                        <i class="far fa-edit white"></i>
+                                    </button>
+                                </a> 
+                            <?php } ?>
                         </td>
                     </tr>
                 @endforeach
