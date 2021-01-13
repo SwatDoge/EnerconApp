@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\SL;
+use App\Models\User;
 
 class SLController extends Controller
 {
@@ -17,6 +18,7 @@ class SLController extends Controller
         $switchbrief = SL::all();
 
         return view('admin.switchbriefs.index')->with('switchbrief', $switchbrief);
+        // return view('posts.index')->with('posts1', $posts1)->with('posts2', $posts2);
     }
 
     /**
@@ -40,8 +42,8 @@ class SLController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->input());
         $this->validate($request, [
-            'briefnr' => 'required',
             'windpark' => 'required',
             'date' => 'required',
             'ivname' => 'required' ,
@@ -54,12 +56,14 @@ class SLController extends Controller
             'switchtel' => 'required',
             'contactname' => 'required' ,
             'contacttel' => 'required',
-            'remarks' => 'required' ,
+            // 'remarks' => 'required' ,
             'reason' => 'required',
         ]);    
+
+        // dd($request->input());
         //create
         $SL = new SL;
-        $SL->briefnr = $request->input('briefnr');
+        $SL->briefnr = 1;
         $SL->windpark = $request->input('windpark');
         $SL->date = $request->input('date');
         $SL->ivname = $request->input('ivname');
@@ -72,10 +76,18 @@ class SLController extends Controller
         $SL->bedrijftel = $request->input('switchtel');
         $SL->contact = $request->input('contactname');
         $SL->contacttel = $request->input('contacttel');
-        $SL->remarks = $request->input('remarks');      
+        $SL->remarks = "";    
         $SL->reason = $request->input('reason'); 
+        $SL->plremarks = "";
+        $SL->ivakkoord = "1";
+        $SL->mvakkoord = "0"; //Bij weigering blijft 0 op 0 staan en gaat ivakkoord ook naar 0, bij goedkeuring word mvakkoord 1
+        $SL->plakkoord = "0";
+        $SL->stap = request('stap');
+        $SL->plaats = request('plaats');
+        $SL->veld = request('veld');
+        $SL->turbine = request('turbine');
         $SL->save();
-        error_log($request);
+        // return request('plaats');
         return redirect('/admin/schakelbrieven')->with('success', 'Post Created');
     }
 
@@ -134,7 +146,6 @@ class SLController extends Controller
             'remarks' => 'required' ,
             'reason' => 'required',
         ]);    
-        // DD($request);
         //update
         $SL = SL::find($id);
         // $SL->briefnr = $request->input('schakelbriefnr');

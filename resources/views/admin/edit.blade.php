@@ -21,7 +21,7 @@
                             <br>
                             <ul class="list-group">
                                 <?php
-                                    $u = App\Models\RoleUser::all()->where('user_id', $user->id);
+                                    $u = App\Models\UserRole::all()->where('user_id', $user->id);
                                     $ar = array();
                                     foreach($u as $item) {
                                         $ar[] = $item->role_id;
