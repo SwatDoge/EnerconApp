@@ -7,7 +7,7 @@
             <input type="hidden" name="briefnr" v-model="schakelbrief_ID">
             <!-- Schakelbrief gegevens -->
             <div class="card mx-4">
-                <div class="card-body">
+                <div class="card-body m-3">
                     <!-- header -->
                     <div class="row">
                         <div class="col order-2 px-0">
@@ -22,27 +22,27 @@
                             <hr/>
                         </div>
                     </div>
-                    <form-general v-if="hasRole(['IV', 'WV', 'PL'])" :wind-parken="enerconapi.windpark" :date="datum" :rollen="rollen"></form-general>
+                    <form-general v-if="hasRole(['IV', 'WV', 'PL'])" :wind-parken="enerconapi.windpark" :date="datum" :rollen="rollen" :init="editinit"></form-general>
                     <!-- header -->
                     
                     <div v-if="hasRole(['IV', 'WV'])">
                         <br/><br/><br/>
                         <h4>Intern</h4>
                         <hr/>
-                        <form-internal :rollen="rollen" :users="users"></form-internal>
+                        <form-internal :rollen="rollen" :users="users" :init="editinit"></form-internal>
                     </div>
 
                     <div v-if="hasRole(['IV', 'WV', 'PL'])">
                         <br/>
                         <h4>Stappen</h4>
-                        <form-steps :rollen="rollen" :omschrijvingen="enerconapi.omschrijvingen"></form-steps>
+                        <form-steps :rollen="rollen" :omschrijvingen="enerconapi.omschrijvingen" :init="editinit" :plaatsen="enerconapi.plaatsen" :velden="enerconapi.velden" :turbine="enerconapi.turbines"></form-steps>
                     </div>
 
                     <div v-if="hasRole(['IV', 'WV'])">
                         <br/><br/><br/>
                         <h4>Opmerkingen</h4>
                         <hr/>
-                        <form-remarks :rollen="rollen"></form-remarks>
+                        <form-remarks :rollen="rollen" :init="editinit"></form-remarks>
                     </div>
 
                     <!-- iv knoppen -->
@@ -89,12 +89,12 @@
                 },
             }
         },
-        props:["rollen", "route", "users", "editid"],
+        props:["rollen", "route", "users", "editinit"],
         methods:{
             post(){
                 switch(this.route){
                     case "slCreate": return "http://127.0.0.1:8000/sl/";
-                    case "slEdit": return 'http://127.0.0.1:8000/sl/update/' + this.editid;
+                    case "slEdit": return 'http://127.0.0.1:8000/sl/update/' + this.editinit.id;
                 }
                 return "http://127.0.0.1:8000/sl/";
             },
@@ -122,6 +122,7 @@
                     vm.rollen.push("PL", "IV", "WV", "Admin");
                 }
                 vm.users = JSON.parse(vm.users);
+                if (typeof(vm.editinit) != "undefined") vm.editinit = JSON.parse(vm.editinit)[0];
             });
 
             let apis = [
