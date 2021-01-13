@@ -22,6 +22,7 @@ export default {
         inputtext: 'resetNumber'
     },
     props: {
+        "input": {default: "", type: String},
         "classes": {}, 
         "name": {}, 
         "dhaydata": {}, 
@@ -37,6 +38,7 @@ export default {
         let vm = this;
         vm.$nextTick(function () {   
             this.boxwidth = this.$refs["input"].clientWidth + "px";
+            this.inputtext = vm.input;
         });
     },
     methods:{
