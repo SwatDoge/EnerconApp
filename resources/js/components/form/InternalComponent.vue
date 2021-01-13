@@ -5,11 +5,7 @@
             <div class="mb-4">
                 <label for="ivname">Instalatie verantwoordlijke:</label>
                     <input-dropdownv2 
-<<<<<<< HEAD
                         placeholder="Naam" type="text" classes="form-control" id="ivname" name="ivname" :disable="!hasRole(['IV'])"
-=======
-                        placeholder="Naam" type="text" classes="form-control" id="ivname" name="ivname" :readonly="!hasRole(['IV'])"
->>>>>>> origin/schakelbriefupdate
                         :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_iv" dupdatekey="phonenumber"
                         @inputdropdown="catchEvent" :input="ivname"
                     />
@@ -22,17 +18,10 @@
         <div class="col">
             <div class="mx-4 mb-4">
                 <label for="mvname">Werk verantwoordelijke:</label>
-<<<<<<< HEAD
                 <input-dropdownv2 
-                    placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :disable="!hasRole(['IV'])"
+                    placeholder="Naam" type="text" classes="form-control" id="mvname" name="mvname" :disable="!hasRole(['IV'])"
                     :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_mv" dupdatekey="phonenumber"
                     @inputdropdown="catchEvent" :input="mvname"
-=======
-                    <input-dropdownv2 
-                        placeholder="Naam" type="text" classes="form-control" id="mvname" name="mvname" :readonly="!hasRole(['IV'])"
-                        :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_mv" dupdatekey="phonenumber"
-                        @inputdropdown="catchEvent"
->>>>>>> origin/schakelbriefupdate
                 />
                 <input v-model="event_comebacks.phonenumber_mv" placeholder="Telefoon nummer" name="mvtel" type="text" value="" id="mvtel" class="form-control mt-1" readonly>
                 <br/>
@@ -43,21 +32,12 @@
         <div class="col">
             <div class="mx-4 mb-4">
                 <label for="plname">Ploeglijder: </label>
-<<<<<<< HEAD
                 <input-dropdownv2 
                     placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :disable="!hasRole(['IV'])"
                     :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_pl" dupdatekey="phonenumber"
                     @inputdropdown="catchEvent" :input="plname"
                 />
                 <input v-model="event_comebacks.phonenumber_pl" placeholder="Telefoon nummer" name="pltel" type="text" value="" id="pltel" class="form-control mt-1" readonly>
-=======
-                    <input-dropdownv2 
-                        placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :readonly="!hasRole(['IV'])"
-                        :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_pl" dupdatekey="phonenumber"
-                        @inputdropdown="catchEvent"
-                /> 
-                <input v-model="this.event_comebacks.phonenumber_pl" placeholder="Telefoon nummer" name="pltel" type="text" value="" id="pltel" class="form-control mt-1" readonly>
->>>>>>> origin/schakelbriefupdate
                 <br/>
             </div>
         </div>

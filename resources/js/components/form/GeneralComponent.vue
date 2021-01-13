@@ -22,8 +22,8 @@
                     <div class="card">
                         <div class="card-body">
                             <label for="switchcompany">Schakelbedrijf:</label>
-                            <input v-model="bedrijf" placeholder="Bedrijfsnaam" name="switchcompany" type="text" value="" id="switchcompany" class="form-control mb-1" :readonly="!hasRole(['IV'])">
-                            <input v-model="bedrijftel" placeholder="Telefoon nummer" name="switchtel" type="text" value="" id="switchtel" class="form-control" :readonly="!hasRole(['IV'])">
+                            <input v-model="bedrijf" placeholder="Bedrijfsnaam" name="bedrijf" type="text" value="" id="switchcompany" class="form-control mb-1" :readonly="!hasRole(['IV'])">
+                            <input v-model="bedrijftel" placeholder="Telefoon nummer" name="bedrijftel" type="text" value="" id="switchtel" class="form-control" :readonly="!hasRole(['IV'])">
                         </div>
                     </div>
                 </div>
@@ -32,7 +32,7 @@
                     <div class="card">
                         <div class="card-body">
                             <label for="contactname">Contactpersoon:</label>
-                            <input v-model="contact" placeholder="Naam Contactpersoon" name="contactname" type="text" value="" id="contactname" class="form-control mb-1" :readonly="!hasRole(['IV'])">
+                            <input v-model="contact" placeholder="Naam Contactpersoon" name="contact" type="text" value="" id="contactname" class="form-control mb-1" :readonly="!hasRole(['IV'])">
                             <input v-model="contacttel" placeholder="Telefoon nummer" name="contacttel" type="text" value="" id="contacttel" class="form-control" :readonly="!hasRole(['IV'])">
                         </div>
                     </div>

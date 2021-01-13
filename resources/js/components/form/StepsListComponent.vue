@@ -16,41 +16,28 @@
                 <div v-for="(step, index) in steps" :key="parseInt(step.stap)">
                     <div class="row text-center align-items-center mt-1">
                         <div class="col">
-<<<<<<< HEAD
                             <input type="text" class="form-control text-center" v-model="step.stap" readonly>
                         </div>
                         <div class="col">
                             <!-- <input type="text" class="form-control text-center" v-model="step.plaats"   :readonly="!hasRole(['IV'])"> -->
                             <input-dropdownv2
-                                placeholder="plaatsnaam" name="windpark" classes="form-control mb-1" :disable="!hasRole(['IV'])"
+                                placeholder="plaatsnaam" name="plaats[]" classes="form-control mb-1" :disable="!hasRole(['IV'])"
                                 :dhaydata="plaatsen" dkey="plaats" dheight="180px" :dlength="40">
                             </input-dropdownv2>
                         </div>
                         <div class="col">
                             <!-- <input type="text" class="form-control text-center" v-model="step.veld"    :readonly="!hasRole(['IV'])"> -->
                             <input-dropdownv2
-                                placeholder="veldnaam" name="windpark" classes="form-control mb-1" :disable="!hasRole(['IV'])"
+                                placeholder="veldnaam" name="veld[]" classes="form-control mb-1" :disable="!hasRole(['IV'])"
                                 :dhaydata="velden" dkey="veld" dheight="180px" :dlength="40">
                             </input-dropdownv2>
                         </div>
                         <div class="col">
                             <!-- <input type="text" class="form-control text-center" v-model="step.turbine"  :readonly="!hasRole(['IV'])"> -->
                             <input-dropdownv2
-                                placeholder="serial number" name="windpark" classes="form-control mb-1" :disable="!hasRole(['IV'])"
+                                placeholder="serial number" name="turbine[]" classes="form-control mb-1" :disable="!hasRole(['IV'])"
                                 :dhaydata="turbine" dkey="serial_nr" dheight="180px" :dlength="40">
                             </input-dropdownv2>
-=======
-                            <input type="text" class="form-control text-center" name="stap[]" id="stap" v-model="step.stap"     :readonly="!hasRole(['IV'])">
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control text-center" name="plaats[]" id="plaats" v-model="step.plaats"   :readonly="!hasRole(['IV'])">
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control text-center " name="veld[]" id="veld" v-model="step.veld"    :readonly="!hasRole(['IV'])">
-                        </div>
-                        <div class="col">
-                            <input type="text" class="form-control text-center" name="turbine[]" id="turbine" v-model="step.turbine"  :readonly="!hasRole(['IV'])">
->>>>>>> origin/schakelbriefupdate
                         </div>
                         <div class="col">
                             <select name="description" class="form-select">

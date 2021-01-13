@@ -57,15 +57,15 @@ class SLController extends Controller
             'mvtel' => 'required',
             'plname' => 'required' ,
             'pltel' => 'required',
-            'switchcompany' => 'required' ,
-            'switchtel' => 'required',
-            'contactname' => 'required' ,
+            'bedrijf' => 'required' ,
+            'bedrijftel' => 'required',
+            'contact' => 'required' ,
             'contacttel' => 'required',
             // 'remarks' => 'required' ,
             'reason' => 'required',
         ]);    
 
-        // dd($request->input());
+         //dd($request->input());
         //create
         $SL = new SL;
         $SL->briefnr = 1;
@@ -77,9 +77,9 @@ class SLController extends Controller
         $SL->mvtel = $request->input('mvtel');
         $SL->plname = $request->input('plname');      
         $SL->pltel = $request->input('pltel'); 
-        $SL->bedrijf = $request->input('switchcompany');
-        $SL->bedrijftel = $request->input('switchtel');
-        $SL->contact = $request->input('contactname');
+        $SL->bedrijf = $request->input('bedrijf');
+        $SL->bedrijftel = $request->input('bedrijftel');
+        $SL->contact = $request->input('contact');
         $SL->contacttel = $request->input('contacttel');
         $SL->remarks = "";    
         $SL->reason = $request->input('reason'); 
@@ -87,7 +87,7 @@ class SLController extends Controller
         $SL->ivakkoord = "1";
         $SL->mvakkoord = "0"; //Bij weigering blijft 0 op 0 staan en gaat ivakkoord ook naar 0, bij goedkeuring word mvakkoord 1
         $SL->plakkoord = "0";
-        $SL->stap = request('stap');
+        $SL->stap = '1337';
         $SL->plaats = request('plaats');
         $SL->veld = request('veld');
         $SL->turbine = request('turbine');
