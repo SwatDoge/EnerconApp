@@ -16,24 +16,33 @@
                 <div v-for="(step, index) in steps" :key="parseInt(step.stap)">
                     <div class="row text-center align-items-center mt-1">
                         <div class="col">
-                            <input type="text" class="form-control text-center" name="stap[]" id="stap" v-model="step.stap"     :readonly="!hasRole(['IV'])">
+                            <input type="text" class="form-control text-center" v-model="step.stap" readonly>
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center" name="plaats[]" id="plaats" v-model="step.plaats"   :readonly="!hasRole(['IV'])">
+                            <!-- <input type="text" class="form-control text-center" v-model="step.plaats"   :readonly="!hasRole(['IV'])"> -->
+                            <input-dropdownv2
+                                placeholder="plaatsnaam" name="windpark" classes="form-control mb-1" :disable="!hasRole(['IV'])"
+                                :dhaydata="plaatsen" dkey="plaats" dheight="180px" :dlength="40">
+                            </input-dropdownv2>
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center " name="veld[]" id="veld" v-model="step.veld"    :readonly="!hasRole(['IV'])">
+                            <!-- <input type="text" class="form-control text-center" v-model="step.veld"    :readonly="!hasRole(['IV'])"> -->
+                            <input-dropdownv2
+                                placeholder="veldnaam" name="windpark" classes="form-control mb-1" :disable="!hasRole(['IV'])"
+                                :dhaydata="velden" dkey="veld" dheight="180px" :dlength="40">
+                            </input-dropdownv2>
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center" name="turbine[]" id="turbine" v-model="step.turbine"  :readonly="!hasRole(['IV'])">
+                            <!-- <input type="text" class="form-control text-center" v-model="step.turbine"  :readonly="!hasRole(['IV'])"> -->
+                            <input-dropdownv2
+                                placeholder="serial number" name="windpark" classes="form-control mb-1" :disable="!hasRole(['IV'])"
+                                :dhaydata="turbine" dkey="serial_nr" dheight="180px" :dlength="40">
+                            </input-dropdownv2>
                         </div>
                         <div class="col">
-                            <div class="dropdown show">
-                                <select name="description" style="form-control">
-                                    <option :value="option['id']" v-for="(option, kindex) in omschrijvingen" :key="kindex">{{option['omschrijving']}}</option>
-                                </select>
-                            </div>
-                            <!-- <a class="x" data-toggle="collapse" :data-target="'#description_' + index" aria-expanded="true" :aria-controls="'description_' + index">Zie omschrijving 👁</a> -->
+                            <select name="description" class="form-select">
+                                <option :value="option['id']" v-for="(option, kindex) in omschrijvingen" :key="kindex" >{{option['omschrijving']}}</option>
+                            </select>
                         </div>
                         <div class="col">
                             <input type="checkbox" :id="'signature_' + index" v-model="step.voltooid" @click="updateDate(index, step.voltooid)" :disabled="!hasRole(['PL'])">
@@ -60,7 +69,7 @@
                 steps: [],
             }
         },
-        props:["rollen", "omschrijvingen"],
+        props:["rollen", "omschrijvingen", "plaatsen", "turbine", "velden"],
         methods:{
             create: function (){
                 let step = {

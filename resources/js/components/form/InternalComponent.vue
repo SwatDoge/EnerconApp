@@ -1,15 +1,15 @@
 <template>
-    <div class="form-group row">
+    <div class="form-group row" v-if="loaded">
         <!-- IV gegevens -->
         <div class="col">
             <div class="mb-4">
                 <label for="ivname">Instalatie verantwoordlijke:</label>
                     <input-dropdownv2 
-                        placeholder="Naam" type="text" classes="form-control" id="ivname" name="ivname" :readonly="!hasRole(['IV'])"
+                        placeholder="Naam" type="text" classes="form-control" id="ivname" name="ivname" :disable="!hasRole(['IV'])"
                         :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_iv" dupdatekey="phonenumber"
-                        @inputdropdown="catchEvent"
+                        @inputdropdown="catchEvent" :input="ivname"
                     />
-                    <input v-model="this.event_comebacks.phonenumber_iv" placeholder="Telefoon nummer" name="ivtel" type="text" value="" id="ivtel" class="form-control mt-1" readonly>
+                    <input v-model="event_comebacks.phonenumber_iv" placeholder="Telefoon nummer" name="ivtel" type="text" value="" id="ivtel" class="form-control mt-1" readonly>
                 <br/>
             </div>
         </div>
@@ -18,12 +18,12 @@
         <div class="col">
             <div class="mx-4 mb-4">
                 <label for="mvname">Werk verantwoordelijke:</label>
-                    <input-dropdownv2 
-                        placeholder="Naam" type="text" classes="form-control" id="mvname" name="mvname" :readonly="!hasRole(['IV'])"
-                        :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_mv" dupdatekey="phonenumber"
-                        @inputdropdown="catchEvent"
+                <input-dropdownv2 
+                    placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :disable="!hasRole(['IV'])"
+                    :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_mv" dupdatekey="phonenumber"
+                    @inputdropdown="catchEvent" :input="mvname"
                 />
-                <input v-model="this.event_comebacks.phonenumber_mv" placeholder="Telefoon nummer" name="mvtel" type="text" value="" id="mvtel" class="form-control mt-1" readonly>
+                <input v-model="event_comebacks.phonenumber_mv" placeholder="Telefoon nummer" name="mvtel" type="text" value="" id="mvtel" class="form-control mt-1" readonly>
                 <br/>
             </div>
         </div>
@@ -32,12 +32,12 @@
         <div class="col">
             <div class="mx-4 mb-4">
                 <label for="plname">Ploeglijder: </label>
-                    <input-dropdownv2 
-                        placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :readonly="!hasRole(['IV'])"
-                        :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_pl" dupdatekey="phonenumber"
-                        @inputdropdown="catchEvent"
-                /> 
-                <input v-model="this.event_comebacks.phonenumber_pl" placeholder="Telefoon nummer" name="pltel" type="text" value="" id="pltel" class="form-control mt-1" readonly>
+                <input-dropdownv2 
+                    placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :disable="!hasRole(['IV'])"
+                    :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_pl" dupdatekey="phonenumber"
+                    @inputdropdown="catchEvent" :input="plname"
+                />
+                <input v-model="event_comebacks.phonenumber_pl" placeholder="Telefoon nummer" name="pltel" type="text" value="" id="pltel" class="form-control mt-1" readonly>
                 <br/>
             </div>
         </div>
@@ -46,7 +46,7 @@
 
 <script>
 export default {
-    props:["rollen", "users"],
+    props:["rollen", "users", "init"],
     methods:{
         hasRole: function(roles){
             let res = false;
@@ -58,6 +58,9 @@ export default {
         },
         catchEvent: function(value){
             this.event_comebacks[value.key] = value.data
+        },    
+        check: function(x){
+        return (typeof(x) !== undefined ? x : "");
         }
     },
     data(){
@@ -66,8 +69,23 @@ export default {
                 phonenumber_iv: "",
                 phonenumber_mv: "",
                 phonenumber_pl: "",
-            }
+            },
+            ivname: "",
+            mvname: "",
+            plname: "",
+            loaded: false,
         }
+    },
+    mounted(){
+        let vm = this;
+        vm.$nextTick(function () {
+            if (typeof(vm.init) != "undefined"){
+                vm.ivname = vm.check(vm.init.ivname);
+                vm.mvname = vm.check(vm.init.mvname);
+                vm.plname = vm.check(vm.init.plname);
+            }
+            vm.loaded = true;
+        });
     }
 }
 </script>

@@ -1,6 +1,6 @@
 <template>
     <div class="px-0">
-        <input :placeholder="placeholder" type="text" :class="classes" autocomplete="off" ref="input" :name="name" @focus="fl(true)" @blur="fl(false)" v-model="inputtext">
+        <input :placeholder="placeholder" type="text" :class="classes" autocomplete="off" ref="input" :name="name" @focus="fl(true)" @blur="fl(false)" v-model="inputtext" :readonly="disable">
         <div ref="popover" v-show="shown" class="rounded position-absolute y h5" :style="[{overflowY: 'auto'},{maxHeight: dheight}, {width: boxwidth}]">
             <div v-for="(item, index) in gainsort(dhaydata, inputtext)" :key="index" class="form-controll" @click="updateText(item[dkey])">
                 <div class="x px-2">{{item[dkey]}}</div>
@@ -22,6 +22,7 @@ export default {
         inputtext: 'resetNumber'
     },
     props: {
+        "input": {default: "", type: String},
         "classes": {}, 
         "name": {}, 
         "dhaydata": {}, 
@@ -30,20 +31,22 @@ export default {
         "dlength": {default: 20, type: Number}, 
         "dheight": {default: "100px", type: String}, 
         "dupdateref": {default: "", type: String}, 
-        "dupdatekey":{default: "", type: String}
+        "dupdatekey":{default: "", type: String},
+        "disable": {}
     },
     mounted(){
         let vm = this;
         vm.$nextTick(function () {   
             this.boxwidth = this.$refs["input"].clientWidth + "px";
+            this.inputtext = vm.input;
         });
     },
     methods:{
         fl: function(x){
+            if (this.disable) return;
             setTimeout(function () {this.shown = x}.bind(this), 100)
         },
         gainsort(ldata, text){
-            if (typeof(ldata) === "string") ldata = JSON.parse(ldata);
             var list = ldata.filter((item) => {
                 if(item[this.dkey].toLowerCase().includes(text.toLowerCase())) return item;
             }).slice(0, this.dlength);
@@ -66,8 +69,6 @@ export default {
         },
         old_key_to_new(data, key, og_key){
             let x = this.dhaydata;
-            if (typeof(x) === "string") x = JSON.parse(x);
-
             for (const item of x) {;
                 if (item[og_key].toLowerCase() === data.toLowerCase())
                     return item[key];
@@ -75,6 +76,7 @@ export default {
             return null;
         },
         resetNumber(){
+            if (this.disable) return;
             if (this.dupdateref !== null){
                 this.$emit("inputdropdown", {data: "", key: this.dupdateref});
             }

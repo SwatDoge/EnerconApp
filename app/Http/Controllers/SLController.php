@@ -111,12 +111,13 @@ class SLController extends Controller
     public function edit($id)
     {
         $SL = SL::find($id);
+        return view('SL.edit')->with('SL', $SL);
         //check 4 role
         // if(auth()->user()->role == 'admin') {} 
         // else if(auth()->user()->id !== $post->user_id) {
         //     return redirect('/')->with('error', 'Unauthorized page');
         // } 
-        return view('SL.edit')->with('SL', $SL);
+        
         
     }
 
