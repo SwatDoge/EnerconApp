@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SL;
 use App\Models\User;
+use DB;
 
 class SLController extends Controller
 {
@@ -15,9 +16,13 @@ class SLController extends Controller
      */
     public function index()
     {
+        $name = auth()->user()->name;
         $switchbrief = SL::all();
-
-        return view('admin.switchbriefs.index')->with('switchbrief', $switchbrief);
+        $iv = DB::select("SELECT * FROM switchbriefs WHERE ivname = '$name'");
+        $wv = DB::select("SELECT * FROM switchbriefs WHERE mvname = '$name'");
+        $pl = DB::select("SELECT * FROM switchbriefs WHERE plname = '$name'");
+        // dd($switchbriefpl);
+        return view('admin.switchbriefs.index')->with('switchbrief', $switchbrief)->with('iv', $iv)->with('wv', $wv)->with('pl', $pl);
         // return view('posts.index')->with('posts1', $posts1)->with('posts2', $posts2);
     }
 
