@@ -7,44 +7,73 @@
             <input type="hidden" name="briefnr" v-model="schakelbrief_ID">
             <!-- Schakelbrief gegevens -->
             <div class="card mx-4">
-                <div class="card-body m-3">
+                <div class="card-body">
                     <!-- header -->
-                    <div class="row">
+                    <div class="row m-1">
                         <div class="col order-2 px-0">
-                            <img class="mr-offset-0" src="/img/logo_transparent.png" height=92>
-                            <hr>
+                            <img class="mr-offset-0" src="/img/logo_transparent.png" height=100 align="right">
                         </div>
                         <div class="col order-1 px-0">
                             <h2>Nieuwe schakelbrief (#{{schakelbrief_ID}})</h2>
-                            <br/>
-                            <h4 v-if="hasRole(['IV', 'WV', 'PL'])">Algemeen</h4>
+                            <br>
+                            <label v-if="hasRole(['IV', 'WV', 'PL'])" class="form-check-label" for="general">
+                                <h4>Algemeen
+                                    <i v-if="display.show_general" class="fas fa-eye"></i>
+                                    <i v-else class="fas fa-eye-slash"></i>
+                                </h4>
+                            </label>
                             <h4 v-else>Je hebt onvoldoende rechten voor bezichtigen/bewerken van schakelbrieven.</h4>
-                            <hr/>
+                            <input type="checkbox" id="general" v-model="display.show_general" hidden>
+                            
                         </div>
                     </div>
-                    <form-general v-if="hasRole(['IV', 'WV', 'PL'])" :wind-parken="enerconapi.windpark" :date="datum" :rollen="rollen" :init="editinit"></form-general>
+                    <hr v-if="display.show_general">
+                    <form-general class="m-1" v-if="hasRole(['IV', 'WV', 'PL'])" v-show="display.show_general" :wind-parken="enerconapi.windpark" :date="datum" :rollen="rollen" :init="editinit"></form-general>
                     <!-- header -->
                     
-                    <div v-if="hasRole(['IV', 'WV'])">
-                        <br/><br/><br/>
-                        <h4>Intern</h4>
+                    <br>
+                    <br v-if="display.show_intern">
+                    <label v-if="hasRole(['IV', 'WV', 'PL'])" class="form-check-label" for="intern">
+                        <h4>Intern
+                            <i v-if="display.show_intern" class="fas fa-eye"></i>
+                            <i v-else class="fas fa-eye-slash"></i>
+                        </h4>
+                    </label>
+                    <input type="checkbox" id="intern" v-model="display.show_intern" hidden>
+                    <div v-if="hasRole(['IV', 'WV'])" v-show="display.show_intern">
                         <hr/>
                         <form-internal :rollen="rollen" :users="users" :init="editinit"></form-internal>
                     </div>
 
-                    <div v-if="hasRole(['IV', 'WV', 'PL'])">
-                        <br/>
-                        <h4>Stappen</h4>
+                    <br>
+                    <br>
+                    <label v-if="hasRole(['IV', 'WV', 'PL'])" class="form-check-label" for="stappen">
+                        <h4>Stappen
+                            <i v-if="display.show_stappen" class="fas fa-eye"></i>
+                            <i v-else class="fas fa-eye-slash"></i>
+                        </h4>
+                    </label>
+                    <input type="checkbox" id="stappen" v-model="display.show_stappen" hidden>
+                    <div v-if="hasRole(['IV', 'WV', 'PL'])" v-show="display.show_stappen">
                         <form-steps :rollen="rollen" :omschrijvingen="enerconapi.omschrijvingen" :init="editinit" :plaatsen="enerconapi.plaatsen" :velden="enerconapi.velden" :turbine="enerconapi.turbines"></form-steps>
                     </div>
 
-                    <div v-if="hasRole(['IV', 'WV'])">
-                        <br/><br/><br/>
-                        <h4>Opmerkingen</h4>
-                        <hr/>
+                    <br>
+                    <br>
+                    <label v-if="hasRole(['IV', 'WV', 'PL'])" class="form-check-label" for="opmerkingen">
+                        <h4>Opmerkingen
+                            <i v-if="display.show_opmerkingen" class="fas fa-eye"></i>
+                            <i v-else class="fas fa-eye-slash"></i>
+                        </h4>
+                    </label>
+                    <input type="checkbox" id="opmerkingen" v-model="display.show_opmerkingen" hidden>
+                    <div v-if="hasRole(['IV', 'WV'])" v-show="display.show_opmerkingen">
+                        <hr>
                         <form-remarks :rollen="rollen" :init="editinit"></form-remarks>
                     </div>
 
+                    <br>
+                    <br>
                     <!-- iv knoppen -->
                     <input class="btn btn-primary mt-4 text-light" type="submit" value="Creeër" v-if="route == 'slCreate'">
                     <input class="btn btn-danger mt-4 text-light" type="submit" value="Annuleer" v-if="route == 'slCreate'">
@@ -87,6 +116,12 @@
                     failed: false,
                     error: "",
                 },
+                display:{
+                    show_general: true,
+                    show_intern: true,
+                    show_stappen: true,
+                    show_opmerkingen: true,
+                }
             }
         },
         props:["rollen", "route", "users", "editinit"],
@@ -141,7 +176,15 @@
                     if (!res.ok){this.load.failed = true;} 
                     return res.json()
                 })
-                .then(data => (data.data.length > 0 ? this.enerconapi[collection.name] = data.data : this.load.failed = true))
+                .then(data => {
+                    let ret = "";
+                    if (data.data.length > 0) ret = this.enerconapi[collection.name] = data.data;
+                    else{
+                        ret = this.load.failed = true; 
+                        this.load.error = "De teruggestuurde gegevens waren leeg, de API is waarschijnlijk neer.";
+                    }
+                    return ret;
+                })
                 .catch(error => {this.load.failed = true; this.load.error = error});
                 if (this.load.failed) break;
                 this.load.gained++;

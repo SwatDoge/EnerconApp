@@ -38,9 +38,10 @@ export default {
     mounted(){
         let vm = this;
         vm.$nextTick(function () {
-            if (typeof(vm.init) != "undefined")
+            if (typeof(vm.init) != "undefined"){
                 vm.remarks = vm.check(vm.init.remarks);
                 vm.plremarks = vm.check(vm.init.plremarks);
+            }
         });
     }
 }
