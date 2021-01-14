@@ -25,6 +25,7 @@ Route::post('/sl/update/{id}', [SLController::class, 'update']);
 Route::get('/sl/create', 'SLController@create')->name('slCreate');
 Route::post('/sl', 'SLController@store')->name('slStore');
 Route::get('/sl/index', 'SLController@index')->name('slIndex');
+Route::get('/sl/{id}', 'SLController@show')->name('slShow');
 Route::get('/sl/{id}/edit', 'SLController@edit')->name('slEdit');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/create-pdf-file-{id}', 'SLController@PDF')->name('slPDF');

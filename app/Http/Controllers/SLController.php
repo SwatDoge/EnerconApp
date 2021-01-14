@@ -136,7 +136,8 @@ class SLController extends Controller
      */
     public function show($id)
     {
-        //
+        $SL = SL::find($id);
+        return view('SL.show')->with('SL', $SL);
     }
 
     /**
