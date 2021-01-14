@@ -5095,6 +5095,35 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5108,6 +5137,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         currentbuffer: "",
         failed: false,
         error: ""
+      },
+      display: {
+        show_general: true,
+        show_intern: true,
+        show_stappen: true,
+        show_opmerkingen: true
       }
     };
   },
@@ -5170,7 +5205,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                 }
 
                 vm.users = JSON.parse(vm.users);
-                if (typeof vm.editinit != "undefined") vm.editinit = JSON.parse(vm.editinit)[0];
+                if (typeof vm.editinit != "undefined") vm.editinit = JSON.parse(vm.editinit);
               });
               apis = [{
                 url: "https://std.stegion.nl/api_enercon/getWindparks",
@@ -5205,7 +5240,12 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
                           return res.json();
                         }).then(function (data) {
-                          return data.data.length > 0 ? _this.enerconapi[collection.name] = data.data : _this.load.failed = true;
+                          var ret = "";
+                          if (data.data.length > 0) ret = _this.enerconapi[collection.name] = data.data;else {
+                            ret = _this.load.failed = true;
+                            _this.load.error = "De teruggestuurde gegevens waren leeg, de API is waarschijnlijk neer.";
+                          }
+                          return ret;
                         })["catch"](function (error) {
                           _this.load.failed = true;
                           _this.load.error = error;
@@ -5570,8 +5610,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   mounted: function mounted() {
     var vm = this;
     vm.$nextTick(function () {
-      if (typeof vm.init != "undefined") vm.remarks = vm.check(vm.init.remarks);
-      vm.plremarks = vm.check(vm.init.plremarks);
+      if (typeof vm.init != "undefined") {
+        vm.remarks = vm.check(vm.init.remarks);
+        vm.plremarks = vm.check(vm.init.plremarks);
+      }
     });
   }
 });
@@ -43557,9 +43599,9 @@ var render = function() {
             _c("div", { staticClass: "card mx-4" }, [
               _c(
                 "div",
-                { staticClass: "card-body m-3" },
+                { staticClass: "card-body" },
                 [
-                  _c("div", { staticClass: "row" }, [
+                  _c("div", { staticClass: "row m-1" }, [
                     _vm._m(0),
                     _vm._v(" "),
                     _c("div", { staticClass: "col order-1 px-0" }, [
@@ -43574,19 +43616,89 @@ var render = function() {
                       _c("br"),
                       _vm._v(" "),
                       _vm.hasRole(["IV", "WV", "PL"])
-                        ? _c("h4", [_vm._v("Algemeen")])
+                        ? _c(
+                            "label",
+                            {
+                              staticClass: "form-check-label",
+                              attrs: { for: "general" }
+                            },
+                            [
+                              _c("h4", [
+                                _vm._v(
+                                  "Algemeen\n                                "
+                                ),
+                                _vm.display.show_general
+                                  ? _c("i", { staticClass: "fas fa-eye" })
+                                  : _c("i", { staticClass: "fas fa-eye-slash" })
+                              ])
+                            ]
+                          )
                         : _c("h4", [
                             _vm._v(
                               "Je hebt onvoldoende rechten voor bezichtigen/bewerken van schakelbrieven."
                             )
                           ]),
                       _vm._v(" "),
-                      _c("hr")
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: _vm.display.show_general,
+                            expression: "display.show_general"
+                          }
+                        ],
+                        attrs: { type: "checkbox", id: "general", hidden: "" },
+                        domProps: {
+                          checked: Array.isArray(_vm.display.show_general)
+                            ? _vm._i(_vm.display.show_general, null) > -1
+                            : _vm.display.show_general
+                        },
+                        on: {
+                          change: function($event) {
+                            var $$a = _vm.display.show_general,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = null,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  _vm.$set(
+                                    _vm.display,
+                                    "show_general",
+                                    $$a.concat([$$v])
+                                  )
+                              } else {
+                                $$i > -1 &&
+                                  _vm.$set(
+                                    _vm.display,
+                                    "show_general",
+                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                  )
+                              }
+                            } else {
+                              _vm.$set(_vm.display, "show_general", $$c)
+                            }
+                          }
+                        }
+                      })
                     ])
                   ]),
                   _vm._v(" "),
+                  _vm.display.show_general ? _c("hr") : _vm._e(),
+                  _vm._v(" "),
                   _vm.hasRole(["IV", "WV", "PL"])
                     ? _c("form-general", {
+                        directives: [
+                          {
+                            name: "show",
+                            rawName: "v-show",
+                            value: _vm.display.show_general,
+                            expression: "display.show_general"
+                          }
+                        ],
+                        staticClass: "m-1",
                         attrs: {
                           "wind-parken": _vm.enerconapi.windpark,
                           date: _vm.datum,
@@ -43596,16 +43708,87 @@ var render = function() {
                       })
                     : _vm._e(),
                   _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _vm.display.show_intern ? _c("br") : _vm._e(),
+                  _vm._v(" "),
+                  _vm.hasRole(["IV", "WV", "PL"])
+                    ? _c(
+                        "label",
+                        {
+                          staticClass: "form-check-label",
+                          attrs: { for: "intern" }
+                        },
+                        [
+                          _c("h4", [
+                            _vm._v("Intern\n                        "),
+                            _vm.display.show_intern
+                              ? _c("i", { staticClass: "fas fa-eye" })
+                              : _c("i", { staticClass: "fas fa-eye-slash" })
+                          ])
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.display.show_intern,
+                        expression: "display.show_intern"
+                      }
+                    ],
+                    attrs: { type: "checkbox", id: "intern", hidden: "" },
+                    domProps: {
+                      checked: Array.isArray(_vm.display.show_intern)
+                        ? _vm._i(_vm.display.show_intern, null) > -1
+                        : _vm.display.show_intern
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.display.show_intern,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 &&
+                              _vm.$set(
+                                _vm.display,
+                                "show_intern",
+                                $$a.concat([$$v])
+                              )
+                          } else {
+                            $$i > -1 &&
+                              _vm.$set(
+                                _vm.display,
+                                "show_intern",
+                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                              )
+                          }
+                        } else {
+                          _vm.$set(_vm.display, "show_intern", $$c)
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
                   _vm.hasRole(["IV", "WV"])
                     ? _c(
                         "div",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.display.show_intern,
+                              expression: "display.show_intern"
+                            }
+                          ]
+                        },
                         [
-                          _c("br"),
-                          _c("br"),
-                          _c("br"),
-                          _vm._v(" "),
-                          _c("h4", [_vm._v("Intern")]),
-                          _vm._v(" "),
                           _c("hr"),
                           _vm._v(" "),
                           _c("form-internal", {
@@ -43620,14 +43803,87 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _vm.hasRole(["IV", "WV", "PL"])
+                    ? _c(
+                        "label",
+                        {
+                          staticClass: "form-check-label",
+                          attrs: { for: "stappen" }
+                        },
+                        [
+                          _c("h4", [
+                            _vm._v("Stappen\n                        "),
+                            _vm.display.show_stappen
+                              ? _c("i", { staticClass: "fas fa-eye" })
+                              : _c("i", { staticClass: "fas fa-eye-slash" })
+                          ])
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.display.show_stappen,
+                        expression: "display.show_stappen"
+                      }
+                    ],
+                    attrs: { type: "checkbox", id: "stappen", hidden: "" },
+                    domProps: {
+                      checked: Array.isArray(_vm.display.show_stappen)
+                        ? _vm._i(_vm.display.show_stappen, null) > -1
+                        : _vm.display.show_stappen
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.display.show_stappen,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 &&
+                              _vm.$set(
+                                _vm.display,
+                                "show_stappen",
+                                $$a.concat([$$v])
+                              )
+                          } else {
+                            $$i > -1 &&
+                              _vm.$set(
+                                _vm.display,
+                                "show_stappen",
+                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                              )
+                          }
+                        } else {
+                          _vm.$set(_vm.display, "show_stappen", $$c)
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
                   _vm.hasRole(["IV", "WV", "PL"])
                     ? _c(
                         "div",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.display.show_stappen,
+                              expression: "display.show_stappen"
+                            }
+                          ]
+                        },
                         [
-                          _c("br"),
-                          _vm._v(" "),
-                          _c("h4", [_vm._v("Stappen")]),
-                          _vm._v(" "),
                           _c("form-steps", {
                             attrs: {
                               rollen: _vm.rollen,
@@ -43643,16 +43899,87 @@ var render = function() {
                       )
                     : _vm._e(),
                   _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _vm.hasRole(["IV", "WV", "PL"])
+                    ? _c(
+                        "label",
+                        {
+                          staticClass: "form-check-label",
+                          attrs: { for: "opmerkingen" }
+                        },
+                        [
+                          _c("h4", [
+                            _vm._v("Opmerkingen\n                        "),
+                            _vm.display.show_opmerkingen
+                              ? _c("i", { staticClass: "fas fa-eye" })
+                              : _c("i", { staticClass: "fas fa-eye-slash" })
+                          ])
+                        ]
+                      )
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.display.show_opmerkingen,
+                        expression: "display.show_opmerkingen"
+                      }
+                    ],
+                    attrs: { type: "checkbox", id: "opmerkingen", hidden: "" },
+                    domProps: {
+                      checked: Array.isArray(_vm.display.show_opmerkingen)
+                        ? _vm._i(_vm.display.show_opmerkingen, null) > -1
+                        : _vm.display.show_opmerkingen
+                    },
+                    on: {
+                      change: function($event) {
+                        var $$a = _vm.display.show_opmerkingen,
+                          $$el = $event.target,
+                          $$c = $$el.checked ? true : false
+                        if (Array.isArray($$a)) {
+                          var $$v = null,
+                            $$i = _vm._i($$a, $$v)
+                          if ($$el.checked) {
+                            $$i < 0 &&
+                              _vm.$set(
+                                _vm.display,
+                                "show_opmerkingen",
+                                $$a.concat([$$v])
+                              )
+                          } else {
+                            $$i > -1 &&
+                              _vm.$set(
+                                _vm.display,
+                                "show_opmerkingen",
+                                $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                              )
+                          }
+                        } else {
+                          _vm.$set(_vm.display, "show_opmerkingen", $$c)
+                        }
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
                   _vm.hasRole(["IV", "WV"])
                     ? _c(
                         "div",
+                        {
+                          directives: [
+                            {
+                              name: "show",
+                              rawName: "v-show",
+                              value: _vm.display.show_opmerkingen,
+                              expression: "display.show_opmerkingen"
+                            }
+                          ]
+                        },
                         [
-                          _c("br"),
-                          _c("br"),
-                          _c("br"),
-                          _vm._v(" "),
-                          _c("h4", [_vm._v("Opmerkingen")]),
-                          _vm._v(" "),
                           _c("hr"),
                           _vm._v(" "),
                           _c("form-remarks", {
@@ -43662,6 +43989,10 @@ var render = function() {
                         1
                       )
                     : _vm._e(),
+                  _vm._v(" "),
+                  _c("br"),
+                  _vm._v(" "),
+                  _c("br"),
                   _vm._v(" "),
                   _vm.route == "slCreate"
                     ? _c("input", {
@@ -43748,10 +44079,12 @@ var staticRenderFns = [
     return _c("div", { staticClass: "col order-2 px-0" }, [
       _c("img", {
         staticClass: "mr-offset-0",
-        attrs: { src: "/img/logo_transparent.png", height: "92" }
-      }),
-      _vm._v(" "),
-      _c("hr")
+        attrs: {
+          src: "/img/logo_transparent.png",
+          height: "100",
+          align: "right"
+        }
+      })
     ])
   }
 ]
@@ -43886,7 +44219,7 @@ var render = function() {
                     staticClass: "form-control mb-1",
                     attrs: {
                       placeholder: "Bedrijfsnaam",
-                      name: "switchcompany",
+                      name: "bedrijf",
                       type: "text",
                       value: "",
                       id: "switchcompany",
@@ -43915,7 +44248,7 @@ var render = function() {
                     staticClass: "form-control",
                     attrs: {
                       placeholder: "Telefoon nummer",
-                      name: "switchtel",
+                      name: "bedrijftel",
                       type: "text",
                       value: "",
                       id: "switchtel",
@@ -43954,7 +44287,7 @@ var render = function() {
                     staticClass: "form-control mb-1",
                     attrs: {
                       placeholder: "Naam Contactpersoon",
-                      name: "contactname",
+                      name: "contact",
                       type: "text",
                       value: "",
                       id: "contactname",
@@ -44112,8 +44445,8 @@ var render = function() {
                   placeholder: "Naam",
                   type: "text",
                   classes: "form-control",
-                  id: "plname",
-                  name: "plname",
+                  id: "mvname",
+                  name: "mvname",
                   disable: !_vm.hasRole(["IV"]),
                   dhaydata: _vm.users,
                   dkey: "name",
@@ -44415,7 +44748,7 @@ var render = function() {
                       _c("input-dropdownv2", {
                         attrs: {
                           placeholder: "plaatsnaam",
-                          name: "windpark",
+                          name: "plaats[]",
                           classes: "form-control mb-1",
                           disable: !_vm.hasRole(["IV"]),
                           dhaydata: _vm.plaatsen,
@@ -44435,7 +44768,7 @@ var render = function() {
                       _c("input-dropdownv2", {
                         attrs: {
                           placeholder: "veldnaam",
-                          name: "windpark",
+                          name: "veld[]",
                           classes: "form-control mb-1",
                           disable: !_vm.hasRole(["IV"]),
                           dhaydata: _vm.velden,
@@ -44455,7 +44788,7 @@ var render = function() {
                       _c("input-dropdownv2", {
                         attrs: {
                           placeholder: "serial number",
-                          name: "windpark",
+                          name: "turbine[]",
                           classes: "form-control mb-1",
                           disable: !_vm.hasRole(["IV"]),
                           dhaydata: _vm.turbine,
@@ -44473,7 +44806,7 @@ var render = function() {
                       "select",
                       {
                         staticClass: "form-select",
-                        attrs: { name: "description" }
+                        attrs: { name: "omschrijving[]" }
                       },
                       _vm._l(_vm.omschrijvingen, function(option, kindex) {
                         return _c(
@@ -44548,7 +44881,11 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control text-center",
-                          attrs: { type: "text", readonly: "" },
+                          attrs: {
+                            type: "text",
+                            name: "datum[]",
+                            readonly: ""
+                          },
                           domProps: { value: step.datum },
                           on: {
                             input: function($event) {
@@ -44571,6 +44908,7 @@ var render = function() {
                           staticClass: "form-control text-center",
                           attrs: {
                             type: "text",
+                            name: "datum[]",
                             placeholder: step.created
                               ? "n.v.t."
                               : "niet voltooid",
@@ -57532,8 +57870,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\1\examenproject\EnerconApp\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\1\examenproject\EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

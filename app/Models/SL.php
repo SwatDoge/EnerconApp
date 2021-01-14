@@ -13,4 +13,10 @@ class SL extends Model
     public function user() {
         return $this->belongsTo('App\User');
     }
+    protected $casts = [
+        'stap' => 'array',
+        'plaats' => 'array',
+        'veld' => 'array',
+        'turbine' => 'array'
+    ];
 }

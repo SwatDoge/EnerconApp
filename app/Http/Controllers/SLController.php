@@ -5,6 +5,9 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SL;
 use PDF;
+use App\Models\User;
+use App\Models\Stappen;
+use DB;
 
 class SLController extends Controller
 {
@@ -15,9 +18,14 @@ class SLController extends Controller
      */
     public function index()
     {
+        $name = auth()->user()->name;
         $switchbrief = SL::all();
-
-        return view('admin.switchbriefs.index')->with('switchbrief', $switchbrief);
+        $iv = DB::select("SELECT * FROM switchbriefs WHERE ivname = '$name'");
+        $wv = DB::select("SELECT * FROM switchbriefs WHERE mvname = '$name'");
+        $pl = DB::select("SELECT * FROM switchbriefs WHERE plname = '$name'");
+        // dd($switchbriefpl);
+        return view('admin.switchbriefs.index')->with('switchbrief', $switchbrief)->with('iv', $iv)->with('wv', $wv)->with('pl', $pl);
+        // return view('posts.index')->with('posts1', $posts1)->with('posts2', $posts2);
     }
 
     /**
@@ -41,8 +49,8 @@ class SLController extends Controller
      */
     public function store(Request $request)
     {
+        // dd($request->input());
         $this->validate($request, [
-            'briefnr' => 'required',
             'windpark' => 'required',
             'date' => 'required',
             'ivname' => 'required' ,
@@ -51,16 +59,17 @@ class SLController extends Controller
             'mvtel' => 'required',
             'plname' => 'required' ,
             'pltel' => 'required',
-            'switchcompany' => 'required' ,
-            'switchtel' => 'required',
-            'contactname' => 'required' ,
+            'bedrijf' => 'required' ,
+            'bedrijftel' => 'required',
+            'contact' => 'required' ,
             'contacttel' => 'required',
-            'remarks' => 'required' ,
+            // 'remarks' => 'required' ,
             'reason' => 'required',
         ]);    
+        // dd($request->input());
         //create
         $SL = new SL;
-        $SL->briefnr = $request->input('briefnr');
+        $SL->briefnr = 1;
         $SL->windpark = $request->input('windpark');
         $SL->date = $request->input('date');
         $SL->ivname = $request->input('ivname');
@@ -69,15 +78,54 @@ class SLController extends Controller
         $SL->mvtel = $request->input('mvtel');
         $SL->plname = $request->input('plname');      
         $SL->pltel = $request->input('pltel'); 
-        $SL->bedrijf = $request->input('switchcompany');
-        $SL->bedrijftel = $request->input('switchtel');
-        $SL->contact = $request->input('contactname');
+        $SL->bedrijf = $request->input('bedrijf');
+        $SL->bedrijftel = $request->input('bedrijftel');
+        $SL->contact = $request->input('contact');
         $SL->contacttel = $request->input('contacttel');
-        $SL->remarks = $request->input('remarks');      
+        $SL->remarks = "";    
         $SL->reason = $request->input('reason'); 
+        $SL->plremarks = "";
+        $SL->ivakkoord = "1";
+        $SL->mvakkoord = "0"; //Bij weigering blijft 0 op 0 staan en gaat ivakkoord ook naar 0, bij goedkeuring word mvakkoord 1
+        $SL->plakkoord = "0";
+        // $SL->plaats = request('plaats');
+        // $SL->veld = request('veld');
+        // $SL->turbine = request('turbine');
         $SL->save();
-        error_log($request);
-        return redirect('/admin/schakelbrieven')->with('success', 'Post Created');
+        // dd($request->input());
+
+        $plaats = request('plaats');
+        $veld = request('veld');
+        $turbine = request('turbine');
+        // $datum = request('datum');
+        
+        $array = array_map(null, $plaats, $veld, $turbine);
+        // dd($array);
+        foreach ($array as $data) {
+            $stap = new Stappen;
+            $stap->brief_id = $SL->id;
+            $stap->plaats = $data[0];
+            $stap->veld = $data[1];
+            $stap->turbine = $data[2];
+            $stap->omschrijving = "";
+            $stap->voltooid = "";
+            $stap->datum = "";
+            $stap->save();
+        }
+        
+        // $stap = new Stappen;
+        // $stap->brief_id = $SL->id;
+        // $stap->plaats = request('plaats');
+        // $stap->veld = request('veld');
+        // $stap->turbine = request('turbine');
+        // $stap->omschrijving = "";
+        // $stap->voltooid = "";
+        // $stap->datum = request('datum');
+        // $stap->save();
+        
+
+        // return request('plaats');
+        return redirect('/sl/index')->with('success', 'Post Created');
     }
 
     /**
@@ -135,7 +183,6 @@ class SLController extends Controller
             'remarks' => 'required' ,
             'reason' => 'required',
         ]);    
-        // DD($request);
         //update
         $SL = SL::find($id);
         // $SL->briefnr = $request->input('schakelbriefnr');

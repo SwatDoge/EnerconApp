@@ -19,7 +19,7 @@
             <div class="mx-4 mb-4">
                 <label for="mvname">Werk verantwoordelijke:</label>
                 <input-dropdownv2 
-                    placeholder="Naam" type="text" classes="form-control" id="plname" name="plname" :disable="!hasRole(['IV'])"
+                    placeholder="Naam" type="text" classes="form-control" id="mvname" name="mvname" :disable="!hasRole(['IV'])"
                     :dhaydata="users" dkey="name" dheight="180px" :dlength="40" dupdateref="phonenumber_mv" dupdatekey="phonenumber"
                     @inputdropdown="catchEvent" :input="mvname"
                 />

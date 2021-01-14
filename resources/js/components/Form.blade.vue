@@ -157,7 +157,7 @@
                     vm.rollen.push("PL", "IV", "WV", "Admin");
                 }
                 vm.users = JSON.parse(vm.users);
-                if (typeof(vm.editinit) != "undefined") vm.editinit = JSON.parse(vm.editinit)[0];
+                if (typeof(vm.editinit) != "undefined") vm.editinit = JSON.parse(vm.editinit);
             });
 
             let apis = [
