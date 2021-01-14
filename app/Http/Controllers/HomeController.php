@@ -32,6 +32,13 @@ class HomeController extends Controller
         return view('home', compact('users', 'roles'));
     }
 
+    public function unauthorized() {
+        return view('index')->with([
+            'message' => "Geen bevoegdheid, neem contact op met de beheerder",
+            'method' => "error"
+        ]);
+    }
+
     public function create(Request $request)
     {
 

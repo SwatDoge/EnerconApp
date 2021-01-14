@@ -17,7 +17,7 @@ class SLController extends Controller
         $switchbrief = SL::all();
 
         return view('admin.switchbriefs.index')->with([
-            'switchbrief', $switchbrief,
+            'switchbrief' => $switchbrief,
             'message' => "Schakelbrieven geladen",
             'method' => "success"
         ]);

@@ -54,3 +54,6 @@ Route::group(['middleware' => 'admin'], function () {
     Route::any('/admin/update', [App\Http\Controllers\AdminController::class, 'update'])->name('aUpdate');
     Route::get('/admin/users/create', 'AdminController@store')->name('aStore');
 });
+
+//unAuthorized
+Route::any('/unauthorized', [App\Http\Controllers\HomeController::class, 'unauthorized'])->name('unauthorized');
