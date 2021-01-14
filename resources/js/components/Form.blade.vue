@@ -55,7 +55,7 @@
                     </label>
                     <input type="checkbox" id="stappen" v-model="display.show_stappen" hidden>
                     <div v-if="hasRole(['IV', 'WV', 'PL'])" v-show="display.show_stappen">
-                        <form-steps :rollen="rollen" :omschrijvingen="enerconapi.omschrijvingen" :init="editinit" :plaatsen="enerconapi.plaatsen" :velden="enerconapi.velden" :turbine="enerconapi.turbines"></form-steps>
+                        <form-steps :stappen="stappen" :route="route" :rollen="rollen" :omschrijvingen="enerconapi.omschrijvingen" :plaatsen="enerconapi.plaatsen" :velden="enerconapi.velden" :turbine="enerconapi.turbines"></form-steps>
                     </div>
 
                     <br>
@@ -124,7 +124,7 @@
                 }
             }
         },
-        props:["rollen", "route", "users", "editinit"],
+        props:["rollen", "route", "users", "editinit", "stappen"],
         methods:{
             post(){
                 switch(this.route){
@@ -155,8 +155,10 @@
                 if (vm.rollen.includes("Admin")){
                     vm.rollen = [];
                     vm.rollen.push("PL", "IV", "WV", "Admin");
+                    
                 }
                 vm.users = JSON.parse(vm.users);
+                if (typeof(vm.stappen) != "undefined") vm.stappen = JSON.parse(vm.stappen);
                 if (typeof(vm.editinit) != "undefined") vm.editinit = JSON.parse(vm.editinit);
             });
 

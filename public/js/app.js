@@ -5146,7 +5146,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     };
   },
-  props: ["rollen", "route", "users", "editinit"],
+  props: ["rollen", "route", "users", "editinit", "stappen"],
   methods: {
     post: function post() {
       switch (this.route) {
@@ -5205,6 +5205,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                 }
 
                 vm.users = JSON.parse(vm.users);
+                if (typeof vm.stappen != "undefined") vm.stappen = JSON.parse(vm.stappen);
                 if (typeof vm.editinit != "undefined") vm.editinit = JSON.parse(vm.editinit);
               });
               apis = [{
@@ -5699,13 +5700,17 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       steps: []
     };
   },
-  props: ["rollen", "omschrijvingen", "plaatsen", "turbine", "velden"],
+  props: ["rollen", "omschrijvingen", "plaatsen", "turbine", "velden", "route", "stappen"],
   methods: {
     create: function create() {
       var step = {
@@ -5746,7 +5751,33 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   mounted: function mounted() {
-    this.create();
+    if (typeof this.stappen !== "undefined") {
+      var _iterator2 = _createForOfIteratorHelper(this.stappen),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var stap = _step2.value;
+          var step = {
+            stap: stap.id,
+            turbine: stap.turbine,
+            plaats: stap.plaats,
+            veld: stap.veld,
+            datum: stap.datum,
+            omschrijving: stap.omschrijving,
+            voltooid: stap.voltooid === "true" ? true : false,
+            created: false
+          };
+          this.steps.push(step);
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+    } else {
+      this.create();
+    }
   }
 });
 
@@ -43886,9 +43917,10 @@ var render = function() {
                         [
                           _c("form-steps", {
                             attrs: {
+                              stappen: _vm.stappen,
+                              route: _vm.route,
                               rollen: _vm.rollen,
                               omschrijvingen: _vm.enerconapi.omschrijvingen,
-                              init: _vm.editinit,
                               plaatsen: _vm.enerconapi.plaatsen,
                               velden: _vm.enerconapi.velden,
                               turbine: _vm.enerconapi.turbines
@@ -44700,9 +44732,37 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col" }, [_vm._v("Omschrijving")]),
             _vm._v(" "),
-            _c("div", { staticClass: "col" }, [_vm._v("Voltooid")]),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.hasRole(["PL"]),
+                    expression: "hasRole(['PL'])"
+                  }
+                ],
+                staticClass: "col"
+              },
+              [_vm._v("Voltooid")]
+            ),
             _vm._v(" "),
-            _c("div", { staticClass: "col" }, [_vm._v("Datum/Tijd")]),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.hasRole(["PL"]),
+                    expression: "hasRole(['PL'])"
+                  }
+                ],
+                staticClass: "col"
+              },
+              [_vm._v("Datum/Tijd")]
+            ),
             _vm._v(" "),
             _vm.hasRole(["IV"])
               ? _c("div", { staticClass: "col" }, [_vm._v("Acties")])
@@ -44754,7 +44814,8 @@ var render = function() {
                           dhaydata: _vm.plaatsen,
                           dkey: "plaats",
                           dheight: "180px",
-                          dlength: 40
+                          dlength: 40,
+                          input: step.plaats
                         }
                       })
                     ],
@@ -44774,7 +44835,8 @@ var render = function() {
                           dhaydata: _vm.velden,
                           dkey: "veld",
                           dheight: "180px",
-                          dlength: 40
+                          dlength: 40,
+                          input: step.veld
                         }
                       })
                     ],
@@ -44794,7 +44856,8 @@ var render = function() {
                           dhaydata: _vm.turbine,
                           dkey: "serial_nr",
                           dheight: "180px",
-                          dlength: 40
+                          dlength: 40,
+                          input: step.turbine
                         }
                       })
                     ],
@@ -44802,129 +44865,177 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "col" }, [
-                    _c(
-                      "select",
-                      {
-                        staticClass: "form-select",
-                        attrs: { name: "omschrijving[]" }
-                      },
-                      _vm._l(_vm.omschrijvingen, function(option, kindex) {
-                        return _c(
-                          "option",
-                          { key: kindex, domProps: { value: option["id"] } },
-                          [_vm._v(_vm._s(option["omschrijving"]))]
+                    _vm.route === "slCreate"
+                      ? _c(
+                          "select",
+                          {
+                            staticClass: "form-select",
+                            attrs: {
+                              name: "omschrijving[]",
+                              disabled: !_vm.hasRole(["IV"])
+                            }
+                          },
+                          _vm._l(_vm.omschrijvingen, function(option, kindex) {
+                            return _c(
+                              "option",
+                              {
+                                key: kindex,
+                                domProps: { value: option["id"] - 1 }
+                              },
+                              [_vm._v(_vm._s(option["omschrijving"]))]
+                            )
+                          }),
+                          0
                         )
-                      }),
-                      0
-                    )
+                      : _c("div", [
+                          _c("textarea", {
+                            staticClass: "form-control",
+                            attrs: { readonly: "", rows: "1" },
+                            domProps: {
+                              value:
+                                _vm.omschrijvingen[step.omschrijving][
+                                  "omschrijving"
+                                ]
+                            }
+                          })
+                        ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col" }, [
-                    _c("input", {
+                  _c(
+                    "div",
+                    {
                       directives: [
                         {
-                          name: "model",
-                          rawName: "v-model",
-                          value: step.voltooid,
-                          expression: "step.voltooid"
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.hasRole(["PL"]),
+                          expression: "hasRole(['PL'])"
                         }
                       ],
-                      attrs: {
-                        type: "checkbox",
-                        id: "signature_" + index,
-                        disabled: !_vm.hasRole(["PL"])
-                      },
-                      domProps: {
-                        checked: Array.isArray(step.voltooid)
-                          ? _vm._i(step.voltooid, null) > -1
-                          : step.voltooid
-                      },
-                      on: {
-                        click: function($event) {
-                          return _vm.updateDate(index, step.voltooid)
+                      staticClass: "col"
+                    },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: step.voltooid,
+                            expression: "step.voltooid"
+                          }
+                        ],
+                        attrs: {
+                          name: "voltooid[]",
+                          type: "checkbox",
+                          id: "signature_" + index
                         },
-                        change: function($event) {
-                          var $$a = step.voltooid,
-                            $$el = $event.target,
-                            $$c = $$el.checked ? true : false
-                          if (Array.isArray($$a)) {
-                            var $$v = null,
-                              $$i = _vm._i($$a, $$v)
-                            if ($$el.checked) {
-                              $$i < 0 &&
-                                _vm.$set(step, "voltooid", $$a.concat([$$v]))
+                        domProps: {
+                          value: step.voltooid,
+                          checked: Array.isArray(step.voltooid)
+                            ? _vm._i(step.voltooid, step.voltooid) > -1
+                            : step.voltooid
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.updateDate(index, step.voltooid)
+                          },
+                          change: function($event) {
+                            var $$a = step.voltooid,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = step.voltooid,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  _vm.$set(step, "voltooid", $$a.concat([$$v]))
+                              } else {
+                                $$i > -1 &&
+                                  _vm.$set(
+                                    step,
+                                    "voltooid",
+                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                  )
+                              }
                             } else {
-                              $$i > -1 &&
-                                _vm.$set(
-                                  step,
-                                  "voltooid",
-                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                )
+                              _vm.$set(step, "voltooid", $$c)
                             }
-                          } else {
-                            _vm.$set(step, "voltooid", $$c)
                           }
                         }
-                      }
-                    })
-                  ]),
+                      })
+                    ]
+                  ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col" }, [
-                    step.voltooid
-                      ? _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: step.datum,
-                              expression: "step.datum"
-                            }
-                          ],
-                          staticClass: "form-control text-center",
-                          attrs: {
-                            type: "text",
-                            name: "datum[]",
-                            readonly: ""
-                          },
-                          domProps: { value: step.datum },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.hasRole(["PL"]),
+                          expression: "hasRole(['PL'])"
+                        }
+                      ],
+                      staticClass: "col"
+                    },
+                    [
+                      step.voltooid
+                        ? _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: step.datum,
+                                expression: "step.datum"
                               }
-                              _vm.$set(step, "datum", $event.target.value)
-                            }
-                          }
-                        })
-                      : _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: step.datum,
-                              expression: "step.datum"
-                            }
-                          ],
-                          staticClass: "form-control text-center",
-                          attrs: {
-                            type: "text",
-                            name: "datum[]",
-                            placeholder: step.created
-                              ? "n.v.t."
-                              : "niet voltooid",
-                            readonly: ""
-                          },
-                          domProps: { value: step.datum },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
+                            ],
+                            staticClass: "form-control text-center",
+                            attrs: {
+                              type: "text",
+                              name: "datum[]",
+                              readonly: ""
+                            },
+                            domProps: { value: step.datum },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(step, "datum", $event.target.value)
                               }
-                              _vm.$set(step, "datum", $event.target.value)
                             }
-                          }
-                        })
-                  ]),
+                          })
+                        : _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: step.datum,
+                                expression: "step.datum"
+                              }
+                            ],
+                            staticClass: "form-control text-center",
+                            attrs: {
+                              type: "text",
+                              name: "datum[]",
+                              placeholder: step.created
+                                ? "n.v.t."
+                                : "niet voltooid",
+                              readonly: ""
+                            },
+                            domProps: { value: step.datum },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(step, "datum", $event.target.value)
+                              }
+                            }
+                          })
+                    ]
+                  ),
                   _vm._v(" "),
                   _vm.hasRole(["IV"])
                     ? _c("div", { staticClass: "col" }, [
@@ -57870,8 +57981,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\1\examenproject\EnerconApp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\1\examenproject\EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
