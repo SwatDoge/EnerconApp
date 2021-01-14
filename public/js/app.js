@@ -5124,10 +5124,20 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      schakelbrief_ID: this.genID(),
+      schakelbrief_ID: 0,
       datum: this.getDateForm(new Date()),
       fetched: false,
       enerconapi: {},
@@ -5146,7 +5156,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     };
   },
-  props: ["rollen", "route", "users", "editinit"],
+  props: ["rollen", "route", "users", "editinit", "sl_count"],
   methods: {
     post: function post() {
       switch (this.route) {
@@ -5178,9 +5188,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
       return res;
     },
-    genID: function genID() {
-      return Math.floor(Math.random() * 9999999) + 1000000;
-    },
     getDateForm: function getDateForm(date) {
       return new Date().toISOString().slice(0, 10);
     }
@@ -5204,8 +5211,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                   vm.rollen.push("PL", "IV", "WV", "Admin");
                 }
 
-                vm.users = JSON.parse(vm.users);
                 if (typeof vm.editinit != "undefined") vm.editinit = JSON.parse(vm.editinit);
+                vm.users = JSON.parse(vm.users);
+                vm.route != "slEdit" ? vm.schakelbrief_ID = parseInt(vm.sl_count) + 1 : vm.schakelbrief_ID = vm.editinit.id;
               });
               apis = [{
                 url: "https://std.stegion.nl/api_enercon/getWindparks",
@@ -43580,18 +43588,18 @@ var render = function() {
                 {
                   name: "model",
                   rawName: "v-model",
-                  value: _vm.schakelbrief_ID,
-                  expression: "schakelbrief_ID"
+                  value: _vm.sl_count,
+                  expression: "sl_count"
                 }
               ],
               attrs: { type: "hidden", name: "briefnr" },
-              domProps: { value: _vm.schakelbrief_ID },
+              domProps: { value: _vm.sl_count },
               on: {
                 input: function($event) {
                   if ($event.target.composing) {
                     return
                   }
-                  _vm.schakelbrief_ID = $event.target.value
+                  _vm.sl_count = $event.target.value
                 }
               }
             }),
@@ -43720,12 +43728,14 @@ var render = function() {
                           attrs: { for: "intern" }
                         },
                         [
-                          _c("h4", [
-                            _vm._v("Intern\n                        "),
-                            _vm.display.show_intern
-                              ? _c("i", { staticClass: "fas fa-eye" })
-                              : _c("i", { staticClass: "fas fa-eye-slash" })
-                          ])
+                          _vm.hasRole(["IV", "WV"])
+                            ? _c("h4", [
+                                _vm._v("Intern\n                        "),
+                                _vm.display.show_intern
+                                  ? _c("i", { staticClass: "fas fa-eye" })
+                                  : _c("i", { staticClass: "fas fa-eye-slash" })
+                              ])
+                            : _vm._e()
                         ]
                       )
                     : _vm._e(),
@@ -43911,12 +43921,14 @@ var render = function() {
                           attrs: { for: "opmerkingen" }
                         },
                         [
-                          _c("h4", [
-                            _vm._v("Opmerkingen\n                        "),
-                            _vm.display.show_opmerkingen
-                              ? _c("i", { staticClass: "fas fa-eye" })
-                              : _c("i", { staticClass: "fas fa-eye-slash" })
-                          ])
+                          _vm.hasRole(["IV", "WV"])
+                            ? _c("h4", [
+                                _vm._v("Opmerkingen\n                        "),
+                                _vm.display.show_opmerkingen
+                                  ? _c("i", { staticClass: "fas fa-eye" })
+                                  : _c("i", { staticClass: "fas fa-eye-slash" })
+                              ])
+                            : _vm._e()
                         ]
                       )
                     : _vm._e(),
@@ -44004,22 +44016,33 @@ var render = function() {
                   _vm.route == "slCreate"
                     ? _c("input", {
                         staticClass: "btn btn-danger mt-4 text-light",
-                        attrs: { type: "submit", value: "Annuleer" }
+                        attrs: { type: "button", value: "Annuleer" }
                       })
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.route == "slEdit"
-                    ? _c("input", {
-                        staticClass: "btn btn-success mt-4 text-light",
-                        attrs: { type: "submit", value: "Accepteren" }
-                      })
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.route == "slEdit"
-                    ? _c("input", {
-                        staticClass: "btn btn-danger mt-4 text-light",
-                        attrs: { type: "submit", value: "Afwijzen" }
-                      })
+                  _vm.route == "slEdit" &&
+                  (_vm.editinit.ivakkoord == 1 ? true : false) &&
+                  (_vm.editinit.mvakkoord == 0 ? true : false)
+                    ? _c("div", [
+                        _c("input", {
+                          attrs: { type: "radio", name: "verified", value: "1" }
+                        }),
+                        _vm._v(" "),
+                        _c("label", [_vm._v("Accepteer")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          attrs: { type: "radio", name: "verified", value: "0" }
+                        }),
+                        _vm._v(" "),
+                        _c("label", [_vm._v("Afwijzen")]),
+                        _vm._v(" "),
+                        _c("br"),
+                        _vm._v(" "),
+                        _c("input", {
+                          staticClass: "btn btn-success mt-4 text-light",
+                          attrs: { type: "submit", value: "Bevestigen" }
+                        })
+                      ])
                     : _vm._e()
                 ],
                 1

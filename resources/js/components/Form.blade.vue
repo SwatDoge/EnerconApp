@@ -4,7 +4,7 @@
             <!-- csrf -->
             <slot></slot>
             <!-- id -->
-            <input type="hidden" name="briefnr" v-model="schakelbrief_ID">
+            <input type="hidden" name="briefnr" v-model="sl_count">
             <!-- Schakelbrief gegevens -->
             <div class="card mx-4">
                 <div class="card-body">
@@ -34,7 +34,7 @@
                     <br>
                     <br v-if="display.show_intern">
                     <label v-if="hasRole(['IV', 'WV', 'PL'])" class="form-check-label" for="intern">
-                        <h4>Intern
+                        <h4 v-if="hasRole(['IV', 'WV'])">Intern
                             <i v-if="display.show_intern" class="fas fa-eye"></i>
                             <i v-else class="fas fa-eye-slash"></i>
                         </h4>
@@ -61,7 +61,7 @@
                     <br>
                     <br>
                     <label v-if="hasRole(['IV', 'WV', 'PL'])" class="form-check-label" for="opmerkingen">
-                        <h4>Opmerkingen
+                        <h4 v-if="hasRole(['IV', 'WV'])">Opmerkingen
                             <i v-if="display.show_opmerkingen" class="fas fa-eye"></i>
                             <i v-else class="fas fa-eye-slash"></i>
                         </h4>
@@ -76,11 +76,21 @@
                     <br>
                     <!-- iv knoppen -->
                     <input class="btn btn-primary mt-4 text-light" type="submit" value="Creeër" v-if="route == 'slCreate'">
-                    <input class="btn btn-danger mt-4 text-light" type="submit" value="Annuleer" v-if="route == 'slCreate'">
+                    <input class="btn btn-danger mt-4 text-light" type="button" value="Annuleer" v-if="route == 'slCreate'">
                     <!-- wv knoppen -->
-                    <input class="btn btn-success mt-4 text-light" type="submit" value="Accepteren" v-if="route == 'slEdit'">
-                    <input class="btn btn-danger mt-4 text-light" type="submit" value="Afwijzen" v-if="route == 'slEdit'">
-                    
+                    <!-- <input class="btn btn-success mt-4 text-light" type="submit" value="Accepteren" v-if="route == 'slEdit' && (editinit.ivakkoord == 1 ? true : false) && (editinit.mvakkoord == 0 ? true : false)">
+                    <input class="btn btn-danger mt-4 text-light" type="submit" value="Afwijzen" v-if="route == 'slEdit' && (editinit.ivakkoord == 1 ? true : false) && (editinit.mvakkoord == 0 ? true : false)">
+                     -->
+
+                    <div v-if="route == 'slEdit' && (editinit.ivakkoord == 1 ? true : false) && (editinit.mvakkoord == 0 ? true : false)">
+                        <input type="radio" name="verified" value="1">
+                        <label>Accepteer</label>
+                        <input type="radio" name="verified" value="0">
+                        <label>Afwijzen</label>
+                        <br>
+                        <input class="btn btn-success mt-4 text-light" type="submit" value="Bevestigen">
+                    </div>
+
                 </div>
             </div>
         </form>
@@ -105,7 +115,7 @@
     export default {
         data() {
             return {
-                schakelbrief_ID: this.genID(),
+                schakelbrief_ID: 0,
                 datum: this.getDateForm(new Date()),
                 fetched: false,
                 enerconapi: {},
@@ -124,7 +134,7 @@
                 }
             }
         },
-        props:["rollen", "route", "users", "editinit"],
+        props:["rollen", "route", "users", "editinit", "sl_count"],
         methods:{
             post(){
                 switch(this.route){
@@ -141,9 +151,6 @@
 
                 return res;
             },
-            genID: function(){
-                return Math.floor(Math.random() * 9999999) + 1000000;
-            },
             getDateForm: function(date){
                 return new Date().toISOString().slice(0,10);
             },
@@ -156,8 +163,9 @@
                     vm.rollen = [];
                     vm.rollen.push("PL", "IV", "WV", "Admin");
                 }
-                vm.users = JSON.parse(vm.users);
                 if (typeof(vm.editinit) != "undefined") vm.editinit = JSON.parse(vm.editinit);
+                vm.users = JSON.parse(vm.users);
+                (vm.route != "slEdit" ? vm.schakelbrief_ID = parseInt(vm.sl_count) + 1 : vm.schakelbrief_ID = vm.editinit.id);
             });
 
             let apis = [
