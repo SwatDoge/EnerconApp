@@ -12,6 +12,7 @@
                 <th scope="col">IV Naam</th>
                 <th scope="col">Bedrijf</th>
                 <th scope="col">PDF</th>
+                <th scope="col">Word</th>
                 <th scope="col">Acties</th>
             </tr>
             </thead>
@@ -26,12 +27,16 @@
                         <a class="btn btn-danger" href="{{ route('slPDF', $brief->id) }}">Export PDF</a>
                     </td>
                     <td>
+                        <a class="btn btn-primary" href="{{ route('slWord', $brief->id) }}">Export Word</a>
+                    </td>
+                    <td>
                         <a href="/sl/{{$brief->id}}/edit" class="">
                             <button style="margin: 0" type="button" class="btn bg-green color-white">
                                 <i class="far fa-edit white"></i>
                             </button>
                         </a>
                     </td>
+            @endforeach
                 </tbody>
             </table>
             @else
