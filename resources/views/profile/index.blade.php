@@ -20,7 +20,7 @@
                         </div>
                         <div class="col text-center">
                             <br>
-                            <button type="submit" class="btn btn-primary">Updaten</button>
+                            <button type="submit" class="btn bg-green white">Updaten</button>
                         </div>
                     </form>
                 </div>
