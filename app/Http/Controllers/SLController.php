@@ -16,7 +16,11 @@ class SLController extends Controller
     {
         $switchbrief = SL::all();
 
-        return view('admin.switchbriefs.index')->with('switchbrief', $switchbrief);
+        return view('admin.switchbriefs.index')->with([
+            'switchbrief', $switchbrief,
+            'message' => "Schakelbrieven geladen",
+            'method' => "success"
+        ]);
     }
 
     /**
@@ -28,7 +32,7 @@ class SLController extends Controller
     {
         // if(auth()->user()->role !== 'IV') {
         //     return redirect('/')->with('error', 'Unauthorized page');
-        // } 
+        // }
         return view('SL.create');
     }
 
@@ -56,7 +60,7 @@ class SLController extends Controller
             'contacttel' => 'required',
             'remarks' => 'required' ,
             'reason' => 'required',
-        ]);    
+        ]);
         //create
         $SL = new SL;
         $SL->briefnr = $request->input('briefnr');
@@ -66,17 +70,22 @@ class SLController extends Controller
         $SL->ivtel = $request->input('ivtel');
         $SL->mvname = $request->input('mvname');
         $SL->mvtel = $request->input('mvtel');
-        $SL->plname = $request->input('plname');      
-        $SL->pltel = $request->input('pltel'); 
+        $SL->plname = $request->input('plname');
+        $SL->pltel = $request->input('pltel');
         $SL->bedrijf = $request->input('switchcompany');
         $SL->bedrijftel = $request->input('switchtel');
         $SL->contact = $request->input('contactname');
         $SL->contacttel = $request->input('contacttel');
-        $SL->remarks = $request->input('remarks');      
-        $SL->reason = $request->input('reason'); 
+        $SL->remarks = $request->input('remarks');
+        $SL->reason = $request->input('reason');
         $SL->save();
         error_log($request);
-        return redirect('/admin/schakelbrieven')->with('success', 'Post Created');
+
+        return view('admin.switchbriefs.index')->with([
+            'switchbrief' => SL::all(),
+            'message' => "Schakelbrief toegevoegd",
+            'method' => "success"
+        ]);
     }
 
     /**
@@ -100,12 +109,12 @@ class SLController extends Controller
     {
         $SL = SL::find($id);
         //check 4 role
-        // if(auth()->user()->role == 'admin') {} 
+        // if(auth()->user()->role == 'admin') {}
         // else if(auth()->user()->id !== $post->user_id) {
         //     return redirect('/')->with('error', 'Unauthorized page');
-        // } 
+        // }
         return view('SL.edit')->with('SL', $SL);
-        
+
     }
 
     /**
@@ -132,7 +141,7 @@ class SLController extends Controller
             'contacttel' => 'required',
             'remarks' => 'required' ,
             'reason' => 'required',
-        ]);    
+        ]);
         // DD($request);
         //update
         $SL = SL::find($id);
@@ -143,17 +152,21 @@ class SLController extends Controller
         $SL->ivtel = $request->input('ivtel');
         $SL->mvname = $request->input('mvname');
         $SL->mvtel = $request->input('mvtel');
-        $SL->plname = $request->input('plname');      
-        $SL->pltel = $request->input('pltel'); 
+        $SL->plname = $request->input('plname');
+        $SL->pltel = $request->input('pltel');
         $SL->bedrijf = $request->input('switchcompany');
         $SL->bedrijftel = $request->input('switchtel');
         $SL->contact = $request->input('contactname');
         $SL->contacttel = $request->input('contacttel');
-        $SL->remarks = $request->input('remarks');      
-        $SL->reason = $request->input('reason'); 
+        $SL->remarks = $request->input('remarks');
+        $SL->reason = $request->input('reason');
         $SL->save();
-        
-        return redirect('/')->with('success', 'Post Updated');
+
+        return view('admin.switchbriefs.index')->with([
+            'switchbrief' => SL::all(),
+            'message' => "Schakelbrief bijgewerkt",
+            'method' => "success"
+        ]);
     }
 
     /**
@@ -167,12 +180,16 @@ class SLController extends Controller
         $SL = SL::find($id);
 
         //check role?
-        // if(auth()->user()->role == 'admin') {} 
+        // if(auth()->user()->role == 'admin') {}
         // else if(auth()->user()->id !== $post->user_id) {
         //     return redirect('/')->with('error', 'Unauthorized page');
-        // } 
+        // }
 
         $SL->delete();
-        return redirect('/')->with('success', 'Post Deleted');
+        return view('admin.switchbriefs.index')->with([
+            'switchbrief' => SL::all(),
+            'message' => "Schakelbrief verwijderd",
+            'method' => "success"
+        ]);
     }
 }

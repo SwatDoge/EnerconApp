@@ -21,6 +21,10 @@ class ProfileController extends Controller
             'email' => 'required'
         ]));
 
-        return redirect()->route('pIndex');
+        return view('profile.index')->with([
+            'user' => Auth::user(),
+            'message' => "Profiel bijgewerkt",
+            'method' => "success"
+        ]);
     }
 }

@@ -28,6 +28,7 @@ Route::group(['middleware' => 'auth'], function () {
     Route::post('/sl', 'SLController@store')->name('slStore');
     Route::get('/sl/index', 'SLController@index')->name('slIndex');
     Route::get('/sl/{id}/edit', 'SLController@edit')->name('slEdit');
+    Route::any('/sl/{id}/delete', [App\Http\Controllers\SLController::class, 'destroy'])->name('slDelete');
     Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 
     Route::any('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('pIndex');

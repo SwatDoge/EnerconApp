@@ -5,13 +5,15 @@
         <link rel="icon" href="{{ URL::asset('/css/favicon.jpg') }}" type="image/x-icon"/>
         <body>
             <div class="container p-5">
+                <div class="pb-2">
+                    <a class="btn bg-green white d-flex justify-content-center" href="{{route('aCreate')}}">
+                        Gebruiker toevoegen
+                    </a>
+                </div>
                 @if($users->count() > 0)
-                    <table id="admin_table_id" class="table p-5 text center display" data-paging='false'>
-                        <h1>Gebruikers</h1><br>
-
-                        <a class="btn bg-green white float-left" href="{{route('aCreate')}}">
-                            Gebruiker toevoegen
-                        </a>
+                <div class="card">
+                    <table id="admin_table_id" class="table p-7 text center display" data-paging='false'>
+                        <h1 class="card-header">Gebruikers</h1><br>
                         <thead>
                             <tr>
                                 <th scope="col">ID</th>
@@ -54,11 +56,17 @@
                         @endforeach
                         </tbody>
                     </table>
+                    <div class="card-footer">
+                    </div>
+                </div>
                 @else
                     <p class="p-5">Nog geen gebruikers</p>
                 @endif
                 <br>
-                {{ $users->links() }}
+                <div class="p-2">
+                    {{ $users->links() }}
+                </div>
+
             <style>
                 .w-5 {
                     display: none;
@@ -75,7 +83,6 @@
                         { orderable: false, targets: -1 }
                     ],
                     "bInfo" : false,
-
                 });
 
             } );

@@ -2,7 +2,7 @@
 
 @section('content')
 <div class="container p-5">
-    @if($roles->count() > 0 )
+    @if(count($roles) > 0 )
     <table id="table" class="table p-5 text-center">
         <h1>Rollen</h1>
         <thead>
