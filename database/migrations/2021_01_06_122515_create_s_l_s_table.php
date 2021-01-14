@@ -29,7 +29,11 @@ class CreateSLSTable extends Migration
             $table->string('contact');
             $table->string('contacttel');
             $table->mediumText('remarks');
+            $table->mediumText('plremarks');
             $table->mediumText('reason');
+            $table->string('ivakkoord');
+            $table->string('mvakkoord');
+            $table->string('plakkoord');
             $table->timestamps();
         });
     }
