@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use App\Models\SL;
 use App\Models\User;
+use App\Models\Stappen;
 use DB;
 
 class SLController extends Controller
@@ -64,8 +65,7 @@ class SLController extends Controller
             // 'remarks' => 'required' ,
             'reason' => 'required',
         ]);    
-
-         //dd($request->input());
+        // dd($request->input());
         //create
         $SL = new SL;
         $SL->briefnr = 1;
@@ -87,13 +87,27 @@ class SLController extends Controller
         $SL->ivakkoord = "1";
         $SL->mvakkoord = "0"; //Bij weigering blijft 0 op 0 staan en gaat ivakkoord ook naar 0, bij goedkeuring word mvakkoord 1
         $SL->plakkoord = "0";
-        $SL->stap = '1337';
-        $SL->plaats = request('plaats');
-        $SL->veld = request('veld');
-        $SL->turbine = request('turbine');
+        // $SL->plaats = request('plaats');
+        // $SL->veld = request('veld');
+        // $SL->turbine = request('turbine');
         $SL->save();
+        // dd($request->input());
+
+        foreach($request->input('plaats') as $key => $value) {
+            $stap = new Stappen;
+            $stap->brief_id = $SL->id;
+            $stap->plaats = $request->input('plaats');
+            $stap->veld = $request->input('veld');
+            $stap->turbine = $request->input('turbine');
+            $stap->omschrijving = "";
+            $stap->voltooid = "";
+            $stap->datum = $request->input('datum');
+            $stap->save();
+        }
+
+
         // return request('plaats');
-        return redirect('/admin/schakelbrieven')->with('success', 'Post Created');
+        return redirect('/sl/index')->with('success', 'Post Created');
     }
 
     /**

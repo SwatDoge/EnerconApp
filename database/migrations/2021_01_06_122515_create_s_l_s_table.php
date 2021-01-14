@@ -28,13 +28,6 @@ class CreateSLSTable extends Migration
             $table->string('bedrijftel');
             $table->string('contact');
             $table->string('contacttel');
-            $table->json('stap');
-            $table->json('plaats');
-            $table->json('veld');
-            $table->json('turbine');
-            // $table->json('omschrijving');
-            // $table->json('voltooid');
-            // $table->json('Datum');
             $table->mediumText('remarks');
             $table->mediumText('plremarks');
             $table->mediumText('reason');

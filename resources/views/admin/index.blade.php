@@ -55,6 +55,7 @@
                 @endif
                 <br>
                 {{ $users->links() }}
+                <br>
                 <a class="btn bg-green white float-right" href="{{route('aCreate')}}">
                     Gebruiker toevoegen
                 </a>

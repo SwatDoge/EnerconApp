@@ -40,7 +40,7 @@
                             </input-dropdownv2>
                         </div>
                         <div class="col">
-                            <select name="description" class="form-select">
+                            <select name="omschrijving[]" class="form-select">
                                 <option :value="option['id']" v-for="(option, kindex) in omschrijvingen" :key="kindex" >{{option['omschrijving']}}</option>
                             </select>
                         </div>
@@ -48,8 +48,8 @@
                             <input type="checkbox" :id="'signature_' + index" v-model="step.voltooid" @click="updateDate(index, step.voltooid)" :disabled="!hasRole(['PL'])">
                         </div>
                         <div class="col">
-                            <input type="text" class="form-control text-center" readonly v-model="step.datum" v-if="step.voltooid">
-                            <input type="text" class="form-control text-center" :placeholder="(step.created ? 'n.v.t.' : 'niet voltooid')" v-model="step.datum" readonly v-else>
+                            <input type="text" name="datum[]" class="form-control text-center" readonly v-model="step.datum" v-if="step.voltooid">
+                            <input type="text" name="datum[]" class="form-control text-center" :placeholder="(step.created ? 'n.v.t.' : 'niet voltooid')" v-model="step.datum" readonly v-else>
                         </div>
                         <div class="col" v-if="hasRole(['IV'])">
                             <i class="fas fa-trash" v-on:click="steps.splice(index, 1)"></i>

@@ -44806,7 +44806,7 @@ var render = function() {
                       "select",
                       {
                         staticClass: "form-select",
-                        attrs: { name: "description" }
+                        attrs: { name: "omschrijving[]" }
                       },
                       _vm._l(_vm.omschrijvingen, function(option, kindex) {
                         return _c(
@@ -44881,7 +44881,11 @@ var render = function() {
                             }
                           ],
                           staticClass: "form-control text-center",
-                          attrs: { type: "text", readonly: "" },
+                          attrs: {
+                            type: "text",
+                            name: "datum[]",
+                            readonly: ""
+                          },
                           domProps: { value: step.datum },
                           on: {
                             input: function($event) {
@@ -44904,6 +44908,7 @@ var render = function() {
                           staticClass: "form-control text-center",
                           attrs: {
                             type: "text",
+                            name: "datum[]",
                             placeholder: step.created
                               ? "n.v.t."
                               : "niet voltooid",
@@ -57865,8 +57870,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\1\examenproject\EnerconApp\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\1\examenproject\EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
