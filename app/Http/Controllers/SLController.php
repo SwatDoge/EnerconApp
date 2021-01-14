@@ -275,9 +275,10 @@ class SLController extends Controller
 
     public function Word($id)
     {
+        $i = 0;
         // Schakelbrief gegevens ophalen.
         $SL = SL::find($id);
-
+        $stappen = DB::select("SELECT * FROM `stappen` WHERE `brief_id` = $id");
         //Datum van download
         $date = date('d-m-Y H:i:s');
 
@@ -340,6 +341,25 @@ class SLController extends Controller
         $table->addCell(3500, $tableCellStyle)->addText($SL->ivtel);
         $table->addCell(3000, $tableCellStyle)->addText($SL->mvtel);
         $table->addCell(3000, $tableCellStyle)->addText($SL->pltel);
+        
+        $section->addTextBreak(1);
+
+        // Tabel aanmaken voor de stappen.
+        $table = $section->addTable($tableStyleName);
+        $table->addRow();
+        $table->addCell(3500, $tableCellStyle)->addText('Stap', $tableFontStyle);
+        $table->addCell(3000, $tableCellStyle)->addText('Plaats', $tableFontStyle);
+        $table->addCell(3000, $tableCellStyle)->addText('Veld', $tableFontStyle);
+        $table->addCell(3000, $tableCellStyle)->addText('Turbine', $tableFontStyle);
+        $table->addCell(3000, $tableCellStyle)->addText('Omshcrijving', $tableFontStyle);
+        foreach($stappen as $stap){
+        $table->addRow();
+        $table->addCell(3500, $tableCellStyle)->addText(++$i);
+        $table->addCell(3000, $tableCellStyle)->addText($stap->plaats);
+        $table->addCell(3000, $tableCellStyle)->addText($stap->veld);
+        $table->addCell(3000, $tableCellStyle)->addText($stap->turbine);
+        $table->addCell(3000, $tableCellStyle)->addText($stap->omschrijving);
+        }
         
         $section->addTextBreak(1);
         // Opmerkingen van GO-NL en Opmerkingen voor werkzaamheden tijdens het werk.
