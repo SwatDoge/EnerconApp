@@ -97,9 +97,9 @@ class SLController extends Controller
         $plaats = request('plaats');
         $veld = request('veld');
         $turbine = request('turbine');
-        // $datum = request('datum');
-        // dd($plaats, $veld, $turbine, $omschrijving, $voltooid);
-        $array = array_map(null, $plaats, $veld, $turbine);
+        $omschrijving= request('omschrijving');
+        
+        $array = array_map(null, $plaats, $veld, $turbine, $omschrijving);
         // dd($array);
         foreach ($array as $data) {
             $stap = new Stappen;
@@ -107,9 +107,9 @@ class SLController extends Controller
             $stap->plaats = $data[0];
             $stap->veld = $data[1];
             $stap->turbine = $data[2];
-            $stap->omschrijving = "";
-            $stap->voltooid = "";
-            $stap->datum = "";
+            $stap->omschrijving = $data[3];
+            $stap->voltooid = "false";
+            $stap->datum = "n.v.t.";
             $stap->save();
         }
         
