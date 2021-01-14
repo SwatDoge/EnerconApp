@@ -184,19 +184,19 @@
         
     </body>
 </html>
-    @push('scripts')
-        <script>
-            $(document).ready( function () {
-                $('#switchbriefs_table_id').DataTable({
-                    columnDefs: [
-                        { orderable: false, targets: -1 }
-                    ],
-                    "bInfo" : false,
+@push('scripts')
+    <script>
+        $(document).ready( function () {
+            $('#table_id').DataTable({
+                columnDefs: [
+                    { orderable: false, targets: -1 }
+                ],
+                "bInfo" : false,
 
-                });
+            });
 
-            } );
-        </script>
-    @endpush
+        } );
+    </script>
+@endpush
 
 @endsection
