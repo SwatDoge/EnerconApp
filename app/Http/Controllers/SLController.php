@@ -98,7 +98,7 @@ class SLController extends Controller
         $veld = request('veld');
         $turbine = request('turbine');
         // $datum = request('datum');
-        
+        // dd($plaats, $veld, $turbine, $omschrijving, $voltooid);
         $array = array_map(null, $plaats, $veld, $turbine);
         // dd($array);
         foreach ($array as $data) {
@@ -136,7 +136,8 @@ class SLController extends Controller
      */
     public function show($id)
     {
-        //
+        $SL = SL::find($id);
+        return view('SL.show')->with('SL', $SL);
     }
 
     /**
