@@ -5111,8 +5111,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     };
   },
-  props: ["rollen", "route", "users"],
+  props: ["rollen", "route", "users", "editinit"],
   methods: {
+    post: function post() {
+      switch (this.route) {
+        case "slCreate":
+          return "http://127.0.0.1:8000/sl/";
+
+        case "slEdit":
+          return 'http://127.0.0.1:8000/sl/update/' + this.editinit.id;
+      }
+
+      return "http://127.0.0.1:8000/sl/";
+    },
     hasRole: function hasRole(roles) {
       var res = false;
 
@@ -5143,12 +5154,24 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     var _this = this;
 
     return _asyncToGenerator( /*#__PURE__*/_babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.mark(function _callee() {
-      var apis, _loop, _i, _apis, _ret;
+      var vm, apis, _loop, _i, _apis, _ret;
 
       return _babel_runtime_regenerator__WEBPACK_IMPORTED_MODULE_0___default.a.wrap(function _callee$(_context2) {
         while (1) {
           switch (_context2.prev = _context2.next) {
             case 0:
+              vm = _this;
+              vm.$nextTick(function () {
+                vm.rollen = JSON.parse(vm.rollen);
+
+                if (vm.rollen.includes("Admin")) {
+                  vm.rollen = [];
+                  vm.rollen.push("PL", "IV", "WV", "Admin");
+                }
+
+                vm.users = JSON.parse(vm.users);
+                if (typeof vm.editinit != "undefined") vm.editinit = JSON.parse(vm.editinit)[0];
+              });
               apis = [{
                 url: "https://std.stegion.nl/api_enercon/getWindparks",
                 name: "windpark"
@@ -5208,33 +5231,33 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
               });
               _i = 0, _apis = apis;
 
-            case 4:
+            case 6:
               if (!(_i < _apis.length)) {
-                _context2.next = 12;
+                _context2.next = 14;
                 break;
               }
 
-              return _context2.delegateYield(_loop(), "t0", 6);
+              return _context2.delegateYield(_loop(), "t0", 8);
 
-            case 6:
+            case 8:
               _ret = _context2.t0;
 
               if (!(_ret === "break")) {
-                _context2.next = 9;
+                _context2.next = 11;
                 break;
               }
 
-              return _context2.abrupt("break", 12);
+              return _context2.abrupt("break", 14);
 
-            case 9:
+            case 11:
               _i++;
-              _context2.next = 4;
+              _context2.next = 6;
               break;
 
-            case 12:
+            case 14:
               if (!_this.load.failed) _this.fetched = !_this.fetched;
 
-            case 13:
+            case 15:
             case "end":
               return _context2.stop();
           }
@@ -5306,7 +5329,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["windParken", "date", "rollen"],
+  props: ["windParken", "date", "rollen", "init"],
   methods: {
     hasRole: function hasRole(roles) {
       var res = false;
@@ -5326,7 +5349,36 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
 
       return res;
+    },
+    check: function check(x) {
+      return typeof x != "undefined" ? x : "";
     }
+  },
+  data: function data() {
+    return {
+      windpark: "",
+      reason: "",
+      bedrijf: "",
+      bedrijftel: "",
+      contact: "",
+      contacttel: "",
+      loaded: false
+    };
+  },
+  mounted: function mounted() {
+    var vm = this;
+    vm.$nextTick(function () {
+      if (typeof vm.init != "undefined") {
+        vm.windpark = vm.check(vm.init.windpark);
+        vm.reason = vm.check(vm.init.reason);
+        vm.bedrijf = vm.check(vm.init.bedrijf);
+        vm.bedrijftel = vm.check(vm.init.bedrijftel);
+        vm.contact = vm.check(vm.init.contact);
+        vm.contacttel = vm.check(vm.init.contacttel);
+      }
+
+      vm.loaded = true;
+    });
   }
 });
 
@@ -5341,6 +5393,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 
 "use strict";
 __webpack_require__.r(__webpack_exports__);
+function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { _typeof = function _typeof(obj) { return typeof obj; }; } else { _typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return _typeof(obj); }
+
 function _createForOfIteratorHelper(o, allowArrayLike) { var it; if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) { if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") { if (it) o = it; var i = 0; var F = function F() {}; return { s: F, n: function n() { if (i >= o.length) return { done: true }; return { done: false, value: o[i++] }; }, e: function e(_e) { throw _e; }, f: F }; } throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); } var normalCompletion = true, didErr = false, err; return { s: function s() { it = o[Symbol.iterator](); }, n: function n() { var step = it.next(); normalCompletion = step.done; return step; }, e: function e(_e2) { didErr = true; err = _e2; }, f: function f() { try { if (!normalCompletion && it["return"] != null) it["return"](); } finally { if (didErr) throw err; } } }; }
 
 function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return _arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen); }
@@ -5394,7 +5448,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["rollen", "users"],
+  props: ["rollen", "users", "init"],
   methods: {
     hasRole: function hasRole(roles) {
       var res = false;
@@ -5417,6 +5471,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     catchEvent: function catchEvent(value) {
       this.event_comebacks[value.key] = value.data;
+    },
+    check: function check(x) {
+      return _typeof(x) !== undefined ? x : "";
     }
   },
   data: function data() {
@@ -5425,8 +5482,24 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
         phonenumber_iv: "",
         phonenumber_mv: "",
         phonenumber_pl: ""
-      }
+      },
+      ivname: "",
+      mvname: "",
+      plname: "",
+      loaded: false
     };
+  },
+  mounted: function mounted() {
+    var vm = this;
+    vm.$nextTick(function () {
+      if (typeof vm.init != "undefined") {
+        vm.ivname = vm.check(vm.init.ivname);
+        vm.mvname = vm.check(vm.init.mvname);
+        vm.plname = vm.check(vm.init.plname);
+      }
+
+      vm.loaded = true;
+    });
   }
 });
 
@@ -5463,7 +5536,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 /* harmony default export */ __webpack_exports__["default"] = ({
-  props: ["rollen"],
+  props: ["rollen", "init"],
   methods: {
     hasRole: function hasRole(roles) {
       var res = false;
@@ -5483,7 +5556,23 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
 
       return res;
+    },
+    check: function check(x) {
+      return typeof x != "undefined" ? x : "";
     }
+  },
+  data: function data() {
+    return {
+      remarks: "",
+      plremarks: ""
+    };
+  },
+  mounted: function mounted() {
+    var vm = this;
+    vm.$nextTick(function () {
+      if (typeof vm.init != "undefined") vm.remarks = vm.check(vm.init.remarks);
+      vm.plremarks = vm.check(vm.init.plremarks);
+    });
   }
 });
 
@@ -5559,13 +5648,22 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       steps: []
     };
   },
-  props: ["rollen", "omschrijvingen"],
+  props: ["rollen", "omschrijvingen", "plaatsen", "turbine", "velden"],
   methods: {
     create: function create() {
       var step = {
@@ -5758,6 +5856,10 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     inputtext: 'resetNumber'
   },
   props: {
+    "input": {
+      "default": "",
+      type: String
+    },
     "classes": {},
     "name": {},
     "dhaydata": {},
@@ -5778,16 +5880,19 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     "dupdatekey": {
       "default": "",
       type: String
-    }
+    },
+    "disable": {}
   },
   mounted: function mounted() {
     var vm = this;
     vm.$nextTick(function () {
       this.boxwidth = this.$refs["input"].clientWidth + "px";
+      this.inputtext = vm.input;
     });
   },
   methods: {
     fl: function fl(x) {
+      if (this.disable) return;
       setTimeout(function () {
         this.shown = x;
       }.bind(this), 100);
@@ -5795,7 +5900,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     gainsort: function gainsort(ldata, text) {
       var _this = this;
 
-      if (typeof ldata === "string") ldata = JSON.parse(ldata);
       var list = ldata.filter(function (item) {
         if (item[_this.dkey].toLowerCase().includes(text.toLowerCase())) return item;
       }).slice(0, this.dlength);
@@ -5828,7 +5932,6 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     },
     old_key_to_new: function old_key_to_new(data, key, og_key) {
       var x = this.dhaydata;
-      if (typeof x === "string") x = JSON.parse(x);
 
       var _iterator = _createForOfIteratorHelper(x),
           _step;
@@ -5848,6 +5951,8 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       return null;
     },
     resetNumber: function resetNumber() {
+      if (this.disable) return;
+
       if (this.dupdateref !== null) {
         this.$emit("inputdropdown", {
           data: "",
@@ -43419,7 +43524,7 @@ var render = function() {
           {
             attrs: {
               method: "POST",
-              action: "http://127.0.0.1:8000/sl",
+              action: _vm.post(),
               "accept-charset": "UTF-8",
               enctype: "multipart/form-data",
               id: "SLcreateform"
@@ -43452,7 +43557,7 @@ var render = function() {
             _c("div", { staticClass: "card mx-4" }, [
               _c(
                 "div",
-                { staticClass: "card-body" },
+                { staticClass: "card-body m-3" },
                 [
                   _c("div", { staticClass: "row" }, [
                     _vm._m(0),
@@ -43485,7 +43590,8 @@ var render = function() {
                         attrs: {
                           "wind-parken": _vm.enerconapi.windpark,
                           date: _vm.datum,
-                          rollen: _vm.rollen
+                          rollen: _vm.rollen,
+                          init: _vm.editinit
                         }
                       })
                     : _vm._e(),
@@ -43503,7 +43609,11 @@ var render = function() {
                           _c("hr"),
                           _vm._v(" "),
                           _c("form-internal", {
-                            attrs: { rollen: _vm.rollen, users: _vm.users }
+                            attrs: {
+                              rollen: _vm.rollen,
+                              users: _vm.users,
+                              init: _vm.editinit
+                            }
                           })
                         ],
                         1
@@ -43521,7 +43631,11 @@ var render = function() {
                           _c("form-steps", {
                             attrs: {
                               rollen: _vm.rollen,
-                              omschrijvingen: _vm.enerconapi.omschrijvingen
+                              omschrijvingen: _vm.enerconapi.omschrijvingen,
+                              init: _vm.editinit,
+                              plaatsen: _vm.enerconapi.plaatsen,
+                              velden: _vm.enerconapi.velden,
+                              turbine: _vm.enerconapi.turbines
                             }
                           })
                         ],
@@ -43541,34 +43655,36 @@ var render = function() {
                           _vm._v(" "),
                           _c("hr"),
                           _vm._v(" "),
-                          _c("form-remarks", { attrs: { rollen: _vm.rollen } })
+                          _c("form-remarks", {
+                            attrs: { rollen: _vm.rollen, init: _vm.editinit }
+                          })
                         ],
                         1
                       )
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.hasRole(["IV"]) && _vm.route == "slCreate"
+                  _vm.route == "slCreate"
                     ? _c("input", {
                         staticClass: "btn btn-primary mt-4 text-light",
                         attrs: { type: "submit", value: "Creeër" }
                       })
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.hasRole(["IV"]) && _vm.route == "slCreate"
+                  _vm.route == "slCreate"
                     ? _c("input", {
                         staticClass: "btn btn-danger mt-4 text-light",
                         attrs: { type: "submit", value: "Annuleer" }
                       })
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.hasRole(["WV"]) && _vm.route == "slAccept"
+                  _vm.route == "slEdit"
                     ? _c("input", {
                         staticClass: "btn btn-success mt-4 text-light",
                         attrs: { type: "submit", value: "Accepteren" }
                       })
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.hasRole(["WV"]) && _vm.route == "slAccept"
+                  _vm.route == "slEdit"
                     ? _c("input", {
                         staticClass: "btn btn-danger mt-4 text-light",
                         attrs: { type: "submit", value: "Afwijzen" }
@@ -43660,148 +43776,236 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "form-group row mb-0" }, [
-    _c("div", { staticClass: "col ml-3" }, [
-      _c(
-        "div",
-        { staticClass: "row" },
-        [
-          _c("input-dropdownv2", {
-            attrs: {
-              placeholder: "Windpark naam",
-              name: "windpark",
-              classes: "form-control mb-1",
-              readonly: !_vm.hasRole(["IV"]),
-              dhaydata: _vm.windParken,
-              dkey: "windpark",
-              dheight: "180px",
-              dlength: 40
-            }
-          })
-        ],
-        1
-      ),
-      _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
-        _c("input", {
-          directives: [
-            {
-              name: "model",
-              rawName: "v-model",
-              value: _vm.date,
-              expression: "date"
-            }
-          ],
-          staticClass: "form-control mb-1",
-          attrs: {
-            placeholder: "Datum",
-            type: "date",
-            name: "date",
-            id: "date",
-            readonly: !_vm.hasRole(["IV"]),
-            required: "required"
-          },
-          domProps: { value: _vm.date },
-          on: {
-            input: function($event) {
-              if ($event.target.composing) {
-                return
-              }
-              _vm.date = $event.target.value
-            }
-          }
-        })
-      ]),
-      _vm._v(" "),
-      _c("div", { staticClass: "row" }, [
-        _c("textarea", {
-          staticClass: "form-control",
-          staticStyle: { height: "110px" },
-          attrs: {
-            placeholder: "Rederene voor schakeling",
-            name: "reason",
-            value: "",
-            id: "reason",
-            readonly: !_vm.hasRole(["IV"])
-          }
-        }),
-        _vm._v(" "),
-        _c("br")
-      ])
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "col" }, [
-      _c("div", { staticClass: "form-group row mb-0" }, [
-        _c("div", { staticClass: "col" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-body" }, [
-              _c("label", { attrs: { for: "switchcompany" } }, [
-                _vm._v("Schakelbedrijf:")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control mb-1",
+  return _vm.loaded
+    ? _c("div", { staticClass: "form-group row mb-0" }, [
+        _c("div", { staticClass: "col ml-3" }, [
+          _c(
+            "div",
+            { staticClass: "row" },
+            [
+              _c("input-dropdownv2", {
                 attrs: {
-                  placeholder: "Bedrijfsnaam",
-                  name: "switchcompany",
-                  type: "text",
-                  value: "",
-                  id: "switchcompany",
-                  readonly: !_vm.hasRole(["IV"])
-                }
-              }),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  placeholder: "Telefoon nummer",
-                  name: "switchtel",
-                  type: "text",
-                  value: "",
-                  id: "switchtel",
-                  readonly: !_vm.hasRole(["IV"])
+                  placeholder: "Windpark naam",
+                  name: "windpark",
+                  classes: "form-control mb-1",
+                  disable: !_vm.hasRole(["IV"]),
+                  input: _vm.windpark,
+                  dhaydata: _vm.windParken,
+                  dkey: "windpark",
+                  dheight: "180px",
+                  dlength: 40
                 }
               })
-            ])
+            ],
+            1
+          ),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("input", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.date,
+                  expression: "date"
+                }
+              ],
+              staticClass: "form-control mb-1",
+              attrs: {
+                placeholder: "Datum",
+                type: "date",
+                name: "date",
+                id: "date",
+                readonly: !_vm.hasRole(["IV"]),
+                required: "required"
+              },
+              domProps: { value: _vm.date },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.date = $event.target.value
+                }
+              }
+            })
+          ]),
+          _vm._v(" "),
+          _c("div", { staticClass: "row" }, [
+            _c("textarea", {
+              directives: [
+                {
+                  name: "model",
+                  rawName: "v-model",
+                  value: _vm.reason,
+                  expression: "reason"
+                }
+              ],
+              staticClass: "form-control",
+              staticStyle: { height: "110px" },
+              attrs: {
+                placeholder: "Rederene voor schakeling",
+                name: "reason",
+                value: "",
+                id: "reason",
+                readonly: !_vm.hasRole(["IV"])
+              },
+              domProps: { value: _vm.reason },
+              on: {
+                input: function($event) {
+                  if ($event.target.composing) {
+                    return
+                  }
+                  _vm.reason = $event.target.value
+                }
+              }
+            }),
+            _vm._v(" "),
+            _c("br")
           ])
         ]),
         _vm._v(" "),
         _c("div", { staticClass: "col" }, [
-          _c("div", { staticClass: "card" }, [
-            _c("div", { staticClass: "card-body" }, [
-              _c("label", { attrs: { for: "contactname" } }, [
-                _vm._v("Contactpersoon:")
-              ]),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control mb-1",
-                attrs: {
-                  placeholder: "Naam Contactpersoon",
-                  name: "contactname",
-                  type: "text",
-                  value: "",
-                  id: "contactname",
-                  readonly: !_vm.hasRole(["IV"])
-                }
-              }),
-              _vm._v(" "),
-              _c("input", {
-                staticClass: "form-control",
-                attrs: {
-                  placeholder: "Telefoon nummer",
-                  name: "contacttel",
-                  type: "text",
-                  value: "",
-                  id: "contacttel",
-                  readonly: !_vm.hasRole(["IV"])
-                }
-              })
+          _c("div", { staticClass: "form-group row mb-0" }, [
+            _c("div", { staticClass: "col" }, [
+              _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("label", { attrs: { for: "switchcompany" } }, [
+                    _vm._v("Schakelbedrijf:")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.bedrijf,
+                        expression: "bedrijf"
+                      }
+                    ],
+                    staticClass: "form-control mb-1",
+                    attrs: {
+                      placeholder: "Bedrijfsnaam",
+                      name: "switchcompany",
+                      type: "text",
+                      value: "",
+                      id: "switchcompany",
+                      readonly: !_vm.hasRole(["IV"])
+                    },
+                    domProps: { value: _vm.bedrijf },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.bedrijf = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.bedrijftel,
+                        expression: "bedrijftel"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      placeholder: "Telefoon nummer",
+                      name: "switchtel",
+                      type: "text",
+                      value: "",
+                      id: "switchtel",
+                      readonly: !_vm.hasRole(["IV"])
+                    },
+                    domProps: { value: _vm.bedrijftel },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.bedrijftel = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ])
+            ]),
+            _vm._v(" "),
+            _c("div", { staticClass: "col" }, [
+              _c("div", { staticClass: "card" }, [
+                _c("div", { staticClass: "card-body" }, [
+                  _c("label", { attrs: { for: "contactname" } }, [
+                    _vm._v("Contactpersoon:")
+                  ]),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.contact,
+                        expression: "contact"
+                      }
+                    ],
+                    staticClass: "form-control mb-1",
+                    attrs: {
+                      placeholder: "Naam Contactpersoon",
+                      name: "contactname",
+                      type: "text",
+                      value: "",
+                      id: "contactname",
+                      readonly: !_vm.hasRole(["IV"])
+                    },
+                    domProps: { value: _vm.contact },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.contact = $event.target.value
+                      }
+                    }
+                  }),
+                  _vm._v(" "),
+                  _c("input", {
+                    directives: [
+                      {
+                        name: "model",
+                        rawName: "v-model",
+                        value: _vm.contacttel,
+                        expression: "contacttel"
+                      }
+                    ],
+                    staticClass: "form-control",
+                    attrs: {
+                      placeholder: "Telefoon nummer",
+                      name: "contacttel",
+                      type: "text",
+                      value: "",
+                      id: "contacttel",
+                      readonly: !_vm.hasRole(["IV"])
+                    },
+                    domProps: { value: _vm.contacttel },
+                    on: {
+                      input: function($event) {
+                        if ($event.target.composing) {
+                          return
+                        }
+                        _vm.contacttel = $event.target.value
+                      }
+                    }
+                  })
+                ])
+              ])
             ])
           ])
         ])
       ])
-    ])
-  ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -43825,203 +44029,210 @@ var render = function() {
   var _vm = this
   var _h = _vm.$createElement
   var _c = _vm._self._c || _h
-  return _c("div", { staticClass: "form-group row" }, [
-    _c("div", { staticClass: "col" }, [
-      _c(
-        "div",
-        { staticClass: "mb-4" },
-        [
-          _c("label", { attrs: { for: "ivname" } }, [
-            _vm._v("Instalatie verantwoordlijke:")
-          ]),
-          _vm._v(" "),
-          _c("input-dropdownv2", {
-            attrs: {
-              placeholder: "Naam",
-              type: "text",
-              classes: "form-control",
-              id: "plname",
-              name: "plname",
-              readonly: !_vm.hasRole(["IV"]),
-              dhaydata: _vm.users,
-              dkey: "name",
-              dheight: "180px",
-              dlength: 40,
-              dupdateref: "phonenumber_iv",
-              dupdatekey: "phonenumber"
-            },
-            on: { inputdropdown: _vm.catchEvent }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: this.event_comebacks.phonenumber_iv,
-                expression: "this.event_comebacks.phonenumber_iv"
-              }
-            ],
-            staticClass: "form-control mt-1",
-            attrs: {
-              placeholder: "Telefoon nummer",
-              name: "ivtel",
-              type: "text",
-              value: "",
-              id: "ivtel",
-              readonly: ""
-            },
-            domProps: { value: this.event_comebacks.phonenumber_iv },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+  return _vm.loaded
+    ? _c("div", { staticClass: "form-group row" }, [
+        _c("div", { staticClass: "col" }, [
+          _c(
+            "div",
+            { staticClass: "mb-4" },
+            [
+              _c("label", { attrs: { for: "ivname" } }, [
+                _vm._v("Instalatie verantwoordlijke:")
+              ]),
+              _vm._v(" "),
+              _c("input-dropdownv2", {
+                attrs: {
+                  placeholder: "Naam",
+                  type: "text",
+                  classes: "form-control",
+                  id: "ivname",
+                  name: "ivname",
+                  disable: !_vm.hasRole(["IV"]),
+                  dhaydata: _vm.users,
+                  dkey: "name",
+                  dheight: "180px",
+                  dlength: 40,
+                  dupdateref: "phonenumber_iv",
+                  dupdatekey: "phonenumber",
+                  input: _vm.ivname
+                },
+                on: { inputdropdown: _vm.catchEvent }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.event_comebacks.phonenumber_iv,
+                    expression: "event_comebacks.phonenumber_iv"
+                  }
+                ],
+                staticClass: "form-control mt-1",
+                attrs: {
+                  placeholder: "Telefoon nummer",
+                  name: "ivtel",
+                  type: "text",
+                  value: "",
+                  id: "ivtel",
+                  readonly: ""
+                },
+                domProps: { value: _vm.event_comebacks.phonenumber_iv },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.event_comebacks,
+                      "phonenumber_iv",
+                      $event.target.value
+                    )
+                  }
                 }
-                _vm.$set(
-                  this.event_comebacks,
-                  "phonenumber_iv",
-                  $event.target.value
-                )
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("br")
-        ],
-        1
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "col" }, [
-      _c(
-        "div",
-        { staticClass: "mx-4 mb-4" },
-        [
-          _c("label", { attrs: { for: "mvname" } }, [
-            _vm._v("Werk verantwoordelijke:")
-          ]),
-          _vm._v(" "),
-          _c("input-dropdownv2", {
-            attrs: {
-              placeholder: "Naam",
-              type: "text",
-              classes: "form-control",
-              id: "plname",
-              name: "plname",
-              readonly: !_vm.hasRole(["IV"]),
-              dhaydata: _vm.users,
-              dkey: "name",
-              dheight: "180px",
-              dlength: 40,
-              dupdateref: "phonenumber_mv",
-              dupdatekey: "phonenumber"
-            },
-            on: { inputdropdown: _vm.catchEvent }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: this.event_comebacks.phonenumber_mv,
-                expression: "this.event_comebacks.phonenumber_mv"
-              }
+              }),
+              _vm._v(" "),
+              _c("br")
             ],
-            staticClass: "form-control mt-1",
-            attrs: {
-              placeholder: "Telefoon nummer",
-              name: "mvtel",
-              type: "text",
-              value: "",
-              id: "mvtel",
-              readonly: ""
-            },
-            domProps: { value: this.event_comebacks.phonenumber_mv },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col" }, [
+          _c(
+            "div",
+            { staticClass: "mx-4 mb-4" },
+            [
+              _c("label", { attrs: { for: "mvname" } }, [
+                _vm._v("Werk verantwoordelijke:")
+              ]),
+              _vm._v(" "),
+              _c("input-dropdownv2", {
+                attrs: {
+                  placeholder: "Naam",
+                  type: "text",
+                  classes: "form-control",
+                  id: "plname",
+                  name: "plname",
+                  disable: !_vm.hasRole(["IV"]),
+                  dhaydata: _vm.users,
+                  dkey: "name",
+                  dheight: "180px",
+                  dlength: 40,
+                  dupdateref: "phonenumber_mv",
+                  dupdatekey: "phonenumber",
+                  input: _vm.mvname
+                },
+                on: { inputdropdown: _vm.catchEvent }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.event_comebacks.phonenumber_mv,
+                    expression: "event_comebacks.phonenumber_mv"
+                  }
+                ],
+                staticClass: "form-control mt-1",
+                attrs: {
+                  placeholder: "Telefoon nummer",
+                  name: "mvtel",
+                  type: "text",
+                  value: "",
+                  id: "mvtel",
+                  readonly: ""
+                },
+                domProps: { value: _vm.event_comebacks.phonenumber_mv },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.event_comebacks,
+                      "phonenumber_mv",
+                      $event.target.value
+                    )
+                  }
                 }
-                _vm.$set(
-                  this.event_comebacks,
-                  "phonenumber_mv",
-                  $event.target.value
-                )
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("br")
-        ],
-        1
-      )
-    ]),
-    _vm._v(" "),
-    _c("div", { staticClass: "col" }, [
-      _c(
-        "div",
-        { staticClass: "mx-4 mb-4" },
-        [
-          _c("label", { attrs: { for: "plname" } }, [_vm._v("Ploeglijder: ")]),
-          _vm._v(" "),
-          _c("input-dropdownv2", {
-            attrs: {
-              placeholder: "Naam",
-              type: "text",
-              classes: "form-control",
-              id: "plname",
-              name: "plname",
-              readonly: !_vm.hasRole(["IV"]),
-              dhaydata: _vm.users,
-              dkey: "name",
-              dheight: "180px",
-              dlength: 40,
-              dupdateref: "phonenumber_pl",
-              dupdatekey: "phonenumber"
-            },
-            on: { inputdropdown: _vm.catchEvent }
-          }),
-          _vm._v(" "),
-          _c("input", {
-            directives: [
-              {
-                name: "model",
-                rawName: "v-model",
-                value: this.event_comebacks.phonenumber_pl,
-                expression: "this.event_comebacks.phonenumber_pl"
-              }
+              }),
+              _vm._v(" "),
+              _c("br")
             ],
-            staticClass: "form-control mt-1",
-            attrs: {
-              placeholder: "Telefoon nummer",
-              name: "pltel",
-              type: "text",
-              value: "",
-              id: "pltel",
-              readonly: ""
-            },
-            domProps: { value: this.event_comebacks.phonenumber_pl },
-            on: {
-              input: function($event) {
-                if ($event.target.composing) {
-                  return
+            1
+          )
+        ]),
+        _vm._v(" "),
+        _c("div", { staticClass: "col" }, [
+          _c(
+            "div",
+            { staticClass: "mx-4 mb-4" },
+            [
+              _c("label", { attrs: { for: "plname" } }, [
+                _vm._v("Ploeglijder: ")
+              ]),
+              _vm._v(" "),
+              _c("input-dropdownv2", {
+                attrs: {
+                  placeholder: "Naam",
+                  type: "text",
+                  classes: "form-control",
+                  id: "plname",
+                  name: "plname",
+                  disable: !_vm.hasRole(["IV"]),
+                  dhaydata: _vm.users,
+                  dkey: "name",
+                  dheight: "180px",
+                  dlength: 40,
+                  dupdateref: "phonenumber_pl",
+                  dupdatekey: "phonenumber",
+                  input: _vm.plname
+                },
+                on: { inputdropdown: _vm.catchEvent }
+              }),
+              _vm._v(" "),
+              _c("input", {
+                directives: [
+                  {
+                    name: "model",
+                    rawName: "v-model",
+                    value: _vm.event_comebacks.phonenumber_pl,
+                    expression: "event_comebacks.phonenumber_pl"
+                  }
+                ],
+                staticClass: "form-control mt-1",
+                attrs: {
+                  placeholder: "Telefoon nummer",
+                  name: "pltel",
+                  type: "text",
+                  value: "",
+                  id: "pltel",
+                  readonly: ""
+                },
+                domProps: { value: _vm.event_comebacks.phonenumber_pl },
+                on: {
+                  input: function($event) {
+                    if ($event.target.composing) {
+                      return
+                    }
+                    _vm.$set(
+                      _vm.event_comebacks,
+                      "phonenumber_pl",
+                      $event.target.value
+                    )
+                  }
                 }
-                _vm.$set(
-                  this.event_comebacks,
-                  "phonenumber_pl",
-                  $event.target.value
-                )
-              }
-            }
-          }),
-          _vm._v(" "),
-          _c("br")
-        ],
-        1
-      )
-    ])
-  ])
+              }),
+              _vm._v(" "),
+              _c("br")
+            ],
+            1
+          )
+        ])
+      ])
+    : _vm._e()
 }
 var staticRenderFns = []
 render._withStripped = true
@@ -44050,6 +44261,14 @@ var render = function() {
       _c("label", { attrs: { for: "remarks" } }, [_vm._v("Opmerking GO-NL: ")]),
       _vm._v(" "),
       _c("textarea", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.remarks,
+            expression: "remarks"
+          }
+        ],
         staticClass: "form-control",
         staticStyle: { width: "100", height: "150px" },
         attrs: {
@@ -44057,6 +44276,15 @@ var render = function() {
           value: "",
           id: "remarks",
           readonly: !_vm.hasRole(["WV"])
+        },
+        domProps: { value: _vm.remarks },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.remarks = $event.target.value
+          }
         }
       }),
       _vm._v(" "),
@@ -44069,6 +44297,14 @@ var render = function() {
       ]),
       _vm._v(" "),
       _c("textarea", {
+        directives: [
+          {
+            name: "model",
+            rawName: "v-model",
+            value: _vm.plremarks,
+            expression: "plremarks"
+          }
+        ],
         staticClass: "form-control",
         staticStyle: { width: "100%", height: "150px" },
         attrs: {
@@ -44076,6 +44312,15 @@ var render = function() {
           value: "",
           id: "plremarks",
           readonly: !_vm.hasRole(["PL"])
+        },
+        domProps: { value: _vm.plremarks },
+        on: {
+          input: function($event) {
+            if ($event.target.composing) {
+              return
+            }
+            _vm.plremarks = $event.target.value
+          }
         }
       }),
       _vm._v(" "),
@@ -44150,7 +44395,7 @@ var render = function() {
                         }
                       ],
                       staticClass: "form-control text-center",
-                      attrs: { type: "text", readonly: !_vm.hasRole(["IV"]) },
+                      attrs: { type: "text", readonly: "" },
                       domProps: { value: step.stap },
                       on: {
                         input: function($event) {
@@ -44163,93 +44408,82 @@ var render = function() {
                     })
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: step.plaats,
-                          expression: "step.plaats"
+                  _c(
+                    "div",
+                    { staticClass: "col" },
+                    [
+                      _c("input-dropdownv2", {
+                        attrs: {
+                          placeholder: "plaatsnaam",
+                          name: "windpark",
+                          classes: "form-control mb-1",
+                          disable: !_vm.hasRole(["IV"]),
+                          dhaydata: _vm.plaatsen,
+                          dkey: "plaats",
+                          dheight: "180px",
+                          dlength: 40
                         }
-                      ],
-                      staticClass: "form-control text-center",
-                      attrs: { type: "text", readonly: !_vm.hasRole(["IV"]) },
-                      domProps: { value: step.plaats },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(step, "plaats", $event.target.value)
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col" },
+                    [
+                      _c("input-dropdownv2", {
+                        attrs: {
+                          placeholder: "veldnaam",
+                          name: "windpark",
+                          classes: "form-control mb-1",
+                          disable: !_vm.hasRole(["IV"]),
+                          dhaydata: _vm.velden,
+                          dkey: "veld",
+                          dheight: "180px",
+                          dlength: 40
                         }
-                      }
-                    })
-                  ]),
+                      })
+                    ],
+                    1
+                  ),
+                  _vm._v(" "),
+                  _c(
+                    "div",
+                    { staticClass: "col" },
+                    [
+                      _c("input-dropdownv2", {
+                        attrs: {
+                          placeholder: "serial number",
+                          name: "windpark",
+                          classes: "form-control mb-1",
+                          disable: !_vm.hasRole(["IV"]),
+                          dhaydata: _vm.turbine,
+                          dkey: "serial_nr",
+                          dheight: "180px",
+                          dlength: 40
+                        }
+                      })
+                    ],
+                    1
+                  ),
                   _vm._v(" "),
                   _c("div", { staticClass: "col" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: step.veld,
-                          expression: "step.veld"
-                        }
-                      ],
-                      staticClass: "form-control text-center ",
-                      attrs: { type: "text", readonly: !_vm.hasRole(["IV"]) },
-                      domProps: { value: step.veld },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(step, "veld", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col" }, [
-                    _c("input", {
-                      directives: [
-                        {
-                          name: "model",
-                          rawName: "v-model",
-                          value: step.turbine,
-                          expression: "step.turbine"
-                        }
-                      ],
-                      staticClass: "form-control text-center",
-                      attrs: { type: "text", readonly: !_vm.hasRole(["IV"]) },
-                      domProps: { value: step.turbine },
-                      on: {
-                        input: function($event) {
-                          if ($event.target.composing) {
-                            return
-                          }
-                          _vm.$set(step, "turbine", $event.target.value)
-                        }
-                      }
-                    })
-                  ]),
-                  _vm._v(" "),
-                  _c("div", { staticClass: "col" }, [
-                    _c("div", { staticClass: "dropdown show" }, [
-                      _c(
-                        "select",
-                        { staticStyle: {}, attrs: { name: "description" } },
-                        _vm._l(_vm.omschrijvingen, function(option, kindex) {
-                          return _c(
-                            "option",
-                            { key: kindex, domProps: { value: option["id"] } },
-                            [_vm._v(_vm._s(option["omschrijving"]))]
-                          )
-                        }),
-                        0
-                      )
-                    ])
+                    _c(
+                      "select",
+                      {
+                        staticClass: "form-select",
+                        attrs: { name: "description" }
+                      },
+                      _vm._l(_vm.omschrijvingen, function(option, kindex) {
+                        return _c(
+                          "option",
+                          { key: kindex, domProps: { value: option["id"] } },
+                          [_vm._v(_vm._s(option["omschrijving"]))]
+                        )
+                      }),
+                      0
+                    )
                   ]),
                   _vm._v(" "),
                   _c("div", { staticClass: "col" }, [
@@ -44478,7 +44712,8 @@ var render = function() {
         placeholder: _vm.placeholder,
         type: "text",
         autocomplete: "off",
-        name: _vm.name
+        name: _vm.name,
+        readonly: _vm.disable
       },
       domProps: { value: _vm.inputtext },
       on: {
@@ -57297,8 +57532,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! D:\School\Xampp\htdocs\examen\EnerconApp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! D:\School\Xampp\htdocs\examen\EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })
