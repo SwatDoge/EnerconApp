@@ -94,18 +94,35 @@ class SLController extends Controller
         $SL->save();
         // dd($request->input());
 
-        foreach($request->input('plaats') as $key => $value) {
+        $plaats = request('plaats');
+        $veld = request('veld');
+        $turbine = request('turbine');
+        // $datum = request('datum');
+        
+        $array = array_map(null, $plaats, $veld, $turbine);
+        // dd($array);
+        foreach ($array as $data) {
             $stap = new Stappen;
             $stap->brief_id = $SL->id;
-            $stap->plaats = $request->input('plaats');
-            $stap->veld = $request->input('veld');
-            $stap->turbine = $request->input('turbine');
+            $stap->plaats = $data[0];
+            $stap->veld = $data[1];
+            $stap->turbine = $data[2];
             $stap->omschrijving = "";
             $stap->voltooid = "";
-            $stap->datum = $request->input('datum');
+            $stap->datum = "";
             $stap->save();
         }
-
+        
+        // $stap = new Stappen;
+        // $stap->brief_id = $SL->id;
+        // $stap->plaats = request('plaats');
+        // $stap->veld = request('veld');
+        // $stap->turbine = request('turbine');
+        // $stap->omschrijving = "";
+        // $stap->voltooid = "";
+        // $stap->datum = request('datum');
+        // $stap->save();
+        
 
         // return request('plaats');
         return redirect('/sl/index')->with('success', 'Post Created');
