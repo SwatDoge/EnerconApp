@@ -27,6 +27,8 @@ Route::post('/sl', 'SLController@store')->name('slStore');
 Route::get('/sl/index', 'SLController@index')->name('slIndex');
 Route::get('/sl/{id}/edit', 'SLController@edit')->name('slEdit');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+Route::get('/create-pdf-file-{id}', 'SLController@PDF')->name('slPDF');
+Route::get('/create-word-file-{id}', 'SLController@Word')->name('slWord');
 
 Route::any('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('pIndex');
 Route::any('/profile/update', [ProfileController::class, 'update'])->name('pUpdate');
