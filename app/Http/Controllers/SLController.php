@@ -228,23 +228,11 @@ class SLController extends Controller
     public function PDF($id)
     {
         $SL = SL::find($id);
-        $data = [
-            'date' => date('d-m-Y H:i:s'),
-            'briefnummer' => $SL->briefnr,
-            'briefreason' => $SL->reason,
-            'datebrief' => $SL->date,
-            'bedrijf' => $SL->bedrijf,
-            'bedrijftel' => $SL->bedrijftel,
-            'contact' => $SL->contact,
-            'contacttel' => $SL->contacttel,
-            'ivname' => $SL->ivname,
-            'ivtel' => $SL->ivtel,
-            'mvname' => $SL->mvname,
-            'mvtel' => $SL->mvtel,
-            'plname' => $SL->plname,
-            'pltel' => $SL->pltel,
-
-        ];
+        $stappen = DB::select("SELECT * FROM `stappen` WHERE `brief_id` = $id");
+        // dd($stappen);
+        $date = date('d-m-Y H:i:s');
+        $data = compact('SL', 'stappen', 'date');
+        
         $pdf = PDF::loadView('SL.pdf', $data);
 
         return $pdf->download('Schakelbrief_'.$SL->briefnr.'.pdf');
