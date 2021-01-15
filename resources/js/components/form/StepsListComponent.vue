@@ -50,6 +50,7 @@
                         </div>
                         <div class="col" v-show="hasRole(['PL'])">
                             <input name="voltooid[]" type="checkbox" :value="step.voltooid" :id="'signature_' + index" v-model="step.voltooid" @click="updateDate(index, step.voltooid)">
+                            <input name="voltooid[]" type="checkbox" :value="step.voltooid" :id="'signature_' + index" :checked="!step.voltooid" hidden>
                         </div>
                         <div class="col" v-show="hasRole(['PL'])">
                             <input type="text" name="datum[]" class="form-control text-center" v-model="step.datum" v-if="step.voltooid" readonly>

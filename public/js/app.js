@@ -5135,6 +5135,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
@@ -5648,6 +5651,7 @@ function _unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o =
 
 function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
+//
 //
 //
 //
@@ -44052,8 +44056,8 @@ var render = function() {
                   _vm._v(" "),
                   _vm.route == "slCreate"
                     ? _c("input", {
-                        staticClass: "btn btn-danger mt-4 text-light",
-                        attrs: { type: "button", value: "Annuleer" }
+                        staticClass: "btn btn-primary mt-4 text-light",
+                        attrs: { type: "submit", value: "Creeër" }
                       })
                     : _vm._e(),
                   _vm._v(" "),
@@ -44075,6 +44079,17 @@ var render = function() {
                         _vm._v(" "),
                         _c("br"),
                         _vm._v(" "),
+                        _c("input", {
+                          staticClass: "btn btn-success mt-4 text-light",
+                          attrs: { type: "submit", value: "Bevestigen" }
+                        })
+                      ])
+                    : _vm._e(),
+                  _vm._v(" "),
+                  _vm.route == "slEdit" &&
+                  (_vm.editinit.mvakkoord == 1 ? true : false) &&
+                  (_vm.editinit.plakkoord == 0 ? true : false)
+                    ? _c("div", [
                         _c("input", {
                           staticClass: "btn btn-success mt-4 text-light",
                           attrs: { type: "submit", value: "Bevestigen" }
@@ -44989,6 +45004,19 @@ var render = function() {
                               _vm.$set(step, "voltooid", $$c)
                             }
                           }
+                        }
+                      }),
+                      _vm._v(" "),
+                      _c("input", {
+                        attrs: {
+                          name: "voltooid[]",
+                          type: "checkbox",
+                          id: "signature_" + index,
+                          hidden: ""
+                        },
+                        domProps: {
+                          value: step.voltooid,
+                          checked: !step.voltooid
                         }
                       })
                     ]
@@ -58009,8 +58037,8 @@ __webpack_require__.r(__webpack_exports__);
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-__webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\js\app.js */"./resources/js/app.js");
-module.exports = __webpack_require__(/*! C:\Users\Clemster\Desktop\local_repos\(PHP) EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
+__webpack_require__(/*! D:\1\examenproject\EnerconApp\resources\js\app.js */"./resources/js/app.js");
+module.exports = __webpack_require__(/*! D:\1\examenproject\EnerconApp\resources\sass\app.scss */"./resources/sass/app.scss");
 
 
 /***/ })

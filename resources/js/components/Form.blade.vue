@@ -80,8 +80,7 @@
                     <input class="btn btn-success mt-4 text-light" type="submit" value="Accepteren" v-if="route == 'slEdit'">
                     <input class="btn btn-danger mt-4 text-light" type="submit" value="Afwijzen" v-if="route == 'slEdit'"> -->
 
-                    
-                    <input class="btn btn-danger mt-4 text-light" type="button" value="Annuleer" v-if="route == 'slCreate'">
+                    <input class="btn btn-primary mt-4 text-light" type="submit" value="Creeër" v-if="route == 'slCreate'">
                     
                     <div v-if="route == 'slEdit' && (editinit.ivakkoord == 1 ? true : false) && (editinit.mvakkoord == 0 ? true : false)">
                         <input type="radio" name="verified" value="1">
@@ -89,6 +88,10 @@
                         <input type="radio" name="verified" value="0">
                         <label>Afwijzen</label>
                         <br>
+                        <input class="btn btn-success mt-4 text-light" type="submit" value="Bevestigen">
+                    </div>
+
+                     <div v-if="route == 'slEdit' && (editinit.mvakkoord == 1 ? true : false) && (editinit.plakkoord == 0 ? true : false)">
                         <input class="btn btn-success mt-4 text-light" type="submit" value="Bevestigen">
                     </div>
                     

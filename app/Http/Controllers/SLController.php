@@ -23,15 +23,9 @@ class SLController extends Controller
         $iv = DB::select("SELECT * FROM switchbriefs WHERE ivname = '$name'");
         $wv = DB::select("SELECT * FROM switchbriefs WHERE mvname = '$name'");
         $pl = DB::select("SELECT * FROM switchbriefs WHERE plname = '$name'");
-        // dd($switchbriefpl);
         return view('admin.switchbriefs.index')->with('switchbrief', $switchbrief)->with('iv', $iv)->with('wv', $wv)->with('pl', $pl);
-        // return view('posts.index')->with('posts1', $posts1)->with('posts2', $posts2);
 
-        return view('admin.switchbriefs.index')->with([
-            'switchbrief' => $switchbrief,
-            'message' => "Schakelbrieven geladen",
-            'method' => "success"
-        ]);
+        return redirect('/sl/index')->with('success', 'Post Edited');
     }
 
     /**
@@ -41,9 +35,6 @@ class SLController extends Controller
      */
     public function create()
     {
-        // if(auth()->user()->role !== 'IV') {
-        //     return redirect('/')->with('error', 'Unauthorized page');
-        // }
         return view('SL.create');
     }
 
@@ -92,11 +83,8 @@ class SLController extends Controller
         $SL->reason = $request->input('reason'); 
         $SL->plremarks = "";
         $SL->ivakkoord = "1";
-        $SL->mvakkoord = "0"; //Bij weigering blijft 0 op 0 staan en gaat ivakkoord ook naar 0, bij goedkeuring word mvakkoord 1
+        $SL->mvakkoord = "0"; 
         $SL->plakkoord = "0";
-        // $SL->plaats = request('plaats');
-        // $SL->veld = request('veld');
-        // $SL->turbine = request('turbine');
         $SL->save();
         // dd($request->input());
 
@@ -118,36 +106,9 @@ class SLController extends Controller
             $stap->datum = "n.v.t.";
             $stap->save();
         }
-        
-        // $stap = new Stappen;
-        // $stap->brief_id = $SL->id;
-        // $stap->plaats = request('plaats');
-        // $stap->veld = request('veld');
-        // $stap->turbine = request('turbine');
-        // $stap->omschrijving = "";
-        // $stap->voltooid = "";
-        // $stap->datum = request('datum');
-        // $stap->save();
-        
 
         // return request('plaats');
         return redirect('/sl/index')->with('success', 'Post Created');
-        $SL->plname = $request->input('plname');
-        $SL->pltel = $request->input('pltel');
-        $SL->bedrijf = $request->input('switchcompany');
-        $SL->bedrijftel = $request->input('switchtel');
-        $SL->contact = $request->input('contactname');
-        $SL->contacttel = $request->input('contacttel');
-        $SL->remarks = $request->input('remarks');
-        $SL->reason = $request->input('reason');
-        $SL->save();
-        error_log($request);
-
-        return view('admin.switchbriefs.index')->with([
-            'switchbrief' => SL::all(),
-            'message' => "Schakelbrief toegevoegd",
-            'method' => "success"
-        ]);
     }
 
     /**
@@ -172,15 +133,6 @@ class SLController extends Controller
     {
         $SL = SL::find($id);
         return view('SL.edit')->with('SL', $SL);
-        //check 4 role
-        // if(auth()->user()->role == 'admin') {}
-        // else if(auth()->user()->id !== $post->user_id) {
-        //     return redirect('/')->with('error', 'Unauthorized page');
-        // } 
-        
-        
-        // }
-        return view('SL.edit')->with('SL', $SL);
 
     }
 
@@ -202,38 +154,59 @@ class SLController extends Controller
             'mvtel' => 'required',
             'plname' => 'required' ,
             'pltel' => 'required',
-            'switchcompany' => 'required' ,
-            'switchtel' => 'required',
-            'contactname' => 'required' ,
+            'bedrijf' => 'required' ,
+            'bedrijftel' => 'required',
+            'contact' => 'required' ,
             'contacttel' => 'required',
-            'remarks' => 'required' ,
+            // 'remarks' => 'required' ,
             'reason' => 'required',
         ]);    
-        // DD($request);
-        //update
+        // dd($request->input());
+        //edit
         $SL = SL::find($id);
-        // $SL->briefnr = $request->input('schakelbriefnr');
         $SL->windpark = $request->input('windpark');
         $SL->date = $request->input('date');
         $SL->ivname = $request->input('ivname');
         $SL->ivtel = $request->input('ivtel');
         $SL->mvname = $request->input('mvname');
         $SL->mvtel = $request->input('mvtel');
-        $SL->plname = $request->input('plname');
-        $SL->pltel = $request->input('pltel');
-        $SL->bedrijf = $request->input('switchcompany');
-        $SL->bedrijftel = $request->input('switchtel');
-        $SL->contact = $request->input('contactname');
+        $SL->plname = $request->input('plname');      
+        $SL->pltel = $request->input('pltel'); 
+        $SL->bedrijf = $request->input('bedrijf');
+        $SL->bedrijftel = $request->input('bedrijftel');
+        $SL->contact = $request->input('contact');
         $SL->contacttel = $request->input('contacttel');
-        $SL->remarks = $request->input('remarks');
-        $SL->reason = $request->input('reason');
-        $SL->save();
 
-        return view('admin.switchbriefs.index')->with([
-            'switchbrief' => SL::all(),
-            'message' => "Schakelbrief bijgewerkt",
-            'method' => "success"
-        ]);
+        if($request->input('remarks') != null){
+            $SL->remarks = $request->input('remarks');
+        } 
+
+        if($request->input('plremarks') != null){
+            $SL->plremarks = $request->input('plremarks');
+        }
+
+        $SL->reason = $request->input('reason'); 
+
+        if($request->input('verified') != '0'){
+            $SL->ivakkoord = "0";
+        } elseif($request->input('verified') != '1')  {
+            $SL->mvakkoord = "1";
+        }
+        // $SL->plakkoord = "0";
+        $SL->save();
+        $check = request('voltooid');
+        $date = request('datum');
+        
+        $array = array_map(null, $check, $date);
+        // dd($array);
+        foreach ($array as $data) {
+            $stap = Stappen::find($brief_id = $SL->id);
+            $stap->voltooid = $data[0];
+            $stap->datum = $data[1];
+            $stap->save();
+        }
+
+        return redirect('/sl/index')->with('success', 'Post Edited');
     }
 
     /**
@@ -245,12 +218,6 @@ class SLController extends Controller
     public function destroy($id)
     {
         $SL = SL::find($id);
-
-        //check role?
-        // if(auth()->user()->role == 'admin') {}
-        // else if(auth()->user()->id !== $post->user_id) {
-        //     return redirect('/')->with('error', 'Unauthorized page');
-        // }
 
         $SL->delete();
         return view('admin.switchbriefs.index')->with([
