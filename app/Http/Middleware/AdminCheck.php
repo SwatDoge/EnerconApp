@@ -6,7 +6,7 @@ use Closure;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\DB;
-use App\Models\RoleUser;
+use App\Models\UserRole;
 use Illuminate\Support\Facades\Auth;
 class AdminCheck
 {
@@ -25,12 +25,12 @@ class AdminCheck
 
         if ($role){
             return $next($request);
-            
+
         }else {
             var_dump($user_id);
-            return response()->json('Geen bevoegdheid', 401);
+            return redirect('unauthorized');
         }
-        
-        
+
+
     }
 }

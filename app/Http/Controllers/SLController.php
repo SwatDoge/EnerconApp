@@ -23,9 +23,9 @@ class SLController extends Controller
         $iv = DB::select("SELECT * FROM switchbriefs WHERE ivname = '$name'");
         $wv = DB::select("SELECT * FROM switchbriefs WHERE mvname = '$name'");
         $pl = DB::select("SELECT * FROM switchbriefs WHERE plname = '$name'");
-        // dd($switchbriefpl);
         return view('admin.switchbriefs.index')->with('switchbrief', $switchbrief)->with('iv', $iv)->with('wv', $wv)->with('pl', $pl);
-        // return view('posts.index')->with('posts1', $posts1)->with('posts2', $posts2);
+
+        return redirect('/sl/index')->with('success', 'Post Edited');
     }
 
     /**
@@ -35,9 +35,6 @@ class SLController extends Controller
      */
     public function create()
     {
-        // if(auth()->user()->role !== 'IV') {
-        //     return redirect('/')->with('error', 'Unauthorized page');
-        // } 
         return view('SL.create');
     }
 
@@ -86,20 +83,17 @@ class SLController extends Controller
         $SL->reason = $request->input('reason'); 
         $SL->plremarks = "";
         $SL->ivakkoord = "1";
-        $SL->mvakkoord = "0"; //Bij weigering blijft 0 op 0 staan en gaat ivakkoord ook naar 0, bij goedkeuring word mvakkoord 1
+        $SL->mvakkoord = "0"; 
         $SL->plakkoord = "0";
-        // $SL->plaats = request('plaats');
-        // $SL->veld = request('veld');
-        // $SL->turbine = request('turbine');
         $SL->save();
         // dd($request->input());
 
         $plaats = request('plaats');
         $veld = request('veld');
         $turbine = request('turbine');
-        // $datum = request('datum');
+        $omschrijving= request('omschrijving');
         
-        $array = array_map(null, $plaats, $veld, $turbine);
+        $array = array_map(null, $plaats, $veld, $turbine, $omschrijving);
         // dd($array);
         foreach ($array as $data) {
             $stap = new Stappen;
@@ -107,22 +101,11 @@ class SLController extends Controller
             $stap->plaats = $data[0];
             $stap->veld = $data[1];
             $stap->turbine = $data[2];
-            $stap->omschrijving = "";
-            $stap->voltooid = "";
-            $stap->datum = "";
+            $stap->omschrijving = $data[3];
+            $stap->voltooid = "false";
+            $stap->datum = "n.v.t.";
             $stap->save();
         }
-        
-        // $stap = new Stappen;
-        // $stap->brief_id = $SL->id;
-        // $stap->plaats = request('plaats');
-        // $stap->veld = request('veld');
-        // $stap->turbine = request('turbine');
-        // $stap->omschrijving = "";
-        // $stap->voltooid = "";
-        // $stap->datum = request('datum');
-        // $stap->save();
-        
 
         // return request('plaats');
         return redirect('/sl/index')->with('success', 'Post Created');
@@ -136,7 +119,8 @@ class SLController extends Controller
      */
     public function show($id)
     {
-        //
+        $SL = SL::find($id);
+        return view('SL.show')->with('SL', $SL);
     }
 
     /**
@@ -149,13 +133,7 @@ class SLController extends Controller
     {
         $SL = SL::find($id);
         return view('SL.edit')->with('SL', $SL);
-        //check 4 role
-        // if(auth()->user()->role == 'admin') {} 
-        // else if(auth()->user()->id !== $post->user_id) {
-        //     return redirect('/')->with('error', 'Unauthorized page');
-        // } 
-        
-        
+
     }
 
     /**
@@ -176,16 +154,16 @@ class SLController extends Controller
             'mvtel' => 'required',
             'plname' => 'required' ,
             'pltel' => 'required',
-            'switchcompany' => 'required' ,
-            'switchtel' => 'required',
-            'contactname' => 'required' ,
+            'bedrijf' => 'required' ,
+            'bedrijftel' => 'required',
+            'contact' => 'required' ,
             'contacttel' => 'required',
-            'remarks' => 'required' ,
+            // 'remarks' => 'required' ,
             'reason' => 'required',
         ]);    
-        //update
+        // dd($request->input());
+        //edit
         $SL = SL::find($id);
-        // $SL->briefnr = $request->input('schakelbriefnr');
         $SL->windpark = $request->input('windpark');
         $SL->date = $request->input('date');
         $SL->ivname = $request->input('ivname');
@@ -194,15 +172,41 @@ class SLController extends Controller
         $SL->mvtel = $request->input('mvtel');
         $SL->plname = $request->input('plname');      
         $SL->pltel = $request->input('pltel'); 
-        $SL->bedrijf = $request->input('switchcompany');
-        $SL->bedrijftel = $request->input('switchtel');
-        $SL->contact = $request->input('contactname');
+        $SL->bedrijf = $request->input('bedrijf');
+        $SL->bedrijftel = $request->input('bedrijftel');
+        $SL->contact = $request->input('contact');
         $SL->contacttel = $request->input('contacttel');
-        $SL->remarks = $request->input('remarks');      
+
+        if($request->input('remarks') != null){
+            $SL->remarks = $request->input('remarks');
+        } 
+
+        if($request->input('plremarks') != null){
+            $SL->plremarks = $request->input('plremarks');
+        }
+
         $SL->reason = $request->input('reason'); 
+
+        if($request->input('verified') != '0'){
+            $SL->ivakkoord = "0";
+        } elseif($request->input('verified') != '1')  {
+            $SL->mvakkoord = "1";
+        }
+        // $SL->plakkoord = "0";
         $SL->save();
+        $check = request('voltooid');
+        $date = request('datum');
         
-        return redirect('/')->with('success', 'Post Updated');
+        $array = array_map(null, $check, $date);
+        // dd($array);
+        foreach ($array as $data) {
+            $stap = Stappen::find($brief_id = $SL->id);
+            $stap->voltooid = $data[0];
+            $stap->datum = $data[1];
+            $stap->save();
+        }
+
+        return redirect('/sl/index')->with('success', 'Post Edited');
     }
 
     /**
@@ -215,36 +219,22 @@ class SLController extends Controller
     {
         $SL = SL::find($id);
 
-        //check role?
-        // if(auth()->user()->role == 'admin') {} 
-        // else if(auth()->user()->id !== $post->user_id) {
-        //     return redirect('/')->with('error', 'Unauthorized page');
-        // } 
-
         $SL->delete();
-        return redirect('/')->with('success', 'Post Deleted');
+        return view('admin.switchbriefs.index')->with([
+            'switchbrief' => SL::all(),
+            'message' => "Schakelbrief verwijderd",
+            'method' => "success"
+        ]);
     }
 
     public function PDF($id)
     {
         $SL = SL::find($id);
-        $data = [
-            'date' => date('d-m-Y H:i:s'),
-            'briefnummer' => $SL->briefnr,
-            'briefreason' => $SL->reason,
-            'datebrief' => $SL->date,
-            'bedrijf' => $SL->bedrijf,
-            'bedrijftel' => $SL->bedrijftel,
-            'contact' => $SL->contact,
-            'contacttel' => $SL->contacttel,
-            'ivname' => $SL->ivname,
-            'ivtel' => $SL->ivtel,
-            'mvname' => $SL->mvname,
-            'mvtel' => $SL->mvtel,
-            'plname' => $SL->plname,
-            'pltel' => $SL->pltel,
-
-        ];
+        $stappen = DB::select("SELECT * FROM `stappen` WHERE `brief_id` = $id");
+        // dd($stappen);
+        $date = date('d-m-Y H:i:s');
+        $data = compact('SL', 'stappen', 'date');
+        
         $pdf = PDF::loadView('SL.pdf', $data);
 
         return $pdf->download('Schakelbrief_'.$SL->briefnr.'.pdf');
@@ -252,9 +242,10 @@ class SLController extends Controller
 
     public function Word($id)
     {
+        $i = 0;
         // Schakelbrief gegevens ophalen.
         $SL = SL::find($id);
-
+        $stappen = DB::select("SELECT * FROM `stappen` WHERE `brief_id` = $id");
         //Datum van download
         $date = date('d-m-Y H:i:s');
 
@@ -317,6 +308,25 @@ class SLController extends Controller
         $table->addCell(3500, $tableCellStyle)->addText($SL->ivtel);
         $table->addCell(3000, $tableCellStyle)->addText($SL->mvtel);
         $table->addCell(3000, $tableCellStyle)->addText($SL->pltel);
+        
+        $section->addTextBreak(1);
+
+        // Tabel aanmaken voor de stappen.
+        $table = $section->addTable($tableStyleName);
+        $table->addRow();
+        $table->addCell(3500, $tableCellStyle)->addText('Stap', $tableFontStyle);
+        $table->addCell(3000, $tableCellStyle)->addText('Plaats', $tableFontStyle);
+        $table->addCell(3000, $tableCellStyle)->addText('Veld', $tableFontStyle);
+        $table->addCell(3000, $tableCellStyle)->addText('Turbine', $tableFontStyle);
+        $table->addCell(3000, $tableCellStyle)->addText('Omshcrijving', $tableFontStyle);
+        foreach($stappen as $stap){
+        $table->addRow();
+        $table->addCell(3500, $tableCellStyle)->addText(++$i);
+        $table->addCell(3000, $tableCellStyle)->addText($stap->plaats);
+        $table->addCell(3000, $tableCellStyle)->addText($stap->veld);
+        $table->addCell(3000, $tableCellStyle)->addText($stap->turbine);
+        $table->addCell(3000, $tableCellStyle)->addText($stap->omschrijving);
+        }
         
         $section->addTextBreak(1);
         // Opmerkingen van GO-NL en Opmerkingen voor werkzaamheden tijdens het werk.

@@ -26,7 +26,7 @@ class PLCheck
 
         }else {
             var_dump($user_id);
-            return response()->json('Geen bevoegdheid', 401);
+            return redirect('unauthorized');
         }
     }
 }

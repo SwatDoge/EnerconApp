@@ -8,8 +8,8 @@
                     <div class="col">Veld</div>
                     <div class="col">Turbine</div>
                     <div class="col">Omschrijving</div>
-                    <div class="col">Voltooid</div>
-                    <div class="col">Datum/Tijd</div>   
+                    <div class="col" v-show="hasRole(['PL'])">Voltooid</div>
+                    <div class="col" v-show="hasRole(['PL'])">Datum/Tijd</div>   
                     <div class="col" v-if="hasRole(['IV'])">Acties</div>
                 </div>
                 <hr class="mb-3"/>
@@ -22,33 +22,38 @@
                             <!-- <input type="text" class="form-control text-center" v-model="step.plaats"   :readonly="!hasRole(['IV'])"> -->
                             <input-dropdownv2
                                 placeholder="plaatsnaam" name="plaats[]" classes="form-control mb-1" :disable="!hasRole(['IV'])"
-                                :dhaydata="plaatsen" dkey="plaats" dheight="180px" :dlength="40">
+                                :dhaydata="plaatsen" dkey="plaats" dheight="180px" :dlength="40" :input="step.plaats">
                             </input-dropdownv2>
                         </div>
                         <div class="col">
                             <!-- <input type="text" class="form-control text-center" v-model="step.veld"    :readonly="!hasRole(['IV'])"> -->
                             <input-dropdownv2
                                 placeholder="veldnaam" name="veld[]" classes="form-control mb-1" :disable="!hasRole(['IV'])"
-                                :dhaydata="velden" dkey="veld" dheight="180px" :dlength="40">
+                                :dhaydata="velden" dkey="veld" dheight="180px" :dlength="40" :input="step.veld">
                             </input-dropdownv2>
                         </div>
                         <div class="col">
                             <!-- <input type="text" class="form-control text-center" v-model="step.turbine"  :readonly="!hasRole(['IV'])"> -->
                             <input-dropdownv2
                                 placeholder="serial number" name="turbine[]" classes="form-control mb-1" :disable="!hasRole(['IV'])"
-                                :dhaydata="turbine" dkey="serial_nr" dheight="180px" :dlength="40">
+                                :dhaydata="turbine" dkey="serial_nr" dheight="180px" :dlength="40" :input="step.turbine">
                             </input-dropdownv2>
                         </div>
                         <div class="col">
-                            <select name="omschrijving[]" class="form-select">
-                                <option :value="option['id']" v-for="(option, kindex) in omschrijvingen" :key="kindex" >{{option['omschrijving']}}</option>
+                            <select name="omschrijving[]" class="form-select" v-if="route === 'slCreate'" :disabled="!hasRole(['IV'])">
+                                <option :value="option['id'] - 1" v-for="(option, kindex) in omschrijvingen" :key="kindex">{{option['omschrijving']}}</option>
                             </select>
+                            <div v-else>
+                                <!-- <input  readonly :value="omschrijvingen[step.omschrijving]['omschrijving']"> -->
+                                <textarea class="form-control" readonly :value="omschrijvingen[step.omschrijving]['omschrijving']" rows="1"></textarea>
+                            </div>
                         </div>
-                        <div class="col">
-                            <input type="checkbox" :id="'signature_' + index" v-model="step.voltooid" @click="updateDate(index, step.voltooid)" :disabled="!hasRole(['PL'])">
+                        <div class="col" v-show="hasRole(['PL'])">
+                            <input name="voltooid[]" type="checkbox" :value="step.voltooid" :id="'signature_' + index" v-model="step.voltooid" @click="updateDate(index, step.voltooid)">
+                            <input name="voltooid[]" type="checkbox" :value="step.voltooid" :id="'signature_' + index" :checked="!step.voltooid" hidden>
                         </div>
-                        <div class="col">
-                            <input type="text" name="datum[]" class="form-control text-center" readonly v-model="step.datum" v-if="step.voltooid">
+                        <div class="col" v-show="hasRole(['PL'])">
+                            <input type="text" name="datum[]" class="form-control text-center" v-model="step.datum" v-if="step.voltooid" readonly>
                             <input type="text" name="datum[]" class="form-control text-center" :placeholder="(step.created ? 'n.v.t.' : 'niet voltooid')" v-model="step.datum" readonly v-else>
                         </div>
                         <div class="col" v-if="hasRole(['IV'])">
@@ -69,7 +74,7 @@
                 steps: [],
             }
         },
-        props:["rollen", "omschrijvingen", "plaatsen", "turbine", "velden"],
+        props:["rollen", "omschrijvingen", "plaatsen", "turbine", "velden", "route", "stappen"],
         methods:{
             create: function (){
                 let step = {
@@ -97,7 +102,23 @@
             },
         },
         mounted(){
-            this.create();
+            if (typeof(this.stappen) !== "undefined"){
+                for (let stap of this.stappen) {
+                    let step = {
+                        stap: stap.id,
+                        turbine: stap.turbine,
+                        plaats: stap.plaats,
+                        veld: stap.veld,
+                        datum: stap.datum,
+                        omschrijving: stap.omschrijving,
+                        voltooid: (stap.voltooid === "true" ? true : false),
+                        created: false,
+                    }
+                    this.steps.push(step);
+                }
+            } else {
+                this.create();
+            }
         }
     }
 </script>

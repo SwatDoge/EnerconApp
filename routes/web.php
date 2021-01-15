@@ -25,13 +25,24 @@ Route::post('/sl/update/{id}', [SLController::class, 'update']);
 Route::get('/sl/create', 'SLController@create')->name('slCreate');
 Route::post('/sl', 'SLController@store')->name('slStore');
 Route::get('/sl/index', 'SLController@index')->name('slIndex');
+Route::get('/sl/{id}', 'SLController@show')->name('slShow');
 Route::get('/sl/{id}/edit', 'SLController@edit')->name('slEdit');
 Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
 Route::get('/create-pdf-file-{id}', 'SLController@PDF')->name('slPDF');
 Route::get('/create-word-file-{id}', 'SLController@Word')->name('slWord');
 
-Route::any('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('pIndex');
-Route::any('/profile/update', [ProfileController::class, 'update'])->name('pUpdate');
+Route::group(['middleware' => 'auth'], function () {
+    Route::post('/sl/update/{id}', [SLController::class, 'update']);
+    Route::get('/sl/create', 'SLController@create')->name('slCreate');
+    Route::post('/sl', 'SLController@store')->name('slStore');
+    Route::get('/sl/index', 'SLController@index')->name('slIndex');
+    Route::get('/sl/{id}/edit', 'SLController@edit')->name('slEdit');
+    Route::any('/sl/{id}/delete', [App\Http\Controllers\SLController::class, 'destroy'])->name('slDelete');
+    Route::get('/home', [App\Http\Controllers\HomeController::class, 'index'])->name('home');
+
+    Route::any('/profile', [App\Http\Controllers\ProfileController::class, 'index'])->name('pIndex');
+    Route::any('/profile/update', [ProfileController::class, 'update'])->name('pUpdate');
+});
 
 //Roles LOL
 Route::group(['middleware' => ['admin']], function () {
@@ -52,3 +63,6 @@ Route::group(['middleware' => 'admin'], function () {
     Route::any('/admin/update', [App\Http\Controllers\AdminController::class, 'update'])->name('aUpdate');
     Route::get('/admin/users/create', 'AdminController@store')->name('aStore');
 });
+
+//unAuthorized
+Route::any('/unauthorized', [App\Http\Controllers\HomeController::class, 'unauthorized'])->name('unauthorized');

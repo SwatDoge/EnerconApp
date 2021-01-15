@@ -20,7 +20,7 @@
                 <tbody>
                 @foreach($switchbrief as $brief)
                     <tr>
-                        <td>{{$brief->id}}</td>
+                        <td> <a href="/sl/{{$brief->id}}"  class="button alt">{{$brief->id}}</a></td>
                         <td>{{$brief->date}}</td>
                         <td>{{$brief->ivname}}</td>
                         <td>{{$brief->bedrijf}}</td>
@@ -56,7 +56,7 @@
                 <tbody>
                 @foreach($iv as $IV)
                     <tr>
-                        <td>{{$IV->id}}</td>
+                        <td> <a href="/sl/{{$IV->id}}"  class="button alt">{{$IV->id}}</a></td>
                         <td>{{$IV->date}}</td>
                         <td>IV</td>
                         <td>{{$IV->bedrijf}}</td>
@@ -97,7 +97,7 @@
                 <tbody>
                     @foreach($wv as $WV)
                         <tr>
-                            <td>{{$WV->id}}</td>
+                            <td> <a href="/posts/{{$WV->id}}"  class="button alt">{{$WV->id}}</a></td>
                             <td>{{$WV->date}}</td>
                             <td>WV</td>
                             <td>{{$WV->bedrijf}}</td>
@@ -138,7 +138,7 @@
                 <tbody>
                     @foreach($pl as $PL)
                         <tr>
-                            <td>{{$PL->id}}</td>
+                            <td> <a href="/posts/{{$PL->id}}"  class="button alt">{{$PL->id}}</a></td>
                             <td>{{$PL->date}}</td>
                             <td>PL</td>
                             <td>{{$PL->bedrijf}}</td>
@@ -184,19 +184,19 @@
         
     </body>
 </html>
-    @push('scripts')
-        <script>
-            $(document).ready( function () {
-                $('#switchbriefs_table_id').DataTable({
-                    columnDefs: [
-                        { orderable: false, targets: -1 }
-                    ],
-                    "bInfo" : false,
+@push('scripts')
+    <script>
+        $(document).ready( function () {
+            $('#table_id').DataTable({
+                columnDefs: [
+                    { orderable: false, targets: -1 }
+                ],
+                "bInfo" : false,
 
-                });
+            });
 
-            } );
-        </script>
-    @endpush
+        } );
+    </script>
+@endpush
 
 @endsection

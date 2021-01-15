@@ -5124,10 +5124,24 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
-      schakelbrief_ID: this.genID(),
+      schakelbrief_ID: 0,
       datum: this.getDateForm(new Date()),
       fetched: false,
       enerconapi: {},
@@ -5146,7 +5160,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       }
     };
   },
-  props: ["rollen", "route", "users", "editinit"],
+  props: ["rollen", "route", "users", "editinit", "stappen", "sl_count"],
   methods: {
     post: function post() {
       switch (this.route) {
@@ -5205,7 +5219,9 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
                 }
 
                 vm.users = JSON.parse(vm.users);
+                if (typeof vm.stappen != "undefined") vm.stappen = JSON.parse(vm.stappen);
                 if (typeof vm.editinit != "undefined") vm.editinit = JSON.parse(vm.editinit);
+                vm.route != "slEdit" ? vm.schakelbrief_ID = parseInt(vm.sl_count) + 1 : vm.schakelbrief_ID = vm.editinit.id;
               });
               apis = [{
                 url: "https://std.stegion.nl/api_enercon/getWindparks",
@@ -5699,13 +5715,18 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
 //
 //
 //
+//
+//
+//
+//
+//
 /* harmony default export */ __webpack_exports__["default"] = ({
   data: function data() {
     return {
       steps: []
     };
   },
-  props: ["rollen", "omschrijvingen", "plaatsen", "turbine", "velden"],
+  props: ["rollen", "omschrijvingen", "plaatsen", "turbine", "velden", "route", "stappen"],
   methods: {
     create: function create() {
       var step = {
@@ -5746,7 +5767,33 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
     }
   },
   mounted: function mounted() {
-    this.create();
+    if (typeof this.stappen !== "undefined") {
+      var _iterator2 = _createForOfIteratorHelper(this.stappen),
+          _step2;
+
+      try {
+        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
+          var stap = _step2.value;
+          var step = {
+            stap: stap.id,
+            turbine: stap.turbine,
+            plaats: stap.plaats,
+            veld: stap.veld,
+            datum: stap.datum,
+            omschrijving: stap.omschrijving,
+            voltooid: stap.voltooid === "true" ? true : false,
+            created: false
+          };
+          this.steps.push(step);
+        }
+      } catch (err) {
+        _iterator2.e(err);
+      } finally {
+        _iterator2.f();
+      }
+    } else {
+      this.create();
+    }
   }
 });
 
@@ -43623,14 +43670,18 @@ var render = function() {
                               attrs: { for: "general" }
                             },
                             [
-                              _c("h4", [
-                                _vm._v(
-                                  "Algemeen\n                                "
-                                ),
-                                _vm.display.show_general
-                                  ? _c("i", { staticClass: "fas fa-eye" })
-                                  : _c("i", { staticClass: "fas fa-eye-slash" })
-                              ])
+                              _vm.hasRole(["IV", "WV"])
+                                ? _c("h4", [
+                                    _vm._v(
+                                      "Algemeen\n                                    "
+                                    ),
+                                    _vm.display.show_general
+                                      ? _c("i", { staticClass: "fas fa-eye" })
+                                      : _c("i", {
+                                          staticClass: "fas fa-eye-slash"
+                                        })
+                                  ])
+                                : _vm._e()
                             ]
                           )
                         : _c("h4", [
@@ -43720,12 +43771,14 @@ var render = function() {
                           attrs: { for: "intern" }
                         },
                         [
-                          _c("h4", [
-                            _vm._v("Intern\n                        "),
-                            _vm.display.show_intern
-                              ? _c("i", { staticClass: "fas fa-eye" })
-                              : _c("i", { staticClass: "fas fa-eye-slash" })
-                          ])
+                          _vm.hasRole(["IV", "WV"])
+                            ? _c("h4", [
+                                _vm._v("Intern\n                            "),
+                                _vm.display.show_intern
+                                  ? _c("i", { staticClass: "fas fa-eye" })
+                                  : _c("i", { staticClass: "fas fa-eye-slash" })
+                              ])
+                            : _vm._e()
                         ]
                       )
                     : _vm._e(),
@@ -43815,12 +43868,14 @@ var render = function() {
                           attrs: { for: "stappen" }
                         },
                         [
-                          _c("h4", [
-                            _vm._v("Stappen\n                        "),
-                            _vm.display.show_stappen
-                              ? _c("i", { staticClass: "fas fa-eye" })
-                              : _c("i", { staticClass: "fas fa-eye-slash" })
-                          ])
+                          _vm.hasRole(["IV", "WV"])
+                            ? _c("h4", [
+                                _vm._v("Stappen\n                            "),
+                                _vm.display.show_stappen
+                                  ? _c("i", { staticClass: "fas fa-eye" })
+                                  : _c("i", { staticClass: "fas fa-eye-slash" })
+                              ])
+                            : _vm._e()
                         ]
                       )
                     : _vm._e(),
@@ -43886,9 +43941,10 @@ var render = function() {
                         [
                           _c("form-steps", {
                             attrs: {
+                              stappen: _vm.stappen,
+                              route: _vm.route,
                               rollen: _vm.rollen,
                               omschrijvingen: _vm.enerconapi.omschrijvingen,
-                              init: _vm.editinit,
                               plaatsen: _vm.enerconapi.plaatsen,
                               velden: _vm.enerconapi.velden,
                               turbine: _vm.enerconapi.turbines
@@ -43911,12 +43967,16 @@ var render = function() {
                           attrs: { for: "opmerkingen" }
                         },
                         [
-                          _c("h4", [
-                            _vm._v("Opmerkingen\n                        "),
-                            _vm.display.show_opmerkingen
-                              ? _c("i", { staticClass: "fas fa-eye" })
-                              : _c("i", { staticClass: "fas fa-eye-slash" })
-                          ])
+                          _vm.hasRole(["IV", "WV"])
+                            ? _c("h4", [
+                                _vm._v(
+                                  "Opmerkingen\n                            "
+                                ),
+                                _vm.display.show_opmerkingen
+                                  ? _c("i", { staticClass: "fas fa-eye" })
+                                  : _c("i", { staticClass: "fas fa-eye-slash" })
+                              ])
+                            : _vm._e()
                         ]
                       )
                     : _vm._e(),
@@ -44001,25 +44061,40 @@ var render = function() {
                       })
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.route == "slCreate"
-                    ? _c("input", {
-                        staticClass: "btn btn-danger mt-4 text-light",
-                        attrs: { type: "submit", value: "Annuleer" }
-                      })
+                  _vm.route == "slEdit" &&
+                  (_vm.editinit.ivakkoord == 1 ? true : false) &&
+                  (_vm.editinit.mvakkoord == 0 ? true : false)
+                    ? _c("div", [
+                        _c("input", {
+                          attrs: { type: "radio", name: "verified", value: "1" }
+                        }),
+                        _vm._v(" "),
+                        _c("label", [_vm._v("Accepteer")]),
+                        _vm._v(" "),
+                        _c("input", {
+                          attrs: { type: "radio", name: "verified", value: "0" }
+                        }),
+                        _vm._v(" "),
+                        _c("label", [_vm._v("Afwijzen")]),
+                        _vm._v(" "),
+                        _c("br"),
+                        _vm._v(" "),
+                        _c("input", {
+                          staticClass: "btn btn-success mt-4 text-light",
+                          attrs: { type: "submit", value: "Bevestigen" }
+                        })
+                      ])
                     : _vm._e(),
                   _vm._v(" "),
-                  _vm.route == "slEdit"
-                    ? _c("input", {
-                        staticClass: "btn btn-success mt-4 text-light",
-                        attrs: { type: "submit", value: "Accepteren" }
-                      })
-                    : _vm._e(),
-                  _vm._v(" "),
-                  _vm.route == "slEdit"
-                    ? _c("input", {
-                        staticClass: "btn btn-danger mt-4 text-light",
-                        attrs: { type: "submit", value: "Afwijzen" }
-                      })
+                  _vm.route == "slEdit" &&
+                  (_vm.editinit.mvakkoord == 1 ? true : false) &&
+                  (_vm.editinit.plakkoord == 0 ? true : false)
+                    ? _c("div", [
+                        _c("input", {
+                          staticClass: "btn btn-success mt-4 text-light",
+                          attrs: { type: "submit", value: "Bevestigen" }
+                        })
+                      ])
                     : _vm._e()
                 ],
                 1
@@ -44700,9 +44775,37 @@ var render = function() {
             _vm._v(" "),
             _c("div", { staticClass: "col" }, [_vm._v("Omschrijving")]),
             _vm._v(" "),
-            _c("div", { staticClass: "col" }, [_vm._v("Voltooid")]),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.hasRole(["PL"]),
+                    expression: "hasRole(['PL'])"
+                  }
+                ],
+                staticClass: "col"
+              },
+              [_vm._v("Voltooid")]
+            ),
             _vm._v(" "),
-            _c("div", { staticClass: "col" }, [_vm._v("Datum/Tijd")]),
+            _c(
+              "div",
+              {
+                directives: [
+                  {
+                    name: "show",
+                    rawName: "v-show",
+                    value: _vm.hasRole(["PL"]),
+                    expression: "hasRole(['PL'])"
+                  }
+                ],
+                staticClass: "col"
+              },
+              [_vm._v("Datum/Tijd")]
+            ),
             _vm._v(" "),
             _vm.hasRole(["IV"])
               ? _c("div", { staticClass: "col" }, [_vm._v("Acties")])
@@ -44754,7 +44857,8 @@ var render = function() {
                           dhaydata: _vm.plaatsen,
                           dkey: "plaats",
                           dheight: "180px",
-                          dlength: 40
+                          dlength: 40,
+                          input: step.plaats
                         }
                       })
                     ],
@@ -44774,7 +44878,8 @@ var render = function() {
                           dhaydata: _vm.velden,
                           dkey: "veld",
                           dheight: "180px",
-                          dlength: 40
+                          dlength: 40,
+                          input: step.veld
                         }
                       })
                     ],
@@ -44794,7 +44899,8 @@ var render = function() {
                           dhaydata: _vm.turbine,
                           dkey: "serial_nr",
                           dheight: "180px",
-                          dlength: 40
+                          dlength: 40,
+                          input: step.turbine
                         }
                       })
                     ],
@@ -44802,129 +44908,190 @@ var render = function() {
                   ),
                   _vm._v(" "),
                   _c("div", { staticClass: "col" }, [
-                    _c(
-                      "select",
-                      {
-                        staticClass: "form-select",
-                        attrs: { name: "omschrijving[]" }
-                      },
-                      _vm._l(_vm.omschrijvingen, function(option, kindex) {
-                        return _c(
-                          "option",
-                          { key: kindex, domProps: { value: option["id"] } },
-                          [_vm._v(_vm._s(option["omschrijving"]))]
+                    _vm.route === "slCreate"
+                      ? _c(
+                          "select",
+                          {
+                            staticClass: "form-select",
+                            attrs: {
+                              name: "omschrijving[]",
+                              disabled: !_vm.hasRole(["IV"])
+                            }
+                          },
+                          _vm._l(_vm.omschrijvingen, function(option, kindex) {
+                            return _c(
+                              "option",
+                              {
+                                key: kindex,
+                                domProps: { value: option["id"] - 1 }
+                              },
+                              [_vm._v(_vm._s(option["omschrijving"]))]
+                            )
+                          }),
+                          0
                         )
-                      }),
-                      0
-                    )
+                      : _c("div", [
+                          _c("textarea", {
+                            staticClass: "form-control",
+                            attrs: { readonly: "", rows: "1" },
+                            domProps: {
+                              value:
+                                _vm.omschrijvingen[step.omschrijving][
+                                  "omschrijving"
+                                ]
+                            }
+                          })
+                        ])
                   ]),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col" }, [
-                    _c("input", {
+                  _c(
+                    "div",
+                    {
                       directives: [
                         {
-                          name: "model",
-                          rawName: "v-model",
-                          value: step.voltooid,
-                          expression: "step.voltooid"
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.hasRole(["PL"]),
+                          expression: "hasRole(['PL'])"
                         }
                       ],
-                      attrs: {
-                        type: "checkbox",
-                        id: "signature_" + index,
-                        disabled: !_vm.hasRole(["PL"])
-                      },
-                      domProps: {
-                        checked: Array.isArray(step.voltooid)
-                          ? _vm._i(step.voltooid, null) > -1
-                          : step.voltooid
-                      },
-                      on: {
-                        click: function($event) {
-                          return _vm.updateDate(index, step.voltooid)
+                      staticClass: "col"
+                    },
+                    [
+                      _c("input", {
+                        directives: [
+                          {
+                            name: "model",
+                            rawName: "v-model",
+                            value: step.voltooid,
+                            expression: "step.voltooid"
+                          }
+                        ],
+                        attrs: {
+                          name: "voltooid[]",
+                          type: "checkbox",
+                          id: "signature_" + index
                         },
-                        change: function($event) {
-                          var $$a = step.voltooid,
-                            $$el = $event.target,
-                            $$c = $$el.checked ? true : false
-                          if (Array.isArray($$a)) {
-                            var $$v = null,
-                              $$i = _vm._i($$a, $$v)
-                            if ($$el.checked) {
-                              $$i < 0 &&
-                                _vm.$set(step, "voltooid", $$a.concat([$$v]))
+                        domProps: {
+                          value: step.voltooid,
+                          checked: Array.isArray(step.voltooid)
+                            ? _vm._i(step.voltooid, step.voltooid) > -1
+                            : step.voltooid
+                        },
+                        on: {
+                          click: function($event) {
+                            return _vm.updateDate(index, step.voltooid)
+                          },
+                          change: function($event) {
+                            var $$a = step.voltooid,
+                              $$el = $event.target,
+                              $$c = $$el.checked ? true : false
+                            if (Array.isArray($$a)) {
+                              var $$v = step.voltooid,
+                                $$i = _vm._i($$a, $$v)
+                              if ($$el.checked) {
+                                $$i < 0 &&
+                                  _vm.$set(step, "voltooid", $$a.concat([$$v]))
+                              } else {
+                                $$i > -1 &&
+                                  _vm.$set(
+                                    step,
+                                    "voltooid",
+                                    $$a.slice(0, $$i).concat($$a.slice($$i + 1))
+                                  )
+                              }
                             } else {
-                              $$i > -1 &&
-                                _vm.$set(
-                                  step,
-                                  "voltooid",
-                                  $$a.slice(0, $$i).concat($$a.slice($$i + 1))
-                                )
+                              _vm.$set(step, "voltooid", $$c)
                             }
-                          } else {
-                            _vm.$set(step, "voltooid", $$c)
                           }
                         }
-                      }
-                    })
-                  ]),
+                      }),
+                      _vm._v(" "),
+                      _c("input", {
+                        attrs: {
+                          name: "voltooid[]",
+                          type: "checkbox",
+                          id: "signature_" + index,
+                          hidden: ""
+                        },
+                        domProps: {
+                          value: step.voltooid,
+                          checked: !step.voltooid
+                        }
+                      })
+                    ]
+                  ),
                   _vm._v(" "),
-                  _c("div", { staticClass: "col" }, [
-                    step.voltooid
-                      ? _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: step.datum,
-                              expression: "step.datum"
-                            }
-                          ],
-                          staticClass: "form-control text-center",
-                          attrs: {
-                            type: "text",
-                            name: "datum[]",
-                            readonly: ""
-                          },
-                          domProps: { value: step.datum },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
+                  _c(
+                    "div",
+                    {
+                      directives: [
+                        {
+                          name: "show",
+                          rawName: "v-show",
+                          value: _vm.hasRole(["PL"]),
+                          expression: "hasRole(['PL'])"
+                        }
+                      ],
+                      staticClass: "col"
+                    },
+                    [
+                      step.voltooid
+                        ? _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: step.datum,
+                                expression: "step.datum"
                               }
-                              _vm.$set(step, "datum", $event.target.value)
-                            }
-                          }
-                        })
-                      : _c("input", {
-                          directives: [
-                            {
-                              name: "model",
-                              rawName: "v-model",
-                              value: step.datum,
-                              expression: "step.datum"
-                            }
-                          ],
-                          staticClass: "form-control text-center",
-                          attrs: {
-                            type: "text",
-                            name: "datum[]",
-                            placeholder: step.created
-                              ? "n.v.t."
-                              : "niet voltooid",
-                            readonly: ""
-                          },
-                          domProps: { value: step.datum },
-                          on: {
-                            input: function($event) {
-                              if ($event.target.composing) {
-                                return
+                            ],
+                            staticClass: "form-control text-center",
+                            attrs: {
+                              type: "text",
+                              name: "datum[]",
+                              readonly: ""
+                            },
+                            domProps: { value: step.datum },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(step, "datum", $event.target.value)
                               }
-                              _vm.$set(step, "datum", $event.target.value)
                             }
-                          }
-                        })
-                  ]),
+                          })
+                        : _c("input", {
+                            directives: [
+                              {
+                                name: "model",
+                                rawName: "v-model",
+                                value: step.datum,
+                                expression: "step.datum"
+                              }
+                            ],
+                            staticClass: "form-control text-center",
+                            attrs: {
+                              type: "text",
+                              name: "datum[]",
+                              placeholder: step.created
+                                ? "n.v.t."
+                                : "niet voltooid",
+                              readonly: ""
+                            },
+                            domProps: { value: step.datum },
+                            on: {
+                              input: function($event) {
+                                if ($event.target.composing) {
+                                  return
+                                }
+                                _vm.$set(step, "datum", $event.target.value)
+                              }
+                            }
+                          })
+                    ]
+                  ),
                   _vm._v(" "),
                   _vm.hasRole(["IV"])
                     ? _c("div", { staticClass: "col" }, [

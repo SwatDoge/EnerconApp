@@ -1,6 +1,5 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
+@extends('layouts.app')
+@section('content')
     <style>
         .container {
             margin: 0;
@@ -26,13 +25,10 @@
             border-bottom: 1px solid #ddd;
         }
     </style>
-</head>
-<body>
     <div class="container">
-        <p id="dtext"><strong>Gedownload op:  {{ $date }}</strong></p>
         <div class="brief-header"><img id="logo" src="https://www.enercon.de/fileadmin/Resources/Public/img/enercon_en.png"/></div>
         <div class="schakelbrief">
-            <h2> Briefnr: (#{{ $SL->briefnr }})</h2>
+            <h2> Briefnr: (#{{ $SL->id }})</h2>
             <p><strong>Reden voor schakelbrief</strong>: {{ $SL->reason }}
             <hr style="color: #00564c;">
             <p> Windparknaam: {{ $SL->windpark }}</p>
@@ -82,42 +78,18 @@
                 </tr>
             </table>
             <hr style="color: #00564c;">
-            <br><br>
-            <h3 style="text-align: center;">Stappen</h3>
-            <table style="align-text: center; width: 100%;">
-                <tr style="padding: 10px;">
-                    <th>Stap</th>
-                    <th>Plaats</th>
-                    <th>Veld</th>
-                    <th>Turbine</th>
-                    <th>Omschrijving</th>
-                </tr>
-                <?php $i = 0; ?>
-                    @foreach($stappen as $stap)
-                    <tr>
-                    <td> <?php echo ++$i; ?></td>
-                    <td> {{ $stap->plaats }} </td>
-                    <td> {{ $stap->veld}} </td>
-                    <td> {{ $stap->turbine }} </td>
-                    <td> {{ $stap->omschrijving }} </td>
-                    </tr>
-                    @endforeach
-                
-            </table>
 
             <br><br><br><br><br>
-            <hr style="color: #00564c;">
-            <label for="go-nl"><strong>Opmerking GO-NL</strong>:<br>
+            <label for="go-nl">Opmerking GO-NL:
+            <textarea name="go-nl" style="border: 1px solid #00564c;">
                 {{ $SL->remarks }}
-            <hr style="color: #00564c;">
+            </textarea>
             <br><br><br>
-            <hr style="color: #00564c;">
-            <label for="werkzaamheden"><strong>Opmerkingen tijdens werkzaamheden</strong>:<br>
-                {{ $SL->plremarks }} 
-            <hr style="color: #00564c;">
-            
+            <label for="werkzaamheden">Opmerkingen tijdens werkzaamheden:
+            <textarea name="werkzaamheden" style="border: 1px solid #00564c;">
+                {{ $SL->plremarks }}
+            </textarea>
 
         </div>
     </div>
-</body>
-</html>
+@endsection

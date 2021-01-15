@@ -16,6 +16,7 @@ class AdminController extends Controller
     public function __construct()
     {
         $this->middleware('auth');
+        $this->middleware('admin');
     }
     /**
      * Display a listing of the resource.
@@ -29,7 +30,9 @@ class AdminController extends Controller
         return view('admin.index')->with([
             'users' => User::simplePaginate(10),
             'roles' => $roles,
-            'userRoles' => $userRoles
+            'userRoles' => $userRoles,
+            'message' => "Gebruikers geladen",
+            'method' => "info"
         ]);
 
     }
@@ -37,7 +40,11 @@ class AdminController extends Controller
     public function roles()
     {
         $roles = Roles::all();
-        return view('admin.roles.roles')->with('roles', $roles);
+        return view('admin.roles.roles')->with([
+            'roles'=> $roles,
+            'message' => "Rollen geladen",
+            'method' => "success"
+        ]);
     }
 
     public function createrole()
@@ -56,7 +63,11 @@ class AdminController extends Controller
         $Role->role = $request->input('addRole');
         $Role->save();
 
-        return redirect('/admin/roles');
+        return view('admin.roles.roles')->with([
+            'roles' => Roles::all(),
+            'message' => "Rol toegevoegd",
+            'method' => "success"
+        ]);
 
     }
 
@@ -75,14 +86,22 @@ class AdminController extends Controller
 
         $newRolename->role = $request->input('newrolename');
         $newRolename->save();
-        return redirect('/admin/roles');
+        return view('admin.roles.roles')->with([
+            'roles' => Roles::all(),
+            'message' => "Rol bijgewerkt",
+            'method' => "success"
+        ]);
     }
 
     public function deleterole($id)
     {
         $role = Roles::find($id);
         $role->delete();
-        return redirect('/admin/roles');
+        return view('admin.roles.roles')->with([
+            'roles' => Roles::all(),
+            'message' => "Rol verwijderd",
+            'method' => "success"
+        ]);
     }
 
     /**
@@ -123,12 +142,13 @@ class AdminController extends Controller
         $newRole->role_id = $request->roles[0];
         $newRole->save();
 
-        return redirect('/admin')->with([
-            'succes', 'Gebruiker toegevoegd',
+        return view('admin.index')->with([
+            'roles' => Roles::all(),
+            'userRoles' => UserRole::all(),
             'users' => User::simplePaginate(10),
-            ]);
-
-
+            'message' => "Gebruiker toegevoegd",
+            'method' => "success"
+        ]);
     }
 
     /**
@@ -174,7 +194,13 @@ class AdminController extends Controller
         $newRole->user_id = $request->id;
         $newRole->role_id = $request->roles[0];
         $newRole->save();
-        return redirect()->route('aIndex');
+        return view('admin.index')->with([
+            'roles' => Roles::all(),
+            'userRoles' => UserRole::all(),
+            'users' => User::simplePaginate(10),
+            'message' => "Gebruiker bijgewerkt",
+            'method' => "success"
+        ]);
     }
 
     /**
@@ -186,6 +212,12 @@ class AdminController extends Controller
     public function destroy(User $user)
     {
         $user->delete();
-        return redirect()->route('aIndex');
+        return view('admin.index')->with([
+            'roles' => Roles::all(),
+            'userRoles' => UserRole::all(),
+            'users' => User::simplePaginate(10),
+            'message' => "Gebruiker verwijderd",
+            'method' => "success"
+        ]);
     }
 }

@@ -17,7 +17,7 @@
                             <h2>Nieuwe schakelbrief (#{{schakelbrief_ID}})</h2>
                             <br>
                             <label v-if="hasRole(['IV', 'WV', 'PL'])" class="form-check-label" for="general">
-                                <h4>Algemeen
+                                <h4 v-if="hasRole(['IV', 'WV'])">Algemeen
                                     <i v-if="display.show_general" class="fas fa-eye"></i>
                                     <i v-else class="fas fa-eye-slash"></i>
                                 </h4>
@@ -34,7 +34,7 @@
                     <br>
                     <br v-if="display.show_intern">
                     <label v-if="hasRole(['IV', 'WV', 'PL'])" class="form-check-label" for="intern">
-                        <h4>Intern
+                        <h4 v-if="hasRole(['IV', 'WV'])">Intern
                             <i v-if="display.show_intern" class="fas fa-eye"></i>
                             <i v-else class="fas fa-eye-slash"></i>
                         </h4>
@@ -48,20 +48,20 @@
                     <br>
                     <br>
                     <label v-if="hasRole(['IV', 'WV', 'PL'])" class="form-check-label" for="stappen">
-                        <h4>Stappen
+                        <h4 v-if="hasRole(['IV', 'WV'])">Stappen
                             <i v-if="display.show_stappen" class="fas fa-eye"></i>
                             <i v-else class="fas fa-eye-slash"></i>
                         </h4>
                     </label>
                     <input type="checkbox" id="stappen" v-model="display.show_stappen" hidden>
                     <div v-if="hasRole(['IV', 'WV', 'PL'])" v-show="display.show_stappen">
-                        <form-steps :rollen="rollen" :omschrijvingen="enerconapi.omschrijvingen" :init="editinit" :plaatsen="enerconapi.plaatsen" :velden="enerconapi.velden" :turbine="enerconapi.turbines"></form-steps>
+                        <form-steps :stappen="stappen" :route="route" :rollen="rollen" :omschrijvingen="enerconapi.omschrijvingen" :plaatsen="enerconapi.plaatsen" :velden="enerconapi.velden" :turbine="enerconapi.turbines"></form-steps>
                     </div>
 
                     <br>
                     <br>
                     <label v-if="hasRole(['IV', 'WV', 'PL'])" class="form-check-label" for="opmerkingen">
-                        <h4>Opmerkingen
+                        <h4 v-if="hasRole(['IV', 'WV'])">Opmerkingen
                             <i v-if="display.show_opmerkingen" class="fas fa-eye"></i>
                             <i v-else class="fas fa-eye-slash"></i>
                         </h4>
@@ -74,12 +74,26 @@
 
                     <br>
                     <br>
-                    <!-- iv knoppen -->
+<!--                     
                     <input class="btn btn-primary mt-4 text-light" type="submit" value="Creeër" v-if="route == 'slCreate'">
                     <input class="btn btn-danger mt-4 text-light" type="submit" value="Annuleer" v-if="route == 'slCreate'">
-                    <!-- wv knoppen -->
                     <input class="btn btn-success mt-4 text-light" type="submit" value="Accepteren" v-if="route == 'slEdit'">
-                    <input class="btn btn-danger mt-4 text-light" type="submit" value="Afwijzen" v-if="route == 'slEdit'">
+                    <input class="btn btn-danger mt-4 text-light" type="submit" value="Afwijzen" v-if="route == 'slEdit'"> -->
+
+                    <input class="btn btn-primary mt-4 text-light" type="submit" value="Creeër" v-if="route == 'slCreate'">
+                    
+                    <div v-if="route == 'slEdit' && (editinit.ivakkoord == 1 ? true : false) && (editinit.mvakkoord == 0 ? true : false)">
+                        <input type="radio" name="verified" value="1">
+                        <label>Accepteer</label>
+                        <input type="radio" name="verified" value="0">
+                        <label>Afwijzen</label>
+                        <br>
+                        <input class="btn btn-success mt-4 text-light" type="submit" value="Bevestigen">
+                    </div>
+
+                     <div v-if="route == 'slEdit' && (editinit.mvakkoord == 1 ? true : false) && (editinit.plakkoord == 0 ? true : false)">
+                        <input class="btn btn-success mt-4 text-light" type="submit" value="Bevestigen">
+                    </div>
                     
                 </div>
             </div>
@@ -105,7 +119,7 @@
     export default {
         data() {
             return {
-                schakelbrief_ID: this.genID(),
+                schakelbrief_ID: 0,
                 datum: this.getDateForm(new Date()),
                 fetched: false,
                 enerconapi: {},
@@ -124,7 +138,7 @@
                 }
             }
         },
-        props:["rollen", "route", "users", "editinit"],
+        props:["rollen", "route", "users", "editinit", "stappen", "sl_count"],
         methods:{
             post(){
                 switch(this.route){
@@ -155,9 +169,12 @@
                 if (vm.rollen.includes("Admin")){
                     vm.rollen = [];
                     vm.rollen.push("PL", "IV", "WV", "Admin");
+                    
                 }
                 vm.users = JSON.parse(vm.users);
+                if (typeof(vm.stappen) != "undefined") vm.stappen = JSON.parse(vm.stappen);
                 if (typeof(vm.editinit) != "undefined") vm.editinit = JSON.parse(vm.editinit);
+                (vm.route != "slEdit" ? vm.schakelbrief_ID = parseInt(vm.sl_count) + 1 : vm.schakelbrief_ID = vm.editinit.id);
             });
 
             let apis = [
