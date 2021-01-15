@@ -46,4 +46,8 @@ class User extends Authenticatable
     {
         return $this->hasMany('App\Models\roles');
     }
+
+    public function isAdmin() {
+        return $this->roles()->where('role', 'Admin')->exists();
+    }
 }
