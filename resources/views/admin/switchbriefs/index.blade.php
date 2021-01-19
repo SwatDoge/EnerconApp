@@ -14,7 +14,7 @@
                     <th scope="col">Datum</th>
                     <th scope="col">IV Naam</th>
                     <th scope="col">Bedrijf</th>
-
+                    <th scope="col">Status</th>
                 </tr>
                 </thead>
                 <tbody>
@@ -24,6 +24,17 @@
                         <td>{{$brief->date}}</td>
                         <td>{{$brief->ivname}}</td>
                         <td>{{$brief->bedrijf}}</td>
+                        <td>
+                            <?php if ($brief->ivakkoord == 0) { ?>
+                                Brief geweigerd
+                            <?php } elseif ($brief->ivakkoord == 1 && $IV->mvakkoord == 0) { ?>
+                                Wachtend op goedkeuring
+                            <?php } elseif ($brief->ivakkoord == 1 && $IV->mvakkoord == 1 && $IV->plakkoord == 0) { ?>
+                                Word aan gewerkt
+                            <?php } else { ?>
+                                Brief afgerond 
+                            <?php } ?>
+                        </td>
                     </tr>
                 @endforeach
                 </tbody>
@@ -47,12 +58,12 @@
                     <th scope="col">Jouw Rol</th>
                     <th scope="col">Bedrijf</th>
                     <th scope="col">Acties</th>
-
+                    <th scope="col">Status</th>
                 </tr>
                 </thead>
 
 
-                @if(count($iv) > 0)
+            @if(count($iv) > 0)
                 <tbody>
                 @foreach($iv as $IV)
                     <tr>
@@ -83,8 +94,19 @@
                                 <a href="#" class="" disabled>
                                     <button style="margin: 0" type="button" class="btn bg-green color-white" disabled>
                                         <i class="far fa-edit white"></i>
-                                    </button>
+                                    </button>S
                                 </a> 
+                            <?php } ?>
+                        </td>
+                        <td>
+                            <?php if ($IV->ivakkoord == 0) { ?>
+                                Brief geweigerd
+                            <?php } elseif ($IV->ivakkoord == 1 && $IV->mvakkoord == 0) { ?>
+                                Wachtend op goedkeuring
+                            <?php } elseif ($IV->ivakkoord == 1 && $IV->mvakkoord == 1 && $IV->plakkoord == 0) { ?>
+                                Word aan gewerkt
+                            <?php } else { ?>
+                                Brief afgerond 
                             <?php } ?>
                         </td>
                     </tr>
@@ -128,6 +150,17 @@
                                     </a> 
                                 <?php } ?>
                             </td>
+                            <td>
+                                <?php if ($WV->ivakkoord == 0) { ?>
+                                    Brief geweigerd
+                                <?php } elseif ($WV->ivakkoord == 1 && $WV->mvakkoord == 0) { ?>
+                                    Wachtend op goedkeuring
+                                <?php } elseif ($WV->ivakkoord == 1 && $WV->mvakkoord == 1 && $WV->plakkoord == 0) { ?>
+                                    Word aan gewerkt
+                                <?php } else { ?>
+                                    Brief afgerond 
+                                <?php } ?>
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -167,6 +200,17 @@
                                             <i class="far fa-edit white"></i>
                                         </button>
                                     </a> 
+                                <?php } ?>
+                            </td>
+                            <td>
+                                <?php if ($PL->ivakkoord == 0) { ?>
+                                    Brief geweigerd
+                                <?php } elseif ($PL->ivakkoord == 1 && $PL->mvakkoord == 0) { ?>
+                                    Wachtend op goedkeuring
+                                <?php } elseif ($PL->ivakkoord == 1 && $PL->mvakkoord == 1 && $PL->plakkoord == 0) { ?>
+                                    Word aan gewerkt
+                                <?php } else { ?>
+                                    Brief afgerond 
                                 <?php } ?>
                             </td>
                         </tr>
