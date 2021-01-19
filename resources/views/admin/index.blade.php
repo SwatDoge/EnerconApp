@@ -12,7 +12,7 @@
                 </div>
                 @if($users->count() > 0)
                 <div class="card">
-                    <table id="admin_table_id" class="table p-7 text center display" data-paging='false'>
+                    <table id="admin_table_id" class="table p-7 text center display">
                         <h1 class="card-header">Gebruikers</h1><br>
                         <thead>
                             <tr>
@@ -55,19 +55,15 @@
                             </tr>
                         @endforeach
                         </tbody>
+                        <br>
                     </table>
+                    <br>
                     <div class="card-footer">
                     </div>
                 </div>
                 @else
                     <p class="p-5">Nog geen gebruikers</p>
                 @endif
-                <br>
-                {{ $users->links() }}
-                <br>
-                <a class="btn bg-green white float-right" href="{{route('aCreate')}}">
-                    Gebruiker toevoegen
-                </a>
             <style>
                 .w-5 {
                     display: none;
@@ -83,7 +79,6 @@
                     columnDefs: [
                         { orderable: false, targets: -1 }
                     ],
-                    "bInfo" : false,
                 });
 
             } );

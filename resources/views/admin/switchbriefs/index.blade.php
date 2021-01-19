@@ -4,10 +4,13 @@
 <html>
     <body>
         <div class="container p-5">
+            <div class="pb-2">
+                <a href="{{ route('slCreate') }}" class="btn bg-green white d-flex justify-content-center">Schakelbrief toevoegen</a>
+            </div>
             <h1>Schakelbrieven</h1>
             @if(count($switchbrief) > 0)
             <div class="card">
-            <table id="table switchbriefs_table_id" class="table p-7 text-center display" data-paging='false'>
+            <table id="table switchbriefs_table_id" class="table p-7 text-center display">
                 <thead>
                 <tr>
                     <th scope="col">Briefnr</th>
@@ -32,7 +35,7 @@
                             <?php } elseif ($brief->ivakkoord == 1 && $IV->mvakkoord == 1 && $IV->plakkoord == 0) { ?>
                                 Word aan gewerkt
                             <?php } else { ?>
-                                Brief afgerond 
+                                Brief afgerond
                             <?php } ?>
                         </td>
                     </tr>
@@ -42,15 +45,15 @@
             @else
             <p>Nog geen schakelbrieven toegevoegd</p>
             @endif
-        </div>
-            <a href="{{ route('slCreate') }}" class="btn bg-green white">Schakelbrief toevoegen</a>
+            </div>
         </div>
 
-
+        <hr width="80%" class="mx-auto">
         <div class="container p-5">
             <h1>Mijn Schakelbrieven</h1>
+            @if(count($iv) > 0)
             <div class="card">
-            <table id="table switchbriefs_table_id" class="table p-7 text-center display" data-paging='false'>
+            <table id="table switchbriefs_table_id" class="table p-7 text-center display">
                 <thead>
                 <tr>
                     <th scope="col">Briefnr</th>
@@ -63,7 +66,7 @@
                 </thead>
 
 
-            @if(count($iv) > 0)
+
                 <tbody>
                 @foreach($iv as $IV)
                     <tr>
@@ -95,7 +98,7 @@
                                     <button style="margin: 0" type="button" class="btn bg-green color-white" disabled>
                                         <i class="far fa-edit white"></i>
                                     </button>S
-                                </a> 
+                                </a>
                             <?php } ?>
                         </td>
                         <td>
@@ -106,7 +109,7 @@
                             <?php } elseif ($IV->ivakkoord == 1 && $IV->mvakkoord == 1 && $IV->plakkoord == 0) { ?>
                                 Word aan gewerkt
                             <?php } else { ?>
-                                Brief afgerond 
+                                Brief afgerond
                             <?php } ?>
                         </td>
                     </tr>
@@ -147,7 +150,7 @@
                                         <button style="margin: 0" type="button" class="btn bg-green color-white" disabled>
                                             <i class="far fa-edit white"></i>
                                         </button>
-                                    </a> 
+                                    </a>
                                 <?php } ?>
                             </td>
                             <td>
@@ -158,7 +161,7 @@
                                 <?php } elseif ($WV->ivakkoord == 1 && $WV->mvakkoord == 1 && $WV->plakkoord == 0) { ?>
                                     Word aan gewerkt
                                 <?php } else { ?>
-                                    Brief afgerond 
+                                    Brief afgerond
                                 <?php } ?>
                             </td>
                         </tr>
@@ -199,7 +202,7 @@
                                         <button style="margin: 0" type="button" class="btn bg-green color-white" disabled>
                                             <i class="far fa-edit white"></i>
                                         </button>
-                                    </a> 
+                                    </a>
                                 <?php } ?>
                             </td>
                             <td>
@@ -210,22 +213,20 @@
                                 <?php } elseif ($PL->ivakkoord == 1 && $PL->mvakkoord == 1 && $PL->plakkoord == 0) { ?>
                                     Word aan gewerkt
                                 <?php } else { ?>
-                                    Brief afgerond 
+                                    Brief afgerond
                                 <?php } ?>
                             </td>
                         </tr>
                     @endforeach
                 </tbody>
             @endif
-
-
-            @if(count($iv) == 0 && count($wv) == 0 && count($pl) == 0)
-            <p>U heeft momenteel geen schakelbrieven aan uw account gebonden</p>
-            @endif
         </table>
+        @if(count($iv) == 0 && count($wv) == 0 && count($pl) == 0)
+            <p>U heeft momenteel geen schakelbrieven aan uw account gebonden</p>
+        @endif
     </div>
-        </div>
-        
+    </div>
+
     </body>
 </html>
 @push('scripts')

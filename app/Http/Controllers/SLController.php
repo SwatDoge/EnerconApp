@@ -7,7 +7,7 @@ use App\Models\SL;
 use PDF;
 use App\Models\User;
 use App\Models\Stappen;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class SLController extends Controller
 {
@@ -62,7 +62,7 @@ class SLController extends Controller
             'contacttel' => 'required',
             // 'remarks' => 'required' ,
             'reason' => 'required',
-        ]);    
+        ]);
         // dd($request->input());
         //create
         $SL = new SL;
@@ -73,17 +73,17 @@ class SLController extends Controller
         $SL->ivtel = $request->input('ivtel');
         $SL->mvname = $request->input('mvname');
         $SL->mvtel = $request->input('mvtel');
-        $SL->plname = $request->input('plname');      
-        $SL->pltel = $request->input('pltel'); 
+        $SL->plname = $request->input('plname');
+        $SL->pltel = $request->input('pltel');
         $SL->bedrijf = $request->input('bedrijf');
         $SL->bedrijftel = $request->input('bedrijftel');
         $SL->contact = $request->input('contact');
         $SL->contacttel = $request->input('contacttel');
-        $SL->remarks = "";    
-        $SL->reason = $request->input('reason'); 
+        $SL->remarks = "";
+        $SL->reason = $request->input('reason');
         $SL->plremarks = "";
         $SL->ivakkoord = "1";
-        $SL->mvakkoord = "0"; 
+        $SL->mvakkoord = "0";
         $SL->plakkoord = "0";
         $SL->save();
         // dd($request->input());
@@ -92,7 +92,7 @@ class SLController extends Controller
         $veld = request('veld');
         $turbine = request('turbine');
         $omschrijving= request('omschrijving');
-        
+
         $array = array_map(null, $plaats, $veld, $turbine, $omschrijving);
         // dd($array);
         foreach ($array as $data) {
@@ -160,7 +160,7 @@ class SLController extends Controller
             'contacttel' => 'required',
             // 'remarks' => 'required' ,
             'reason' => 'required',
-        ]);    
+        ]);
         // dd($request->input());
         //edit
         $SL = SL::find($id);
@@ -170,8 +170,8 @@ class SLController extends Controller
         $SL->ivtel = $request->input('ivtel');
         $SL->mvname = $request->input('mvname');
         $SL->mvtel = $request->input('mvtel');
-        $SL->plname = $request->input('plname');      
-        $SL->pltel = $request->input('pltel'); 
+        $SL->plname = $request->input('plname');
+        $SL->pltel = $request->input('pltel');
         $SL->bedrijf = $request->input('bedrijf');
         $SL->bedrijftel = $request->input('bedrijftel');
         $SL->contact = $request->input('contact');
@@ -179,13 +179,13 @@ class SLController extends Controller
 
         if($request->input('remarks') != null){
             $SL->remarks = $request->input('remarks');
-        } 
+        }
 
         if($request->input('plremarks') != null){
             $SL->plremarks = $request->input('plremarks');
         }
 
-        $SL->reason = $request->input('reason'); 
+        $SL->reason = $request->input('reason');
 
         if($request->input('verified') != '0'){
             $SL->ivakkoord = "0";
@@ -205,7 +205,7 @@ class SLController extends Controller
             $stap->voltooid = $data[0];
             $stap->datum = $data[1];
             $stap->save();
-            } 
+            }
         }
 
         return redirect('/sl/index')->with('success', 'Post Edited');
@@ -236,7 +236,7 @@ class SLController extends Controller
         // dd($stappen);
         $date = date('d-m-Y H:i:s');
         $data = compact('SL', 'stappen', 'date');
-        
+
         $pdf = PDF::loadView('SL.pdf', $data);
 
         return $pdf->download('Schakelbrief_'.$SL->briefnr.'.pdf');
@@ -258,7 +258,7 @@ class SLController extends Controller
         $style['unit'] = \PhpOffice\PhpWord\Style\Image::UNIT_PX;
         $phpWord->getSettings()->setZoom('bestFit');
         $section = $phpWord->addSection();
-        
+
         // Word file vullen met schakelbrief info.
         \PhpOffice\PhpWord\Shared\Html::addHtml($section, '<p style="position:absolute;float:left;top:0;font-size:11px;"><strong>Gedownload op</strong>: '. $date.'</p>');
         \PhpOffice\PhpWord\Shared\Html::addHtml($section, '<img width="300" height="50" src="https://www.enercon.de/fileadmin/Resources/Public/img/enercon_en.png"/>');
@@ -282,7 +282,7 @@ class SLController extends Controller
         $table->addRow();
         $table->addCell(3000, $tableCellStyle)->addText($SL->bedrijf);
         $table->addCell(3000, $tableCellStyle)->addText($SL->bedrijftel);
-        
+
         // Tabel aanmaken voor contactinfo
         $section->addTextBreak(1);
 
@@ -310,7 +310,7 @@ class SLController extends Controller
         $table->addCell(3500, $tableCellStyle)->addText($SL->ivtel);
         $table->addCell(3000, $tableCellStyle)->addText($SL->mvtel);
         $table->addCell(3000, $tableCellStyle)->addText($SL->pltel);
-        
+
         $section->addTextBreak(1);
 
         // Tabel aanmaken voor de stappen.
@@ -329,7 +329,7 @@ class SLController extends Controller
         $table->addCell(3000, $tableCellStyle)->addText($stap->turbine);
         $table->addCell(3000, $tableCellStyle)->addText($stap->omschrijving);
         }
-        
+
         $section->addTextBreak(1);
         // Opmerkingen van GO-NL en Opmerkingen voor werkzaamheden tijdens het werk.
         \PhpOffice\PhpWord\Shared\Html::addHtml($section, '<p>Opmerking GO-NL: </p> <p style="border:1px solid black;">'.$SL->remarks.'</p>');

@@ -28,7 +28,7 @@ class AdminController extends Controller
         $roles = Roles::all();
         $userRoles = UserRole::all();
         return view('admin.index')->with([
-            'users' => User::simplePaginate(10),
+            'users' => User::all(),
             'roles' => $roles,
             'userRoles' => $userRoles,
             'message' => "Gebruikers geladen",
@@ -137,15 +137,18 @@ class AdminController extends Controller
         $user->phonenumber = $request->input('pnumber');
         $user->save();
 
-        $newRole = new UserRole;
-        $newRole->user_id = $user->id;
-        $newRole->role_id = $request->roles[0];
-        $newRole->save();
+        if(!empty($role)) {
+            $newRole = new UserRole;
+            $newRole->user_id = $user->id;
+            $newRole->role_id = $request->roles[0];
+            $newRole->save();
+        }
+
 
         return view('admin.index')->with([
             'roles' => Roles::all(),
             'userRoles' => UserRole::all(),
-            'users' => User::simplePaginate(10),
+            'users' => User::all(),
             'message' => "Gebruiker toegevoegd",
             'method' => "success"
         ]);
@@ -190,14 +193,16 @@ class AdminController extends Controller
             'email' => 'required'
         ]));
 
-        $newRole = new UserRole;
-        $newRole->user_id = $request->id;
-        $newRole->role_id = $request->roles[0];
-        $newRole->save();
+        if(!empty($role)) {
+            $newRole = new UserRole;
+            $newRole->user_id = $request->id;
+            $newRole->role_id = $request->roles[0];
+            $newRole->save();
+        }
         return view('admin.index')->with([
             'roles' => Roles::all(),
             'userRoles' => UserRole::all(),
-            'users' => User::simplePaginate(10),
+            'users' => User::all(),
             'message' => "Gebruiker bijgewerkt",
             'method' => "success"
         ]);
@@ -215,7 +220,7 @@ class AdminController extends Controller
         return view('admin.index')->with([
             'roles' => Roles::all(),
             'userRoles' => UserRole::all(),
-            'users' => User::simplePaginate(10),
+            'users' => User::all(),
             'message' => "Gebruiker verwijderd",
             'method' => "success"
         ]);
