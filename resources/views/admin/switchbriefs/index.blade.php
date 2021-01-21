@@ -51,7 +51,6 @@
         <hr width="80%" class="mx-auto">
         <div class="container p-5">
             <h1>Mijn Schakelbrieven</h1>
-            @if(count($iv) > 0)
             <div class="card">
             <table id="table switchbriefs_table_id" class="table p-7 text-center display">
                 <thead>
@@ -68,6 +67,7 @@
 
 
                 <tbody>
+                @if(count($iv) > 0)
                 @foreach($iv as $IV)
                     <tr>
                         <td> <a href="/sl/{{$IV->id}}"  class="button alt">{{$IV->id}}</a></td>

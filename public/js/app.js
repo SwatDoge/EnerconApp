@@ -5726,7 +5726,7 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
       steps: []
     };
   },
-  props: ["rollen", "omschrijvingen", "plaatsen", "turbine", "velden", "route", "stappen"],
+  props: ["rollen", "omschrijvingen", "plaatsen", "turbine", "velden", "route", "stappen", "sl_count"],
   methods: {
     create: function create() {
       var step = {
@@ -5768,28 +5768,29 @@ function _arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len 
   },
   mounted: function mounted() {
     if (typeof this.stappen !== "undefined") {
-      var _iterator2 = _createForOfIteratorHelper(this.stappen),
-          _step2;
+      var i = 0;
+      var isFucked = true;
 
-      try {
-        for (_iterator2.s(); !(_step2 = _iterator2.n()).done;) {
-          var stap = _step2.value;
+      while (true) {
+        if (typeof this.stappen[i] !== "undefined") {
+          isFucked = false;
           var step = {
-            stap: stap.id,
-            turbine: stap.turbine,
-            plaats: stap.plaats,
-            veld: stap.veld,
-            datum: stap.datum,
-            omschrijving: stap.omschrijving,
-            voltooid: stap.voltooid === "true" ? true : false,
+            stap: this.stappen[i].id,
+            turbine: this.stappen[i].turbine,
+            plaats: this.stappen[i].plaats,
+            veld: this.stappen[i].veld,
+            datum: this.stappen[i].datum,
+            omschrijving: this.stappen[i].omschrijving,
+            voltooid: this.stappen[i].voltooid === "true" ? true : false,
             created: false
           };
           this.steps.push(step);
+        } else {
+          if (!isFucked) break;
         }
-      } catch (err) {
-        _iterator2.e(err);
-      } finally {
-        _iterator2.f();
+
+        i++;
+        if (i > 200) break;
       }
     } else {
       this.create();
@@ -43942,6 +43943,7 @@ var render = function() {
                           _c("form-steps", {
                             attrs: {
                               stappen: _vm.stappen,
+                              sl_count: _vm.sl_count,
                               route: _vm.route,
                               rollen: _vm.rollen,
                               omschrijvingen: _vm.enerconapi.omschrijvingen,
@@ -44133,7 +44135,7 @@ var render = function() {
               _vm._v(
                 'Kon "' +
                   _vm._s(this.load.currentbuffer) +
-                  '" niet laden, neem contact op met een beheerder.'
+                  '" api niet laden, neem contact op met een beheerder.'
               )
             ])
           ]),

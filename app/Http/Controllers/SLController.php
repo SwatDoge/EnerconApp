@@ -194,19 +194,19 @@ class SLController extends Controller
         }
         // $SL->plakkoord = "0";
         $SL->save();
-        $check = request('voltooid');
-        $date = request('datum');
+        // $check = request('voltooid');
+        // $date = request('datum');
 
-        $array = array_map(null, $check, $date);
-        // dd($array);
-        foreach ($array as $data) {
-            $stap = Stappen::find($brief_id = $SL->id);
-            if ($data[0] != $stap->voltooid) {
-            $stap->voltooid = $data[0];
-            $stap->datum = $data[1];
-            $stap->save();
-            }
-        }
+        // $array = array_map(null, $check, $date);
+        // // dd($array);
+        // foreach ($array as $data) {
+        //     $stap = Stappen::find($brief_id = $SL->id);
+        //     if ($data[0] != $stap->voltooid) {
+        //     $stap->voltooid = $data[0];
+        //     $stap->datum = $data[1];
+        //     $stap->save();
+        //     }
+        // }
 
         return redirect('/sl/index')->with('success', 'Post Edited');
     }
