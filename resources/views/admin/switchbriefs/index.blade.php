@@ -27,9 +27,9 @@
                         <td>
                             <?php if ($brief->ivakkoord == 0) { ?>
                                 Brief geweigerd
-                            <?php } elseif ($brief->ivakkoord == 1 && $IV->mvakkoord == 0) { ?>
+                            <?php } elseif ($brief->ivakkoord == 1 && $brief->mvakkoord == 0) { ?>
                                 Wachtend op goedkeuring
-                            <?php } elseif ($brief->ivakkoord == 1 && $IV->mvakkoord == 1 && $IV->plakkoord == 0) { ?>
+                            <?php } elseif ($brief->ivakkoord == 1 && $brief->mvakkoord == 1 && $brief->plakkoord == 0) { ?>
                                 Word aan gewerkt
                             <?php } else { ?>
                                 Brief afgerond 
