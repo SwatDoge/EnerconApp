@@ -74,7 +74,7 @@
                 steps: [],
             }
         },
-        props:["rollen", "omschrijvingen", "plaatsen", "turbine", "velden", "route", "stappen"],
+        props:["rollen", "omschrijvingen", "plaatsen", "turbine", "velden", "route", "stappen", "sl_count"],
         methods:{
             create: function (){
                 let step = {
@@ -103,18 +103,27 @@
         },
         mounted(){
             if (typeof(this.stappen) !== "undefined"){
-                for (let stap of this.stappen) {
-                    let step = {
-                        stap: stap.id,
-                        turbine: stap.turbine,
-                        plaats: stap.plaats,
-                        veld: stap.veld,
-                        datum: stap.datum,
-                        omschrijving: stap.omschrijving,
-                        voltooid: (stap.voltooid === "true" ? true : false),
-                        created: false,
+                var i = 0
+                var isFucked = true;
+                while(true){
+                    if (typeof(this.stappen[i]) !== "undefined"){
+                        isFucked = false;
+                        let step = {
+                            stap: this.stappen[i].id,
+                            turbine: this.stappen[i].turbine,
+                            plaats: this.stappen[i].plaats,
+                            veld: this.stappen[i].veld,
+                            datum: this.stappen[i].datum,
+                            omschrijving: this.stappen[i].omschrijving,
+                            voltooid: (this.stappen[i].voltooid === "true" ? true : false),
+                            created: false,
+                        }
+                        this.steps.push(step);
                     }
-                    this.steps.push(step);
+                    else {if (!isFucked) break;}
+
+                    i++;
+                    if (i > 200) break;
                 }
             } else {
                 this.create();

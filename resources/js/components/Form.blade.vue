@@ -55,7 +55,7 @@
                     </label>
                     <input type="checkbox" id="stappen" v-model="display.show_stappen" hidden>
                     <div v-if="hasRole(['IV', 'WV', 'PL'])" v-show="display.show_stappen">
-                        <form-steps :stappen="stappen" :route="route" :rollen="rollen" :omschrijvingen="enerconapi.omschrijvingen" :plaatsen="enerconapi.plaatsen" :velden="enerconapi.velden" :turbine="enerconapi.turbines"></form-steps>
+                        <form-steps :stappen="stappen" :sl_count="sl_count" :route="route" :rollen="rollen" :omschrijvingen="enerconapi.omschrijvingen" :plaatsen="enerconapi.plaatsen" :velden="enerconapi.velden" :turbine="enerconapi.turbines"></form-steps>
                     </div>
 
                     <br>
@@ -107,7 +107,7 @@
     </div>
     <div v-else>
         <div class="text-center alert alert-danger mx-4">
-            <h4><b>Kon "{{this.load.currentbuffer}}" niet laden, neem contact op met een beheerder.</b></h4>
+            <h4><b>Kon "{{this.load.currentbuffer}}" api niet laden, neem contact op met een beheerder.</b></h4>
             <br/>
             <h4>Error bericht:</h4>
             <h4>{{this.load.error}}</h4>
@@ -163,6 +163,7 @@
             },
         },
         async mounted(){
+            
             let vm = this;
             vm.$nextTick(function () {
                 vm.rollen = JSON.parse(vm.rollen);
